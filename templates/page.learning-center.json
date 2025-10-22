@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "learning-center",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+
+    {% # Load and preload the critical CSS %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% # Social, title, etc. %}
+    {% render 'meta-tags' %}
+
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'amatic-sc-700.woff2' | asset_url }}" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'open-sans-400.woff2' | asset_url }}" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'open-sans-700.woff2' | asset_url }}" crossorigin>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ 'favicon-180.png' | asset_url }}">
+    <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32.png' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ 'favicon-16.png' | asset_url }}">
+    <link rel="manifest" href="{{ 'site.webmanifest' | asset_url }}">
+    <link rel="mask-icon" href="{{ 'favicon.svg' | asset_url }}" color="#EE6A5B">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+  {%- comment -%} Localized fonts & Choices assets {%- endcomment -%}
+  <link href="{{ 'fonts.css' | asset_url }}" rel="stylesheet">
+  <link href="{{ 'choices.min.css' | asset_url }}" rel="stylesheet">
+    <link href="{{ 'theme.css' | asset_url }}" rel="stylesheet">
+    
+
+
+    {{ content_for_header }}
+    
+  </head>
+
+  <body>
+    
+    {% sections 'header-group' %}
+
+    {{ content_for_layout }}
+
+    {% sections 'footer-group' %}
+  <script defer src="{{ 'choices.min.js' | asset_url }}"></script>
+  </body>
+</html>

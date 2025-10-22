@@ -1,0 +1,90 @@
+{% doc %}
+  Renders a puppy product card with image, title, breed, sex, age and availability status.
+  Used in collection pages and product carousels.
+
+  @param {object} product - The product to display
+  @param {boolean} [show_cta=true] - Whether to show the CTA button
+  @param {boolean} [link_entire_card=true] - Whether to wrap the entire card in a link
+  
+  @example
+  {% render 'puppy-card', product: product %}
+  {% render 'puppy-card', product: product, show_cta: false %}
+  {% render 'puppy-card', product: product, link_entire_card: false %}
+{% enddoc %}
+
+{%- assign p = product -%}
+{%- if p != blank -%}
+  {%- assign hero = p.featured_image | default: p.images.first -%}
+  {%- assign breed = p.collections.first -%}
+  {%- assign sex = p.metafields.custom.sex.value | default: p.metafields.custom.sex -%}
+
+  {%- assign dob_val = p.metafields.custom.dob.value | default: p.metafields.custom.dob -%}
+  {%- if dob_val -%}
+    {%- assign dob_ts = dob_val | date: "%s" | plus: 0 -%}
+    {%- assign now_ts = 'now' | date: "%s" | plus: 0 -%}
+    {%- assign diff = now_ts | minus: dob_ts -%}
+    {%- assign weeks = diff | divided_by: 604800 | round: 0 -%}
+  {%- endif -%}
+
+  {%- assign wrap_link = link_entire_card | default: true -%}
+  {%- assign show_cta = show_cta | default: true -%}
+
+  {%- capture card_inner -%}
+  <div class="flex flex-col bg-bg-card rounded-3xl overflow-hidden transition-all duration-200 puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
+      <div class="relative">
+        {%- if hero -%}
+          <img
+            src="{{ hero | image_url: width: 600 }}"
+            alt="{{ hero.alt | default: p.title | escape }}"
+            loading="lazy"
+            width="300"
+            height="300"
+            class="h-auto aspect-square object-cover rounded-t-xl"
+          >
+        {%- endif -%}
+
+        {%- if p.metafields.custom.availability.value == 'Reserved' or p.metafields.custom.availability.value == 'Deposit' -%}
+          <div class="absolute inset-x-0 bottom-0 w-[90%] ml-auto mr-auto bg-primary text-white font-body-copy text-center uppercase font-semibold pt-1 rounded-t-md tracking-wide">
+            I Am Reserved
+          </div>
+        {%- endif -%}
+
+        {%- if p.metafields.custom.availability.value == 'Sold' or p.metafields.custom.availability.value == 'Sold, but Show' -%}
+          <div class="absolute inset-x-0 bottom-0 w-[90%] ml-auto mr-auto bg-primary text-white font-body-copy text-center uppercase font-semibold pt-1 rounded-t-md tracking-wide">
+            I Found My New Home
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="flex flex-col p-4 border-t-[6px] border-t-primary">
+        <div class="flex flex-col gap-2">
+          <h3 class="font-titles text-black font-bold text-center text-4xl leading-[1.2]">{{ p.title | escape }}</h3>
+
+          {%- if breed -%}
+            <div class="font-body-copy text-body-copy text-center mb-4 text-base">{{ breed.title }}</div>
+          {%- endif -%}
+
+            <div class="flex gap-2 justify-around text-[var(--color-primary)] text-base">
+              <span>{{ sex }}</span>
+            {%- if weeks != blank -%}
+              <span>{{ weeks }}{% if weeks == 1 %} week{% else %} weeks{% endif %} old</span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <span class="block w-full bg-primary text-white text-center rounded-br-[1.5rem] rounded-bl-[1.5rem] py-[0.8rem] px-[5%] transition-colors duration-200">
+          Details
+        </span>
+      </div>
+    </div>
+  {%- endcapture -%}
+
+  {%- if wrap_link -%}
+  <a href="{{ p.url }}" class="block no-underline text-body-copy hover:no-underline max-w-[300px] puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
+      {{ card_inner }}
+    </a>
+  {%- else -%}
+    {{ card_inner }}
+  {%- endif -%}
+{%- endif -%}

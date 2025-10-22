@@ -1,0 +1,145 @@
+{%- comment -%}
+  SEO overrides for Learning Center page
+  Title pattern: "Learning Center | Puppy Care Articles, Tips & Guides"
+  Description emphasizes educational content and trust.
+{%- endcomment -%}
+{%- capture page_title -%}
+  Learning Center | Puppy Care Articles, Tips & Guides
+{%- endcapture -%}
+{%- capture page_description -%}
+  Explore expert puppy care guides, health tips, training advice and breed insights—all in one learning center to help you raise a happy, healthy companion.
+{%- endcapture -%}
+{%- if page_title -%}{%- endif -%}
+{%- if page_description -%}{%- endif -%}
+
+{%- assign max_articles = 200 -%}
+{%- assign article_keys = '' -%}
+{%- assign count = 0 -%}
+{%- for blog in blogs -%}
+  {%- for article in blog.articles -%}
+    {%- if count >= max_articles -%}
+      {%- break -%}
+    {%- endif -%}
+    {%- assign key = blog.handle | append: '::' | append: article.handle -%}
+    {%- if article_keys == '' -%}
+      {%- assign article_keys = key -%}
+    {%- else -%}
+      {%- assign article_keys = article_keys | append: '||' | append: key -%}
+    {%- endif -%}
+    {%- assign count = count | plus: 1 -%}
+  {%- endfor -%}
+  {%- if count >= max_articles -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign article_key_array = article_keys | split: '||' -%}
+
+{%- comment -%} Simple published date sort: we rebuild pairs with timestamp prefix {%- endcomment -%}
+{%- assign stamped = '' -%}
+{%- for key in article_key_array -%}
+  {%- assign parts = key | split: '::' -%}
+  {%- assign b_handle = parts[0] -%}
+  {%- assign a_handle = parts[1] -%}
+  {%- assign a = blogs[b_handle].articles[a_handle] -%}
+  {%- if a -%}
+    {%- assign ts = a.published_at | date: '%s' -%}
+    {%- assign stamped_key = ts | append: '::' | append: key -%}
+    {%- if stamped == '' -%}
+      {%- assign stamped = stamped_key -%}
+    {%- else -%}
+      {%- assign stamped = stamped | append: '||' | append: stamped_key -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign stamped_array = stamped | split: '||' -%}
+{%- assign sorted_desc = stamped_array | sort_natural | reverse -%}
+
+{%- assign per_page = section.settings.per_page | default: 20 -%}
+{%- assign page_param = request.params.page | default: 1 | plus: 0 -%}
+{%- if page_param < 1 -%}{%- assign page_param = 1 -%}{%- endif -%}
+{%- assign total_articles = sorted_desc.size -%}
+{%- assign total_pages = total_articles | divided_by: per_page | ceil -%}
+{%- if page_param > total_pages -%}{%- assign page_param = total_pages -%}{%- endif -%}
+{%- assign start_index = per_page | times: page_param | minus: per_page -%}
+{%- assign end_index = start_index | plus: per_page -%}
+{%- if end_index > total_articles -%}{%- assign end_index = total_articles -%}{%- endif -%}
+
+  <section class="learning-center container mx-auto py-12">
+    <header class="lc-header text-center mb-12">
+      <h1 class="font-bold text-5xl sm:text-6xl md:text-7xl tracking-tight">Learning Center</h1>
+      <p class="mt-4 text-base text-gray-600">Articles, guides and tips for caring for your new puppy.</p>
+    </header>
+
+  <div class="lc-grid grid gap-10 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
+      {%- for i in (start_index..end_index) -%}
+        {%- assign entry = sorted_desc[i] -%}
+        {%- if entry == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign entry_parts = entry | split: '::' -%}
+        {%- assign blog_handle = entry_parts[1] -%}
+        {%- assign article_handle = entry_parts[2] -%}
+        {%- assign article_collection = blogs[blog_handle].articles -%}
+        {%- assign article = article_collection[article_handle] -%}
+        {%- if article == blank -%}
+          {%- comment -%} Fallback: iterate to locate article by handle because array indexing by handle returns blank {%- endcomment -%}
+          {%- for a in article_collection -%}
+            {%- if a.handle == article_handle -%}
+              {%- assign article = a -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if article -%}
+          <a href="{{ article.url }}" aria-label="Read article: {{ article.title | escape }}" class="lc-article group flex flex-col bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100 transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/40">
+            {%- if article.image -%}
+              <div class="relative aspect-[4/3] overflow-hidden">
+                {{ article.image | image_url: width: 900 | image_tag: class: 'w-full h-full object-cover transition-transform duration-300 group-hover:scale-105', alt: article.title | escape }}
+              </div>
+            {%- else -%}
+              <div class="relative aspect-[4/3] bg-gray-100 flex items-center justify-center text-gray-400 text-sm">No image</div>
+            {%- endif -%}
+            <div class="flex flex-col h-full p-8 pt-10">
+              <h2 class="font-titles text-[1.75rem] leading-snug font-semibold mb-4 tracking-tight">{{ article.title | escape }}</h2>
+              {%- if article.excerpt != blank -%}
+                <p class="text-base text-gray-600 mb-6">{{ article.excerpt | strip_html | truncate: 180 }}</p>
+              {%- endif -%}
+              <div class="mt-auto flex items-center justify-between text-xs uppercase tracking-wide text-gray-500">
+                <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
+                <span>{{ blogs[blog_handle].title }}</span>
+              </div>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="mt-12 text-center flex items-center justify-center gap-6">
+      {%- if page_param > 1 -%}
+        <a class="text-sm underline" href="{{ request.path }}?page={{ page_param | minus: 1 }}">Previous</a>
+      {%- endif -%}
+      <span class="text-xs tracking-wide uppercase">Page {{ page_param }} of {{ total_pages }}</span>
+      {%- if page_param < total_pages -%}
+        <a class="text-sm underline" href="{{ request.path }}?page={{ page_param | plus: 1 }}">Next</a>
+      {%- endif -%}
+    </div>
+  </section>
+
+{% stylesheet %}
+.learning-center { --gap: 2rem; }
+.lc-grid { align-items: stretch; }
+.lc-article { transition: box-shadow .15s ease, transform .15s ease; }
+.lc-article:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); transform: translateY(-2px); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.learning_center",
+  "settings": [
+    {"type": "range", "id": "per_page", "label": "Articles per page (display only)", "min": 6, "max": 30, "step": 2, "default": 20}
+  ],
+  "presets": [
+    {"name": "Learning Center"}
+  ]
+}
+{% endschema %}

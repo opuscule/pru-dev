@@ -1,0 +1,6 @@
+/* Pruned font-face declarations: only weights used (Amatic 400/700; Open Sans 400/700 normal) */
+/* IMPORTANT: Place corresponding woff2 files in assets and ensure filenames match. */
+@font-face { font-family: 'Amatic SC'; font-style: normal; font-weight: 400; font-display: swap; src: url('amatic-sc-400.woff2') format('woff2'); }
+@font-face { font-family: 'Amatic SC'; font-style: normal; font-weight: 700; font-display: swap; src: url('amatic-sc-700.woff2') format('woff2'); }
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('open-sans-400.woff2') format('woff2'); }
+@font-face { font-family: 'Open Sans'; font-style: normal; font-weight: 700; font-display: swap; src: url('open-sans-700.woff2') format('woff2'); }

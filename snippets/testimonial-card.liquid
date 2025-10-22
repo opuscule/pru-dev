@@ -1,0 +1,15 @@
+<div class="testimonial-card bg-white rounded-lg shadow-md overflow-hidden">
+  {% if image %}
+    <img src="{{ image | image_url: width: 400, height: 400 }}" alt="Photo of {{ puppysName }}" width="400" height="400" class="w-full h-48 object-cover">
+  {% else %}
+    <div class="w-full h-48 bg-gray-200"></div>
+  {% endif %}
+  <div class="p-6">
+    <h3 class="text-xl font-bold font-titles">{{ title | default: "Our new best friend!" }}</h3>
+    <p class="text-gray-700 mt-2">"{{ quote | default: "We are so in love with our new puppy. The whole process was so easy and everyone was so helpful. We couldn't be happier!" }}"</p>
+    <div class="mt-4">
+      <p class="font-bold">{{ ownersName | default: "The Smith Family testimonial-card.liquid" }}</p>
+      <p class="text-sm text-gray-600">{{ puppysName | default: "Buddy" }}, {{ breed | default: "Golden Retriever" }}</p>
+    </div>
+  </div>
+</div>

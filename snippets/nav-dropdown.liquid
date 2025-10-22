@@ -1,0 +1,95 @@
+{%- comment -%}
+  Renders a navigation dropdown for both desktop (hover) and mobile (accordion).
+
+  Accepts:
+  - parent_link: {object} The main link that triggers the dropdown.
+  - link_handle: {string} A slugified version of the parent link's title.
+  - menu_id: {string} The ID of the parent link's menu.
+
+  Usage:
+  {% render 'nav-dropdown', parent_link: link, link_handle: link.title | handleize, menu_id: section.settings.menu.id %}
+{%- endcomment -%}
+
+{%- liquid
+  assign has_sub_links = false
+  if parent_link.links.size > 0
+    assign has_sub_links = true
+  endif
+-%}
+
+{%- if has_sub_links -%}
+  <li class="relative">
+    <button
+      type="button"
+      data-{{ link_handle }}-toggle
+      aria-controls="desktop-{{ link_handle }}-menu mobile-{{ link_handle }}-menu"
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="flex items-center gap-2 text-body-copy no-underline transition-colors duration-200 ease-in-out"
+    >
+      {{ parent_link.title }}
+      <svg class="w-3 transition-transform duration-200 ease-in-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>
+    </button>
+
+    {%- comment -%}
+      DESKTOP: Hover Panel
+    {%- endcomment -%}
+    <div
+      id="desktop-{{ link_handle }}-menu"
+      class="absolute left-0 top-full z-10 hidden w-max min-w-[200px] rounded-md border border-gray-200 bg-white shadow-lg md:block"
+      role="menu"
+      aria-hidden="true"
+    >
+      <ul class="list-none p-4 m-0">
+        {%- for child_link in parent_link.links -%}
+          <li>
+            <a
+              href="{{ child_link.url }}"
+              class="block p-2 text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100"
+              role="menuitem"
+              {% if child_link.current %}aria-current="page"{% endif %}
+            >
+              {{ child_link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul> 
+    </div>
+
+    {%- comment -%}
+      MOBILE: Accordion Panel
+    {%- endcomment -%}
+    <div
+      id="mobile-{{ link_handle }}-menu"
+      data-{{ link_handle }}-panel
+      class="overflow-hidden transition-max-height duration-300 ease-in-out md:hidden"
+      style="max-height: 0px;"
+      role="menu"
+    >
+      <ul class="list-none p-4 m-0">
+        {%- for child_link in parent_link.links -%}
+          <li>
+            <a
+              href="{{ child_link.url }}"
+              class="block p-2 text-body-copy no-underline"
+              role="menuitem"
+              {% if child_link.current %}aria-current="page"{% endif %}
+            >
+              {{ child_link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </li>
+{%- else -%}
+  <li>
+    <a
+      href="{{ parent_link.url }}"
+      class="text-body-copy no-underline transition-colors duration-200 ease-in-out"
+      {% if parent_link.current %}aria-current="page"{% endif %}
+    >
+      {{ parent_link.title }}
+    </a>
+  </li>
+{%- endif -%}

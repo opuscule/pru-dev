@@ -1,0 +1,228 @@
+{% comment %}
+  This section fetches testimonials from the Contentful API and displays them in a grid.
+{% endcomment %}
+
+<!-- SVG sprite for testimonial rating stars -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+  <defs>
+    <svg id="star-icon" viewBox="0 0 64 64" xml:space="preserve">
+      <path fill="currentColor" d="M62.799 23.737a3.941 3.941 0 0 0-3.139-2.642l-16.969-2.593-7.622-16.237a3.938 3.938 0 0 0-7.13 0l-7.623 16.238-16.969 2.593a3.937 3.937 0 0 0-2.222 6.642l12.392 12.707-2.935 17.977a3.94 3.94 0 0 0 5.797 4.082l15.126-8.365 15.126 8.365a3.94 3.94 0 0 0 5.796-4.082l-2.935-17.977 12.393-12.707a3.942 3.942 0 0 0 .914-4.001z"></path>
+    </svg>
+  </defs>
+</svg>
+
+<div class="w-full px-4 mx-auto py-12 {{ section.settings.custom_class }}">
+  <div class="max-w-[var(--width-container-content)] mx-auto">
+    {% if section.settings.title != blank %}
+      <h2 class="text-4xl font-titles text-center mb-12">{{ section.settings.title | escape }}</h2>
+    {% endif %}
+
+    <div
+      id="testimonials-container"
+      class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+      data-space-id="{{ settings.contentful_space_id | escape }}"
+      data-access-token="{{ settings.contentful_access_token | escape }}"
+      data-content-type="happy_families"
+    >
+      <!-- Testimonials will be loaded here by JavaScript -->
+      <p>Loading testimonials...</p>
+    </div>
+  </div>
+</div>
+
+{% javascript %}
+  (async () => {
+    // --- Contentful API Details ---
+    // Read from data-* attributes to avoid Liquid inside JS block.
+    const container = document.getElementById('testimonials-container');
+    if (!container) return;
+
+    const SPACE_ID = container.dataset.spaceId;
+    const ACCESS_TOKEN = container.dataset.accessToken;
+    const CONTENT_TYPE = container.dataset.contentType || 'happy_families';
+
+    if (!SPACE_ID || !ACCESS_TOKEN) {
+      console.error('Contentful API credentials are not configured in the theme editor.');
+      document.getElementById('testimonials-container').innerHTML = '<p>Could not load testimonials. API not configured.</p>';
+      return;
+    }
+
+  const endpoint = `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/master/entries?access_token=${ACCESS_TOKEN}&content_type=${CONTENT_TYPE}&include=2`;
+
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error(`Contentful API error: ${response.statusText}`);
+      }
+      const data = await response.json();
+
+      // Clear the "Loading..." message
+      container.innerHTML = '';
+
+      if (data.items && data.items.length > 0) {
+        // Create a map of included assets for easy lookup
+        const assetMap = new Map();
+        if (data.includes && data.includes.Asset) {
+          for (const asset of data.includes.Asset) {
+            assetMap.set(asset.sys.id, asset.fields);
+          }
+        }
+        // Shuffle items to randomize
+        const shuffled = data.items
+          .map(v => ({ v, r: Math.random() }))
+          .sort((a, b) => a.r - b.r)
+          .map(({ v }) => v)
+          .slice(0, 8);
+
+        const fallbackDate = '2022-01-03';
+  shuffled.forEach(item => {
+          const fields = item.fields;
+          let imageUrl = '';
+          if (fields.image && fields.image.sys && fields.image.sys.id) {
+            const asset = assetMap.get(fields.image.sys.id);
+            if (asset && asset.file && asset.file.url) {
+              imageUrl = asset.file.url;
+              if (imageUrl.startsWith('//')) {
+                imageUrl = 'https:' + imageUrl;
+              }
+            }
+          }
+
+          // Dynamically create the card HTML. We can't use the Liquid snippet here
+          // because this is client-side JavaScript.
+          const starSVG = `<svg class=\"icon inline-block w-5 h-5 testimonial-star\" width=\"15\" height=\"15\"><use href=\"#star-icon\"></use></svg>`;
+          const stars = starSVG.repeat(5);
+          const article = document.createElement('article');
+          article.className = 'testimonial flex gap-6 items-start bg-transparent';
+          article.innerHTML = `
+              <div class="relative shrink-0">
+                <div class="absolute -left-3 -bottom-3 w-[140px] h-[140px] rounded-[24px] bg-[#F2635B]"></div>
+                ${imageUrl
+                  ? `<img src="${imageUrl}?w=300&h=300" alt="Photo of ${(fields.puppysName || '').replace(/"/g,'&quot;')}" width="300" height="300" class="relative rounded-[24px] w-[140px] h-[140px] object-cover" loading="lazy">`
+                  : '<div class="relative rounded-[24px] w-[140px] h-[140px] bg-gray-200"></div>'}
+              </div>
+              <div class="flex-1">
+                <div class="mb-2 leading-none">${stars}</div>
+                <h3 class="font-titles text-5xl tracking-wide mb-3">${(fields.title || '')}</h3>
+                <p class="text-[1.35rem] leading-relaxed text-gray-700">${(fields.quote || '')}</p>
+              </div>`;
+
+          // Build Review structured data
+          // Derive publish date from Contentful (dateSubmitted) if present
+          let datePublished = fallbackDate;
+          if (fields.dateSubmitted) {
+            try {
+              const d = new Date(fields.dateSubmitted);
+              if (!isNaN(d.getTime())) {
+                // Use date portion only (YYYY-MM-DD)
+                datePublished = d.toISOString().split('T')[0];
+              }
+            } catch(e) { /* silently fallback */ }
+          }
+
+          const reviewData = {
+            '@context': 'https://schema.org/',
+            '@type': 'Review',
+            itemReviewed: {
+              '@type': 'Organization',
+              name: 'Puppys R Us, LLC.',
+              url: 'https://puppysrus.com/',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: '1404 Southern Hills #246',
+                addressLocality: 'West Plains',
+                addressRegion: 'MO',
+                postalCode: '65775',
+                addressCountry: 'US'
+              },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+1-844-733-7877',
+                contactType: 'Sales',
+                email: 'sales@puppysrus.com'
+              }
+            },
+            author: {
+              '@type': 'Person',
+              name: fields.ownersName || 'Happy Family'
+            },
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: '5',
+              bestRating: '5',
+              worstRating: '1'
+            },
+            reviewBody: fields.quote || '',
+            datePublished: datePublished
+          };
+
+          const ld = document.createElement('script');
+          ld.type = 'application/ld+json';
+          ld.textContent = JSON.stringify(reviewData);
+          article.appendChild(ld);
+          container.appendChild(article);
+        });
+
+        // Append aggregate rating (all reviews assumed rating 5)
+        try {
+          if (shuffled.length > 0) {
+            const orgData = {
+              '@context': 'https://schema.org/',
+              '@type': 'Organization',
+              name: 'Puppys R Us, LLC.',
+              url: 'https://puppysrus.com/',
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '5',
+                reviewCount: String(shuffled.length),
+                bestRating: '5',
+                worstRating: '1'
+              }
+            };
+            const agg = document.createElement('script');
+            agg.type = 'application/ld+json';
+            agg.textContent = JSON.stringify(orgData);
+            container.appendChild(agg);
+          }
+        } catch(e) { /* swallow */ }
+      } else {
+        container.innerHTML = '<p>No testimonials found.</p>';
+      }
+    } catch (error) {
+      console.error('Failed to fetch testimonials:', error);
+      container.innerHTML = '<p>Sorry, we could not load testimonials at this time.</p>';
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.testimonials.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.testimonials.settings.title.label",
+      "default": "What Our Families Say"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.testimonials.settings.header_styling.content"
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "t:sections.testimonials.settings.custom_class.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.testimonials.name"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .testimonial-star { color: var(--color-primary, #F2635B); fill: currentColor; }
+{% endstylesheet %}

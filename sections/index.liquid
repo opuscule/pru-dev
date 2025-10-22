@@ -1,0 +1,394 @@
+<section id="homepage-hero" class="p-8">
+  <style>
+    /* Scoped hero styles: max width, min-height and left->right gradient overlay */
+    #homepage-hero > div {
+      max-width: var(--width-container-content);
+      min-height: 60vh;
+      margin-inline: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    #homepage-hero > div::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 50%);
+      z-index: 0;
+    }
+  </style>
+  
+  <div class="bg-cover bg-center rounded-3xl pt-40 px-12 pb-18 bg-[url(https://dr9yafd9jyp80.cloudfront.net/pru/puppysrus-banner-2023.webp)]">
+    <div class="max-w-lg banner_content z-10 relative">
+      <h1 class="text-6xl text-white">We have the perfect addition to your family.</h1>
+      <p role="heading" class="text-white text-lg">Creating happier homes one puppy at a time.</p>
+      <div id="breed-search" class="mt-6 flex items-stretch rounded-full bg-white shadow max-w-xl">
+        <select class="choices-single flex-1" id="collection-select" aria-label="Find your breed">
+          <option value="">Find Your Breed</option>
+          {% for collection in collections %}
+            {% if collection.metafields.custom.shown_on_website == true %}
+              <option value="{{ collection.url }}">{{ collection.title }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <button id="breed-search-btn" type="button" class="px-6 bg-primary text-white font-bold text-sm tracking-wide uppercase disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition" disabled>
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="text-center pt-10">
+  <h2 class="inline-block bg-primary text-white font-titles text-center mx-auto mb-0 pt-0.5 px-4 text-5xl leading-tight" style="border-top-left-radius:.25em;border-top-right-radius:.25em;">Our Newest Additions</h2>
+</div>
+<section id="newest-additions" class="border-t-[0.65rem] border-t-primary">
+
+  <!-- Homepage puppies carousel -->
+  <link rel="stylesheet" href="{{ 'splide.min.css' | asset_url }}">
+  
+
+  <div class="home_carousel_wrapper max-w-[var(--width-container-content)] mx-auto px-8">
+  
+    <div id="homepage-puppies-carousel" class="splide mt-6 relative" role="group" aria-label="Newest puppies carousel" tabindex="0">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {% assign ap = collections['all'] | default: collections['all'] %}
+          {% if ap and ap.products.size > 0 %}
+            {% assign count = 0 %}
+            {% for p in ap.products %}
+              {% if count >= 8 %}{% break %}{% endif %}
+              <li class="splide__slide">
+                {% render 'puppy-card', product: p %}
+              </li>
+              {% assign count = count | plus: 1 %}
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
+      <!-- Custom navigation arrows -->
+      <button id="puppies-prev" type="button" aria-label="Previous puppies" class="puppies-arrow absolute top-1/2 -translate-y-1/2 left-2 bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)] w-12 h-12 rounded-full z-10 flex items-center justify-center text-white text-[45px] leading-none p-0 cursor-pointer select-none focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition">&lsaquo;</button>
+      <button id="puppies-next" type="button" aria-label="Next puppies" class="puppies-arrow absolute top-1/2 -translate-y-1/2 right-2 bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)] w-12 h-12 rounded-full z-10 flex items-center justify-center text-white text-[45px] leading-none p-0 cursor-pointer select-none focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition">&rsaquo;</button>
+    </div>
+
+  </div><!-- .home_carousel_wrapper -->
+
+  <script defer src="{{ 'splide.min.js' | asset_url }}"></script>
+    
+  <div class="my-12 text-center"><a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">View All Puppies</a></div>
+
+  <div class="text-center pt-10">
+      <h2 class="inline-block bg-primary text-white font-titles text-center mx-auto mb-0 pt-0.5 px-4 text-5xl leading-tight" style="border-top-left-radius:.25em;border-top-right-radius:.25em;">The Puppys R Us Difference</h2>
+    </div>
+</section>
+
+{% render 'puppiesrus-difference' %}
+
+{% render 'meet-a-breeder' %}
+
+{% render 'about-us' %}
+
+    <!-- Embedded Testimonials (previously separate section) -->
+  <section id="happy-families" class="pt-24 pb-[200px] mb-[-200px] bg-[var(--color-bg-extralight)]">
+      <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+        <h2 class="font-titles text-center text-5xl mb-16">Happy Families</h2>
+        <div id="happy-families-slider" class="relative max-w-5xl mx-auto">
+          <div id="happy-families-track" class="overflow-hidden">
+            <div class="slides transition-all duration-500"></div>
+          </div>
+          <div class="dots flex items-center justify-center gap-4 mt-10" id="happy-families-dots"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      (async () => {
+        const SPACE_ID = '{{ settings.contentful_space_id | escape }}';
+        const ACCESS_TOKEN = '{{ settings.contentful_access_token | escape }}';
+        const CONTENT_TYPE = 'happy_families';
+        if (!SPACE_ID || !ACCESS_TOKEN) return;
+
+        const endpoint = `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/master/entries?access_token=${ACCESS_TOKEN}&content_type=${CONTENT_TYPE}&include=2`;
+        try {
+          const res = await fetch(endpoint);
+          if (!res.ok) throw new Error(await res.text());
+          const data = await res.json();
+          const track = document.querySelector('#happy-families-track .slides');
+          const dotsWrap = document.getElementById('happy-families-dots');
+          if (!data.items || data.items.length === 0) {
+            track.innerHTML = '<p class="text-center">No testimonials found.</p>';
+            return;
+          }
+          const assetMap = new Map();
+          if (data.includes && data.includes.Asset) {
+            for (const a of data.includes.Asset) assetMap.set(a.sys.id, a.fields);
+          }
+          const shuffled = data.items
+            .map(v => ({ v, r: Math.random() }))
+            .sort((a,b)=>a.r-b.r)
+            .map(({v})=>v)
+            .slice(0,8);
+
+          const slides = [];
+          shuffled.forEach((item,i) => {
+            const f = item.fields;
+            let imageUrl = '';
+            if (f.image && f.image.sys && f.image.sys.id) {
+              const asset = assetMap.get(f.image.sys.id);
+              if (asset && asset.file && asset.file.url) {
+                imageUrl = asset.file.url.startsWith('//') ? 'https:' + asset.file.url : asset.file.url;
+              }
+            }
+            const stars = '<span class="text-[#F2635B]">★</span>'.repeat(5);
+            slides.push(`
+              <div class="slide flex flex-col md:flex-row gap-8 items-start w-full shrink-0" data-index="${i}">
+                <div class="relative shrink-0 mx-auto md:mx-0">
+                  <div class="absolute -left-3 -bottom-3 w-[180px] h-[180px] rounded-[32px] bg-[#F2635B]"></div>
+                  ${imageUrl ? `<img src="${imageUrl}?w=400&h=400" alt="${f.puppysName || ''}" width="400" height="400" class="relative rounded-[32px] w-[180px] h-[180px] object-cover" loading="lazy">` : '<div class="relative rounded-[32px] w-[180px] h-[180px] bg-gray-200"></div>'}
+                </div>
+                <div class="flex-1 max-w-2xl mx-auto md:mx-0">
+                  <div class="mb-3 leading-none">${stars}</div>
+                  <h3 class="font-titles text-5xl tracking-wide mb-5">${f.title || ''}</h3>
+                  <p class="text-[1.35rem] leading-relaxed text-gray-700">${f.quote || ''}</p>
+                </div>
+              </div>`);
+          });
+
+          track.style.display = 'flex';
+          track.style.width = '100%';
+          track.innerHTML = slides.join('');
+
+          // Slider state
+          let current = 0;
+          function render() {
+            const all = track.querySelectorAll('.slide');
+              all.forEach((s,i)=>{
+                s.style.display = i === current ? 'flex' : 'none';
+              });
+            dotsWrap.querySelectorAll('button').forEach((b,i)=>{
+              b.classList.toggle('opacity-100', i===current);
+              b.classList.toggle('opacity-30', i!==current);
+            });
+          }
+          // Dots
+          dotsWrap.innerHTML = slides.map((_,i)=>`<button aria-label="Show testimonial ${i+1}" class="w-5 h-5 rounded-full bg-neutral-700 opacity-30 transition" data-to="${i}"></button>`).join('');
+          dotsWrap.addEventListener('click', e => {
+            const btn = e.target.closest('button[data-to]');
+            if (!btn) return;
+            current = parseInt(btn.dataset.to, 10);
+            render();
+          });
+          render();
+        } catch (e) {
+          console.error('Testimonials load error', e);
+        }
+      })();
+    });
+    </script>
+
+
+{% javascript %}
+  document.addEventListener('DOMContentLoaded', function() {
+    var selectElement = document.querySelector('.choices-single');
+
+    if (selectElement) {
+      var choices = new Choices(selectElement, {
+        searchEnabled: true,
+        itemSelectText: '',
+        placeholder: true,
+        placeholderValue: 'Find Your Breed',
+        shouldSort: false,
+      });
+
+      var searchBtn = document.getElementById('breed-search-btn');
+
+      function updateButtonState() {
+        if (!searchBtn) return;
+        if (selectElement.value) {
+          searchBtn.disabled = false;
+        } else {
+          searchBtn.disabled = true;
+        }
+      }
+
+      selectElement.addEventListener('change', updateButtonState);
+      updateButtonState();
+
+      if (searchBtn) {
+        searchBtn.addEventListener('click', function() {
+          if (selectElement.value) {
+            window.location.href = selectElement.value;
+          }
+        });
+      }
+
+      // Allow Enter key inside the choices input to trigger search
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var active = document.activeElement;
+          if (active && (active.closest('#breed-search'))) {
+            if (selectElement.value) {
+              e.preventDefault();
+              window.location.href = selectElement.value;
+            }
+          }
+        }
+      });
+    }
+
+    // Initialize Splide homepage carousel if available
+    function initPuppiesCarousel() {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let autoplayEnabled = !prefersReduced; // Respect user reduced motion preference
+
+      const splide = new Splide('#homepage-puppies-carousel', {
+        type: 'slide',
+        perPage: 4,              // desktop: 4 full slides
+        perMove: 1,
+        gap: '0',                // we handle visual gap via CSS gap to avoid rounding overflow
+        arrows: false,           // using custom arrows
+        pagination: false,
+        autoplay: autoplayEnabled,
+        interval: 5000,
+        padding: { left: 0, right: 0 },
+        focus: 'start',
+        trimSpace: true,
+        breakpoints: {
+          1023: { perPage: 3 },  // tablet
+          767:  { perPage: 2 }
+        }
+      }).mount();
+
+      // Expose instance for external handlers / late-bound scripts
+      window.__puppiesSplide = splide;
+
+      function getSplide() {
+        const inst = window.__puppiesSplide;
+        if (!inst || typeof inst.go !== 'function') {
+          console.warn('[Puppies Carousel] Splide instance not ready when arrow clicked.');
+          return null;
+        }
+        return inst;
+      }
+
+      const prevBtn = document.getElementById('puppies-prev');
+      const nextBtn = document.getElementById('puppies-next');
+  if (prevBtn) prevBtn.addEventListener('click', () => { const inst = getSplide(); if (inst) inst.go('<'); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { const inst = getSplide(); if (inst) inst.go('>'); });
+
+      // Autoplay toggle button
+      const toggleBtn = document.getElementById('puppies-autoplay-toggle');
+      let playing = autoplayEnabled;
+      function updateToggle() {
+        if (!toggleBtn) return;
+        toggleBtn.textContent = playing ? 'Pause' : 'Play';
+        toggleBtn.setAttribute('aria-label', (playing ? 'Pause' : 'Play') + ' carousel autoplay');
+        toggleBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      }
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          if (!playing) {
+            splide.Components.Autoplay.play();
+            playing = true;
+          } else {
+            splide.Components.Autoplay.pause();
+            playing = false;
+          }
+          updateToggle();
+        });
+        updateToggle();
+      }
+
+      // Keyboard navigation & spacebar autoplay toggle when carousel focused
+      const carouselEl = document.getElementById('homepage-puppies-carousel');
+      if (carouselEl) {
+        carouselEl.addEventListener('keydown', (e) => {
+          switch (e.key) {
+            case 'ArrowLeft':
+              splide.go('<');
+              e.preventDefault();
+              break;
+            case 'ArrowRight':
+              splide.go('>');
+              e.preventDefault();
+              break;
+            case ' ': // Space toggles autoplay
+            case 'Spacebar':
+              if (playing) {
+                splide.Components.Autoplay.pause();
+                playing = false;
+              } else {
+                splide.Components.Autoplay.play();
+                playing = true;
+              }
+              updateToggle();
+              e.preventDefault();
+              break;
+          }
+        });
+      }
+
+      // Listen for reduced motion preference changes
+      const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+      media.addEventListener('change', (ev) => {
+        if (ev.matches) { // user now prefers reduced motion
+          splide.Components.Autoplay.pause();
+          playing = false;
+        } else if (!playing) { // user no longer prefers reduced motion, but only auto-resume if previously playing before
+          splide.Components.Autoplay.play();
+          playing = true;
+        }
+        updateToggle();
+      });
+    }
+
+    if (window.Splide) {
+      initPuppiesCarousel();
+    } else {
+      window.addEventListener('load', function() { if (window.Splide) initPuppiesCarousel(); });
+    }
+  });
+{% endjavascript %}
+
+{% stylesheet %}
+  /* Add any custom styling for Choices.js here */
+  .choices { width: 100%; }
+  /* Breed search composite control */
+  #breed-search { box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.06); }
+  #breed-search:focus-within { box-shadow: 0 0 0 2px var(--color-primary,#EE6A5B); }
+  #breed-search .choices { margin-bottom: 0; }
+  #breed-search .choices__inner {
+    display: flex;
+    align-items: center;
+    min-height: 0;
+    border: none;
+    background: transparent;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    box-shadow: none;
+    border-radius: 0; /* handled by wrapper */
+  }
+  #breed-search .choices__list { margin-left: 30px; width: calc(100% - 30px); }
+  #breed-search .choices__list--single { padding: 0; }
+  #breed-search .choices__placeholder { opacity: 0.55; }
+  #breed-search .choices__list--dropdown { border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  #breed-search .choices__list--dropdown .choices__item--selectable.is-highlighted { background: var(--color-primary,#EE6A5B); color: #fff; }
+  #breed-search-btn { letter-spacing: .5px; }
+  /* Ensure equal spacing & exactly 4 (desktop) / 3 (tablet) / 2 (mobile) visible slides without peeking */
+  #homepage-puppies-carousel .splide__track { overflow: hidden; }
+  #homepage-puppies-carousel .splide__list { display: flex; gap: 1rem; }
+  /* Desktop >= 1024px: 4 slides */
+  @media (min-width:1024px) {
+    #homepage-puppies-carousel .splide__slide { flex: 0 0 calc((100% - 3rem) / 4); }
+  }
+  /* Tablet 768-1023px: 3 slides */
+  @media (min-width:768px) and (max-width:1023.98px) {
+    #homepage-puppies-carousel .splide__slide { flex: 0 0 calc((100% - 2rem) / 3); }
+  }
+  /* Mobile < 768px: 2 slides */
+  @media (max-width:767.98px) {
+    #homepage-puppies-carousel .splide__slide { flex: 0 0 calc((100% - 1rem) / 2); }
+  }
+{% endstylesheet %}
