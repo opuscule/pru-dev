@@ -317,11 +317,18 @@
                     <div class="col-md-6">
                       <div class="buy-col col-two">
                         <div class="product-description">
-                          <h2 class="font-bold text-4xl"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+                          <code>#{{ item.sku }}</code>
+                          <h2 class="font-bold text-4xl"><a href="{{ item.url }}" style="color: #000;text-decoration: none;">{{ item.product.title }}</a></h2>
                           {% if breed %}<p class="two-line-clamp">{{ breed }}</p>{% endif %}
-                          <ul>
-                            {% if gender %}<li><strong>Gender</strong> {{ gender }}</li>{% endif %}
-                            {% if age %}<li><strong>Age</strong> {{ age }}</li>{% endif %}
+                            {% assign dob_val = item.product.metafields.custom.dob.value %}
+                            {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
+                            {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
+                            {% assign diff_seconds = now_ts | minus: dob_ts %}
+                            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+
+                            <ul>
+                            <li><strong>Gender</strong> {{ item.product.metafields.custom.sex }}</li>
+                            <li><strong>Age</strong> {{ weeks_old | floor }} Weeks Old</li>
                             <li><strong>Price</strong> {{ unit_price | money }}</li>
                           </ul>
 
@@ -509,7 +516,7 @@
             {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
             {% assign diff_seconds = now_ts | minus: dob_ts %}
-                  {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
 
             <code>#{{ item.sku }}</code>
 
