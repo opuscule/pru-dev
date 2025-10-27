@@ -409,18 +409,7 @@
                   </label>
                 </div>
               </div>
-
-              <button
-                id="checkoutBtn"
-                class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"
-                type="submit"
-                name="checkout"
-                disabled
-                aria-disabled="true">
-                {% render 'icon-lock' %}
-                Checkout
-              </button>
-
+              <input  id="checkoutBtn" type="submit" name="checkout" class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
               <img class="w-100" src="{{ 'cards.png' | asset_url }}" alt="Payment methods">
               {% endif %}
             </div>
