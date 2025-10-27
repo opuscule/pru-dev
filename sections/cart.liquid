@@ -28,7 +28,7 @@
             </div>
             
             <!-- 2nd column: details -->
-            <div class="space-y-1">
+            <div class="space-y-1 title-here">
             {% assign dob_val = item.product.metafields.custom.dob.value %}
             {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
