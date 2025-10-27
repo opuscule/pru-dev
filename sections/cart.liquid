@@ -6,6 +6,487 @@
 {% endcomment %}
 
 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ef6859;
+            --secondary-color: #8bb02e;
+            --theme-light: #efebdc;
+            --gray-light: #f1f2f3;
+            --black-color: #2a2a2a;
+            --white-color: #ffffff;
+
+
+            --border-radius: .3rem;
+        }
+
+        body {
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        .section-space {
+            padding: 5rem 0;
+        }
+
+        .section-space-top {
+            padding-top: 5rem;
+        }
+
+        .section-space-bottom {
+            padding-bottom: 5rem;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .bg-theme-light {
+            background-color: var(--theme-light);
+        }
+
+        .btn {
+            border-radius: 50px;
+            padding: 0.35rem 1.5rem;
+            display: inline-block;
+        }
+
+        /* .btn-theme */
+        .btn.btn-theme {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+        }
+
+        .btn.btn-theme:hover {
+            background-color: var(--primary-color);
+        }
+
+
+        /* .btn-bordered */
+        .btn.btn-bordered {
+            border: 1px solid var(--white-color);
+            color: var(--primary-color);
+        }
+
+        .btn.btn-bordered:hover {
+            border: 1px solid var(--white-color);
+            color: var(--primary-color);
+        }
+
+        .order-summary {
+            background-color: var(--gray-light);
+            border: 1px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+        }
+        .order-summary .form-check{
+            border: 1px solid var(--primary-color);
+            padding: .5rem .5rem .5rem 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .order-summary ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .order-summary ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--white-color);
+        }
+
+        .order-summary ul li.total {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--primary-color);
+            border-bottom: none !important;
+            margin-bottom: 1rem;
+        }
+
+        .cart-quantity {
+            max-width: 9rem;
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
+            padding: 0.15rem 0.5rem;
+            color: var(--white-color);
+        }
+
+        .cart-quantity input {
+            max-width: 5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--white-color);
+            text-align: center;
+        }
+
+        .cart-quantity input:focus {
+            border: 1px solid var(--white-color) !important;
+            outline: none !important;
+        }
+
+        .cart-quantity button {
+            background-color: transparent;
+            border: none;
+            color: var(--white-color);
+            font-size: 1.5rem;
+            padding: 0 0.5rem;
+            cursor: pointer;
+        }
+
+        .cart-quantity button:focus {
+            box-shadow: none;
+        }
+
+        .buy-product-pod {
+            background-color: var(--gray-light);
+            padding: 0.25rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--primary-color);
+        }
+
+        .buy-product-pod .buy-col {
+            width: 100%;
+            height: 100%;
+        }
+
+        .buy-product-pod .buy-col.col-two {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .buy-product-pod .buy-col.col-two .product-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .buy-product-pod .buy-col.col-three {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem 0;
+            border-left: 1px solid var(--primary-color);
+        }
+
+        .buy-product-pod .cart-quantity .btn:hover {
+
+            color: var(--white-color);
+        }
+
+        /* 
+        .buy-product-pod .cart-quantity {
+            max-width: 9rem;
+            background-color: var(--color_secondary);
+            color: var(--color_white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
+            padding: 0.15rem 0.5rem;
+            color: var(--color_white);
+        }
+
+        .buy-product-pod .cart-quantity input {
+            max-width: 5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--color_white);
+            text-align: center;
+        }
+
+        .buy-product-pod .cart-quantity input:focus {
+            border: 1px solid var(--color_white) !important;
+            outline: none !important;
+        }
+
+        .buy-product-pod .cart-quantity button {
+            background-color: transparent;
+            border: none;
+            color: var(--color_white);
+            font-size: 1.5rem;
+            padding: 0 0.5rem;
+            cursor: pointer;
+        }
+
+        .buy-product-pod .cart-quantity button:focus {
+            box-shadow: none;
+        } */
+
+        .buy-product-pod figure {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .buy-product-pod figure .badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            padding: 0.1rem 0.75rem;
+            color: var(--color_white);
+            font-size: 0.9rem;
+        }
+
+        .buy-product-pod figure img {
+            width: 100%;
+            height: 100%;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        .buy-product-pod .two-line-clamp {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4em;
+            max-width: 20rem;
+        }
+
+        .buy-product-pod ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .buy-product-pod ul li:last-child{
+            font-size: 1.25rem;
+            color: var(--white-color);
+            background-color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
+        .buy-product-pod ul strong {
+            color: var(--color_theme);
+            margin-right: 0.5rem;
+        }
+    </style>
+
+
+
+    <div class="buy-pod-wrap bg-theme-light section-space">
+        <div class="container">
+            <div class="buy-pod-inner">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="buy-product-pod mb-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="buy-col col-one">
+                                        <figure>
+                                            <img src="assets/images/product-image.webp" alt="">
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="buy-col col-two">
+                                        <div class="product-description">
+                                            <h4 class="product-title mb-2">Avery</h4>
+                                            <p class="two-line-clamp">Rottweiler</p>
+
+                                            <ul>
+                                                <li><strong>Gender</strong>Female</li>
+                                                <li><strong>Age</strong>12 Month</li>
+                                                <li><strong>Price</strong>$61.65</li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="buy-col col-three">
+
+                                        <div class="qty-pod text-center">
+                                            <strong class="d-block mb-2">Quantity</strong>
+                                            <div class="cart-quantity mb-2">
+                                                <button class="btn btn-minus">-</button>
+                                                <input type="text" value="1" />
+                                                <button class="btn btn-plus">+</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buy-product-pod mb-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="buy-col col-one">
+                                        <figure>
+                                            <img src="assets/images/product-image.webp" alt="">
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="buy-col col-two">
+                                        <div class="product-description">
+                                            <h4 class="product-title mb-2">Avery</h4>
+                                            <p class="two-line-clamp">Rottweiler</p>
+
+                                            <ul>
+                                                <li><strong>Gender</strong>Female</li>
+                                                <li><strong>Age</strong>12 Month</li>
+                                                <li><strong>Price</strong>$61.65</li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="buy-col col-three">
+
+                                        <div class="qty-pod text-center">
+                                            <strong class="d-block mb-2">Quantity</strong>
+                                            <div class="cart-quantity mb-2">
+                                                <button class="btn btn-minus">-</button>
+                                                <input type="text" value="1" />
+                                                <button class="btn btn-plus">+</button>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                       
+                    </div>
+                    <div class="col-md-3">
+                        <div class="order-summary">
+                            <h4 class="summary-title fw-bold">Order Summary</h4>
+                            <ul>
+                                <li>
+                                    <strong>Subtotal</strong>
+                                    <span>$61.65</span>
+                                </li>
+                                <li>
+                                    <strong>Sales Tax</strong>
+                                    <span>$6.65</span>
+                                </li>
+                                <li>
+                                    <strong>Shipping</strong>
+                                    <span>$6.65</span>
+                                </li>
+                                <li class="total">
+                                    <strong>Grand Total</strong>
+                                    <span>$61.65</span>
+                                </li>
+
+                            </ul>
+
+                            <div class="terms-pod mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="certifyAge">
+                                    <label class="form-check-label" for="certifyAge">
+                                        I certify I am 18 years of age or older.
+                                    </label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="understandTerms">
+                                    <label class="form-check-label" for="understandTerms">
+                                        I understand each Puppy is sold as-is, as a Pet, without breeding rights (unless
+                                        previously agreed in writing), without warranty, and understand my rights and
+                                        obligations of the Health Guarantee.
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="acknowledgeAgreement">
+                                    <label class="form-check-label" for="acknowledgeAgreement">
+                                        I acknowledge that I have read, understand, and agree to the terms of the
+                                        Reservation Agreement including the Cancellation, Refund, and Return policies.
+                                    </label>
+                                </div>
+                            </div>
+
+                            <a href="checkout.php" id="checkoutBtn" class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 disabled"
+                                aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
+                                </svg> Checkout</a>
+
+                                <img class="w-100" src="assets/images/cards.png" alt="">
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div><!-- /.buy-pod-inner -->
+        </div><!-- /.container -->
+    </div><!-- /.buy-pod-wrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.cart-quantity').forEach(cart => {
+            const minusBtn = cart.querySelector('.btn-minus');
+            const plusBtn = cart.querySelector('.btn-plus');
+            const qtyInput = cart.querySelector('input');
+
+            // Plus button
+            plusBtn.addEventListener('click', () => {
+                qtyInput.value = parseInt(qtyInput.value) + 1;
+            });
+
+            // Minus button
+            minusBtn.addEventListener('click', () => {
+                let current = parseInt(qtyInput.value);
+                if (current > 0) {
+                    qtyInput.value = current - 1;
+                }
+            });
+
+            // Prevent typing invalid values
+            qtyInput.addEventListener('input', () => {
+                if (isNaN(qtyInput.value) || qtyInput.value < 0) {
+                    qtyInput.value = 0;
+                }
+            });
+        });
+
+
+        const checkboxes = document.querySelectorAll('.form-check-input');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        function toggleCheckoutButton() {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            if (allChecked) {
+                checkoutBtn.classList.remove('disabled');
+                checkoutBtn.removeAttribute('aria-disabled');
+            } else {
+                checkoutBtn.classList.add('disabled');
+                checkoutBtn.setAttribute('aria-disabled', 'true');
+            }
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckoutButton));
+    </script>
+
+
+
+
 <section class="w-full bg-bg-extralight pt-8">
 
   <div class="rounded-top-left w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-16 ms-[4vw]" style="padding-bottom: 200px; margin-bottom: -200px;">
