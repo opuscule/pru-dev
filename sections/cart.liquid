@@ -1,61 +1,69 @@
 {% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
+  Beautiful Responsive Cart Section
+  Built with TailwindCSS — Modern, accessible, and mobile-friendly
 {% endcomment %}
 
+<section class="w-full bg-bg-extralight pt-10 pb-20">
 
-<section class="w-full bg-bg-extralight pt-8">
+  <div class="w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-16 ms-[4vw] shadow-inner">
+    <div class="max-w-[var(--width-container-content)] mx-auto px-6 lg:px-10">
+      
+      <!-- Title -->
+      <h1 class="text-center font-extrabold mb-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl tracking-tight text-gray-900">
+        {{ 'cart.title' | t }}
+      </h1>
 
-  <div class="rounded-top-left w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-16 ms-[4vw]" style="padding-bottom: 200px; margin-bottom: -200px;">
-  
-    <div class="max-w-[var(--width-container-content)] mx-auto">
+      <form action="{{ routes.cart_url }}" method="post" class="space-y-8">
 
+        {% for item in cart.items %}
+        {% assign dob_val = item.product.metafields.custom.dob.value %}
+        {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
+        {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
+        {% assign diff_seconds = now_ts | minus: dob_ts %}
+        {% assign weeks_old = diff_seconds | divided_by: 604800 %}
 
-      <h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">{{ 'cart.title' | t }}</h1>
+        <!-- Single Cart Item -->
+        <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 p-5 md:p-6 grid grid-cols-1 md:grid-cols-[160px_1fr_auto] gap-6 items-start border border-gray-100">
 
-      <form action="{{ routes.cart_url }}" method="post">
-        
-          {% for item in cart.items %}
-
-          <!-- Cart row wrapper: 3 columns on md+, stacked on mobile -->
-          <div class="grid grid-cols-1 gap-6 md:[grid-template-columns:175px_1fr_auto] items-start py-6 border-b border-black/10">
-
-            <!-- 1st column: image -->
-            <div class="w-full max-w-full md:max-w-[175px] overflow-hidden rounded-[1.25rem] shadow-[-8px_8px_0_0_var(--color-primary)]">
-              {% render 'image', image: item.image, url: item.url %}
-            </div>
-            
-            <!-- 2nd column: details -->
-            <div class="space-y-1 title-here">
-            {% assign dob_val = item.product.metafields.custom.dob.value %}
-            {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
-            {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
-            {% assign diff_seconds = now_ts | minus: dob_ts %}
-                  {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-
-            <code>#{{ item.sku }}</code>
-
-            <h2 class="font-bold text-4xl">{{ item.product.title }}</h2>
-            <p>{{ item.product.collections.first.title }}</p>
-            <p>{{ item.product.metafields.custom.sex }} - {{ weeks_old | floor }} Weeks Old</p>
-            </div>
-
-            <!-- 3rd column: price, remove -->
-            <div class="text-left md:text-right space-y-3">
-              <div class="font-semibold">{{ item.line_price | money }}</div>
-              <div>{{ 'cart.remove' | t | link_to: item.url_to_remove }}</div>
-            </div>
+          <!-- Product Image -->
+          <div class="relative rounded-2xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+            {% render 'image', image: item.image, url: item.url %}
           </div>
-          {% endfor %}
 
+          <!-- Product Details -->
+          <div class="space-y-2 text-gray-700">
+            <code class="text-sm text-gray-400 block">#{{ item.sku }}</code>
+            <h2 class="font-bold text-2xl sm:text-3xl text-gray-900">{{ item.product.title }}</h2>
+            <p class="text-gray-500 text-sm uppercase tracking-wide">{{ item.product.collections.first.title }}</p>
+            <p class="text-gray-600">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} weeks old</p>
+          </div>
 
-        <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
+          <!-- Price & Remove -->
+          <div class="text-left md:text-right flex flex-col justify-between gap-3">
+            <div class="font-semibold text-2xl text-gray-900">{{ item.line_price | money }}</div>
+            <a href="{{ item.url_to_remove }}" class="text-sm text-red-500 hover:text-red-700 underline transition-colors duration-200">
+              {{ 'cart.remove' | t }}
+            </a>
+          </div>
+
+        </div>
+        {% endfor %}
+
+        <!-- Checkout Button -->
+        <div class="flex justify-center pt-10">
+          <input 
+            type="submit" 
+            name="checkout" 
+            value="{{ 'cart.checkout' | t }}" 
+            class="bg-primary text-white text-lg font-semibold px-10 py-4 rounded-full shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+          >
+        </div>
+
       </form>
     </div>
   </div>
 </section>
+
 {% schema %}
 {
   "name": "t:general.cart",
