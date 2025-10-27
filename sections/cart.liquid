@@ -281,208 +281,213 @@
 
 
 
-    <div class="buy-pod-wrap bg-theme-light section-space">
-        <div class="container">
-            <div class="buy-pod-inner">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="buy-product-pod mb-3">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="buy-col col-one">
-                                        <figure>
-                                            <img src="assets/images/product-image.webp" alt="">
-                                        </figure>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="buy-col col-two">
-                                        <div class="product-description">
-                                            <h4 class="product-title mb-2">Avery</h4>
-                                            <p class="two-line-clamp">Rottweiler</p>
+<section class="buy-pod-wrap bg-theme-light section-space" data-cart-section>
+  <div class="container">
+    <div class="buy-pod-inner">
+      <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
+        <div class="row">
+          <div class="col-md-9">
+            {% if cart.item_count == 0 %}
+              <p>Your cart is empty.</p>
+            {% else %}
 
-                                            <ul>
-                                                <li><strong>Gender</strong>Female</li>
-                                                <li><strong>Age</strong>12 Month</li>
-                                                <li><strong>Price</strong>$61.65</li>
+              {% for item in cart.items %}
+                {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
+                {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
+                {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
+                {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
 
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="buy-col col-three">
-
-                                        <div class="qty-pod text-center">
-                                            <strong class="d-block mb-2">Quantity</strong>
-                                            <div class="cart-quantity mb-2">
-                                                <button class="btn btn-minus">-</button>
-                                                <input type="text" value="1" />
-                                                <button class="btn btn-plus">+</button>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="buy-product-pod mb-3">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="buy-col col-one">
-                                        <figure>
-                                            <img src="assets/images/product-image.webp" alt="">
-                                        </figure>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="buy-col col-two">
-                                        <div class="product-description">
-                                            <h4 class="product-title mb-2">Avery</h4>
-                                            <p class="two-line-clamp">Rottweiler</p>
-
-                                            <ul>
-                                                <li><strong>Gender</strong>Female</li>
-                                                <li><strong>Age</strong>12 Month</li>
-                                                <li><strong>Price</strong>$61.65</li>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="buy-col col-three">
-
-                                        <div class="qty-pod text-center">
-                                            <strong class="d-block mb-2">Quantity</strong>
-                                            <div class="cart-quantity mb-2">
-                                                <button class="btn btn-minus">-</button>
-                                                <input type="text" value="1" />
-                                                <button class="btn btn-plus">+</button>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                       
-                    </div>
+                <div class="buy-product-pod mb-3" data-line="{{ item.key }}">
+                  <div class="row">
                     <div class="col-md-3">
-                        <div class="order-summary">
-                            <h4 class="summary-title fw-bold">Order Summary</h4>
-                            <ul>
-                                <li>
-                                    <strong>Subtotal</strong>
-                                    <span>$61.65</span>
-                                </li>
-                                <li>
-                                    <strong>Sales Tax</strong>
-                                    <span>$6.65</span>
-                                </li>
-                                <li>
-                                    <strong>Shipping</strong>
-                                    <span>$6.65</span>
-                                </li>
-                                <li class="total">
-                                    <strong>Grand Total</strong>
-                                    <span>$61.65</span>
-                                </li>
-
-                            </ul>
-
-                            <div class="terms-pod mb-3">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="certifyAge">
-                                    <label class="form-check-label" for="certifyAge">
-                                        I certify I am 18 years of age or older.
-                                    </label>
-                                </div>
-
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="understandTerms">
-                                    <label class="form-check-label" for="understandTerms">
-                                        I understand each Puppy is sold as-is, as a Pet, without breeding rights (unless
-                                        previously agreed in writing), without warranty, and understand my rights and
-                                        obligations of the Health Guarantee.
-                                    </label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="acknowledgeAgreement">
-                                    <label class="form-check-label" for="acknowledgeAgreement">
-                                        I acknowledge that I have read, understand, and agree to the terms of the
-                                        Reservation Agreement including the Cancellation, Refund, and Return policies.
-                                    </label>
-                                </div>
-                            </div>
-
-                            <a href="checkout.php" id="checkoutBtn" class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 disabled"
-                                aria-disabled="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
-                                </svg> Checkout</a>
-
-                                <img class="w-100" src="assets/images/cards.png" alt="">
-
-
-                        </div>
+                      <div class="buy-col col-one">
+                        <figure>
+                          <a href="{{ item.url }}">
+                            {% if item.image %}
+                              <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}" loading="lazy">
+                            {% else %}
+                              {{ 'product-apparel-1' | placeholder_svg_tag }}
+                            {% endif %}
+                          </a>
+                        </figure>
+                      </div>
                     </div>
+
+                    <div class="col-md-6">
+                      <div class="buy-col col-two">
+                        <div class="product-description">
+                          <h4 class="product-title mb-2"><a href="{{ item.url }}">{{ item.product.title }}</a></h4>
+                          {% if breed %}<p class="two-line-clamp">{{ breed }}</p>{% endif %}
+                          <ul>
+                            {% if gender %}<li><strong>Gender</strong> {{ gender }}</li>{% endif %}
+                            {% if age %}<li><strong>Age</strong> {{ age }}</li>{% endif %}
+                            <li><strong>Price</strong> {{ unit_price | money }}</li>
+                          </ul>
+
+                          {% if item.properties and item.properties.size > 0 %}
+                            <details class="mt-2">
+                              <summary>Details</summary>
+                              <ul style="margin:8px 0 0 0;">
+                                {% for p in item.properties %}
+                                  {% unless p.last == blank %}
+                                    <li><strong>{{ p.first }}:</strong> {{ p.last }}</li>
+                                  {% endunless %}
+                                {% endfor %}
+                              </ul>
+                            </details>
+                          {% endif %}
+
+                          <button class="btn-link remove-line mt-2" name="updates[{{ item.key }}]" value="0" type="submit" aria-label="Remove {{ item.product.title }}">Remove</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="buy-col col-three">
+                        <div class="qty-pod text-center">
+                          <strong class="d-block mb-2">Quantity</strong>
+                          <div class="cart-quantity mb-2" data-key="{{ item.key }}">
+                            <button class="btn btn-minus" type="button" aria-label="Decrease quantity">-</button>
+                            <input
+                              class="qty-input"
+                              type="text"
+                              name="updates[{{ item.key }}]"
+                              value="{{ item.quantity }}"
+                              inputmode="numeric"
+                              pattern="[0-9]*"
+                              aria-label="Quantity for {{ item.product.title }}"
+                              />
+                            <button class="btn btn-plus" type="button" aria-label="Increase quantity">+</button>
+                          </div>
+                          <div class="line-total"><strong>Line Total:</strong> {{ item.final_line_price | money }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+
+            {% endif %}
+          </div>
+
+          <div class="col-md-3">
+            <div class="order-summary">
+              <h4 class="summary-title fw-bold">Order Summary</h4>
+              <ul>
+                <li>
+                  <strong>Subtotal</strong>
+                  <span>{{ cart.items_subtotal_price | money }}</span>
+                </li>
+
+                {% if shop.taxes_included %}
+                  <li><em>Tax included. Shipping calculated at checkout.</em></li>
+                {% else %}
+                  <li><em>Taxes and shipping calculated at checkout.</em></li>
+                {% endif %}
+              </ul>
+
+              {% if cart.item_count > 0 %}
+              <div class="terms-pod mb-3" data-terms>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="certifyAge">
+                  <label class="form-check-label" for="certifyAge">
+                    I certify I am 18 years of age or older.
+                  </label>
                 </div>
 
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="understandTerms">
+                  <label class="form-check-label" for="understandTerms">
+                    I understand each Puppy is sold as-is, as a Pet, without breeding rights (unless previously agreed in writing), without warranty, and understand my rights and obligations of the Health Guarantee.
+                  </label>
+                </div>
 
-            </div><!-- /.buy-pod-inner -->
-        </div><!-- /.container -->
-    </div><!-- /.buy-pod-wrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelectorAll('.cart-quantity').forEach(cart => {
-            const minusBtn = cart.querySelector('.btn-minus');
-            const plusBtn = cart.querySelector('.btn-plus');
-            const qtyInput = cart.querySelector('input');
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement">
+                  <label class="form-check-label" for="acknowledgeAgreement">
+                    I acknowledge that I have read, understand, and agree to the terms of the Reservation Agreement including the Cancellation, Refund, and Return policies.
+                  </label>
+                </div>
+              </div>
 
-            // Plus button
-            plusBtn.addEventListener('click', () => {
-                qtyInput.value = parseInt(qtyInput.value) + 1;
-            });
+              <button
+                id="checkoutBtn"
+                class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"
+                type="submit"
+                name="checkout"
+                disabled
+                aria-disabled="true">
+                {% render 'icon-lock' %}
+                Checkout
+              </button>
 
-            // Minus button
-            minusBtn.addEventListener('click', () => {
-                let current = parseInt(qtyInput.value);
-                if (current > 0) {
-                    qtyInput.value = current - 1;
-                }
-            });
+              <img class="w-100" src="{{ 'cards.png' | asset_url }}" alt="Payment methods">
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div><!-- /.buy-pod-inner -->
+  </div><!-- /.container -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+    // Quantity +/- and auto-submit
+    const form = document.querySelector('.cart-form');
+    const debouncedSubmit = (() => {
+      let t;
+      return () => { clearTimeout(t); t = setTimeout(()=>form.requestSubmit(), 350); }
+    })();
 
-            // Prevent typing invalid values
-            qtyInput.addEventListener('input', () => {
-                if (isNaN(qtyInput.value) || qtyInput.value < 0) {
-                    qtyInput.value = 0;
-                }
-            });
-        });
+    document.querySelectorAll('.cart-quantity').forEach((wrap)=>{
+      const minus = wrap.querySelector('.btn-minus');
+      const plus  = wrap.querySelector('.btn-plus');
+      const input = wrap.querySelector('.qty-input');
 
+      plus.addEventListener('click', ()=>{
+        const v = parseInt(input.value || '0', 10) + 1;
+        input.value = Math.max(0, v);
+        debouncedSubmit();
+      });
 
-        const checkboxes = document.querySelectorAll('.form-check-input');
-        const checkoutBtn = document.getElementById('checkoutBtn');
+      minus.addEventListener('click', ()=>{
+        const v = parseInt(input.value || '0', 10) - 1;
+        input.value = Math.max(0, v);
+        debouncedSubmit();
+      });
 
-        function toggleCheckoutButton() {
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            if (allChecked) {
-                checkoutBtn.classList.remove('disabled');
-                checkoutBtn.removeAttribute('aria-disabled');
-            } else {
-                checkoutBtn.classList.add('disabled');
-                checkoutBtn.setAttribute('aria-disabled', 'true');
-            }
-        }
+      input.addEventListener('input', ()=>{
+        const cleansed = input.value.replace(/\D+/g,'');
+        input.value = cleansed === '' ? '0' : cleansed;
+        debouncedSubmit();
+      });
+    });
 
-        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckoutButton));
-    </script>
+    // Gate checkout until all three boxes are ticked
+    const checks = [
+      document.getElementById('certifyAge'),
+      document.getElementById('understandTerms'),
+      document.getElementById('acknowledgeAgreement')
+    ].filter(Boolean);
+
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    function syncCheckoutState(){
+      if(checks.length === 0 || checks.every(cb => cb.checked)){
+        checkoutBtn?.classList.remove('is-disabled');
+        checkoutBtn?.removeAttribute('disabled');
+        checkoutBtn?.setAttribute('aria-disabled','false');
+      } else {
+        checkoutBtn?.classList.add('is-disabled');
+        checkoutBtn?.setAttribute('disabled','disabled');
+        checkoutBtn?.setAttribute('aria-disabled','true');
+      }
+    }
+    checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
+    syncCheckoutState();
+  });
+  </script>
+
+</section>
 
 
 
