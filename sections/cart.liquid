@@ -328,6 +328,10 @@
 
                             <ul>
                             <li><strong>Gender :</strong>{{ item.product.metafields.custom.sex }}</li>
+                            {% assign first_collection = item.product.collections | first %}
+                            {% if first_collection %}
+                              <li><strong>Breed :</strong> {{ first_collection.title }}</li>
+                            {% endif %}
                             <li><strong>DOB :</strong>{{ item.product.metafields.custom.dob }}</li>
                             <li><strong>Age :</strong>{{ weeks_old | floor }} Weeks Old</li>
                             <li><strong>Price</strong> {{ unit_price | money }}</li>
