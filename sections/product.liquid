@@ -147,7 +147,21 @@
             <!-- CTAs -->
             <div class="flex gap-4 mt-4 items-center">
               <button type="button" id="ask-about-btn" class="btn btn-secondary">Ask About {{ product.title }}</button>
-              <button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button>
+              <!--<button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button>-->
+              <div class="product-form">
+              {% form 'product', product %}
+                {% assign current_variant = product.selected_or_first_available_variant %}
+
+                <!-- Hidden variant ID (always adds the first available variant) -->
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+                <!-- Hidden quantity -->
+                <input type="hidden" name="quantity" value="1">
+
+                <!-- Add to Cart button -->
+                <input type="submit" value="Take Me Home" class="btn btn-primary">
+              {% endform %}
+            </div>
             </div>
 
             <!-- Ask modal -->
@@ -284,20 +298,7 @@
           </div>
 
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <!-- Hidden variant ID (always adds the first available variant) -->
-    <input type="hidden" name="id" value="{{ current_variant.id }}">
-
-    <!-- Hidden quantity -->
-    <input type="hidden" name="quantity" value="1">
-
-    <!-- Add to Cart button -->
-    <input type="submit" value="Add to cart" class="add-to-cart-btn">
-  {% endform %}
-</div>
 
 
  
