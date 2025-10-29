@@ -11,3 +11,7 @@
     margin-bottom: 1rem;
     background-color: #fff;
 }
+
+.puppy-status span {
+    font-weight: 700;
+}
