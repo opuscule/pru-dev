@@ -399,23 +399,38 @@
                 <div class="form-check mb-2">
                   <input class="form-check-input" type="checkbox" id="certifyAge">
                   <label class="form-check-label" for="certifyAge">
-                    I certify I am 18 years of age or older.
+                    I have read and agree to the Puppys R Us Health Guarantee.
                   </label>
                 </div>
 
                 <div class="form-check mb-2">
                   <input class="form-check-input" type="checkbox" id="understandTerms">
                   <label class="form-check-label" for="understandTerms">
-                    I understand each Puppy is sold as-is, as a Pet, without breeding rights (unless previously agreed in writing), without warranty, and understand my rights and obligations of the Health Guarantee.
+                    I confirm I am 18+ and agree to the Puppys R Us Terms & Conditions.
                   </label>
                 </div>
 
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="acknowledgeAgreement">
                   <label class="form-check-label" for="acknowledgeAgreement">
-                    I acknowledge that I have read, understand, and agree to the terms of the Reservation Agreement including the Cancellation, Refund, and Return policies.
+                    I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving him/her.
                   </label>
                 </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement1">
+                  <label class="form-check-label" for="acknowledgeAgreement1">
+                    I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I will be contacted to confirm details.
+                  </label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement2">
+                  <label class="form-check-label" for="acknowledgeAgreement2">
+                   I confirm I am purchasing the puppy listed in my order summary.
+                  </label>
+                </div>
+
               </div>
               <input  id="checkoutBtn" type="submit" name="checkout" class="btn btn-theme mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
               <img class="w-100" src="{{ 'cards.png' | asset_url }}" alt="Payment methods">
@@ -464,7 +479,9 @@
     const checks = [
       document.getElementById('certifyAge'),
       document.getElementById('understandTerms'),
-      document.getElementById('acknowledgeAgreement')
+      document.getElementById('acknowledgeAgreement'),
+      document.getElementById('acknowledgeAgreement1'),
+      document.getElementById('acknowledgeAgreement2')
     ].filter(Boolean);
 
     const checkoutBtn = document.getElementById('checkoutBtn');
