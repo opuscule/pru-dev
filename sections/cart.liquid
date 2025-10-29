@@ -327,7 +327,7 @@
                             {% assign weeks_old = diff_seconds | divided_by: 604800 %}
 
                             <ul>
-                            <li><strong>Gender :</strong>{{ item.product.metafields.custom.sex }}</li>
+                            <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
                             {% assign first_collection = item.product.collections | first %}
                             {% if first_collection %}
                               <li><strong>Breed :</strong> {{ first_collection.title }}</li>
