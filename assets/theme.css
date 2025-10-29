@@ -15,3 +15,8 @@
 .puppy-status span {
     font-weight: 700;
 }
+#take-me-home-btn:hover {
+    background-color: black;
+    border-color: black;
+    cursor: pointer;
+}
