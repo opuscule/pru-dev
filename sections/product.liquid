@@ -283,29 +283,33 @@
             </div>
           </div>
 
-          <div class="product-form">
-          {% form 'product', product %}
-            {% assign current_variant = product.selected_or_first_available_variant %}
 
-            <select name="id">
-              {% for variant in product.variants %}
-                <option
-                  value="{{ variant.id }}"
-                  {% if variant == current_variant %}
-                    selected="selected"
-                  {% endif %}
-                >
-                  {{ variant.title }} - {{ variant.price | money }}
-                </option>
-              {% endfor %}
-            </select>
+<div class="product-form">
+  {% form 'product', product %}
+    {% assign current_variant = product.selected_or_first_available_variant %}
 
-            <input type="text" name="quantity" min="1" value="1">
+    <select name="id">
+      {% for variant in product.variants %}
+        <option
+          value="{{ variant.id }}"
+          {% if variant == current_variant %}
+            selected="selected"
+          {% endif %}
+        >
+          {{ variant.title }} - {{ variant.price | money }}
+        </option>
+      {% endfor %}
+    </select>
 
-            <input type="submit" value="Add to cart">
-            {{ form | payment_button }}
-          {% endform %}
-          </div>
+    <!-- Hidden fixed quantity -->
+    <input type="hidden" name="quantity" value="1">
+
+    <input type="submit" value="Add to cart" class="add-to-cart-btn">
+  {% endform %}
+</div>
+
+
+
         </div><!-- # right column -->
       </div>
     </div>
