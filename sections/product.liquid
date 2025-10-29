@@ -148,11 +148,8 @@
             <h1 class="mt-0 text-8xl leading-[1.2]">{{ product.title }}</h1>
             <p style="line-height:1.6;">Take home {{ product.title }}, an adorable {{ product.collections.first.title }} puppy, or any of the other <a href="{{ product.collections.first.url }}" class="text-primary">{{ product.collections.first.title }}</a> puppies. Puppys R Us works closely with responsible dog breeders to offer healthy designer &amp; purebred puppies for sale to loving homes.</p>
             
-{% assign availability = product.metafields.custom.availability | default: '' %}
-
-            {% if availability != 'Reserved' or availability != 'Sold, but Show' %}
-            
-              <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
+             {% if product.metafields.custom.availability != 'Reserved' %}
+            <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
 
             <!-- CTAs -->
             <div class="flex gap-4 mt-4 items-center">
