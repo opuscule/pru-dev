@@ -138,6 +138,11 @@
                 This puppy is not available: <span>I AM RESERVED</span>
               </div> 
             {% endif %} 
+            {% if product.metafields.custom.availability == 'Sold, but Show' %}
+              <div class="puppy-status">
+                This puppy is not available: <span>I FOUND MY NEW HOME</span>
+              </div> 
+            {% endif %} 
             
             <p>Meet&hellip;</p>
             <h1 class="mt-0 text-8xl leading-[1.2]">{{ product.title }}</h1>
