@@ -345,8 +345,8 @@
                               </ul>
                             </details>
                           {% endif %}
-
-                          <button class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;" name="updates[{{ item.key }}]" value="0" type="submit" aria-label="Remove {{ item.product.title }}">Remove</button>
+                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;">Remove</a>
+                          <!--<button class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;" name="updates[{{ item.key }}]" value="0" type="submit" aria-label="Remove {{ item.product.title }}">Remove</button>-->
                         </div>
                       </div>
                     </div>
