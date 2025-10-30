@@ -51,7 +51,7 @@
       <h1 class="text-6xl text-white">We have the perfect addition to your family.</h1>
       <p role="heading" class="text-white text-lg">Creating happier homes one puppy at a time.</p>
       <div id="breed-search" class="mt-6 flex items-stretch rounded-full bg-white shadow max-w-xl">
-        <select class="choices-single flex-1" id="collection-select" aria-label="Find your breed">
+        <select class="choices-single flex-1" id="collection-select" aria-label="Find your breed" style="border-bottom: 0px;">
           <option value="">Find Your Breed</option>
           {% for collection in collections %}
             {% if collection.metafields.custom.shown_on_website == true %}
