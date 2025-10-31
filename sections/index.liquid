@@ -11,7 +11,7 @@
     }
     .container-width-banner{
       max-width: var(--width-container-content);
-      margin-inline: auto; 
+      margin-inline: auto;   
     }
     #homepage-hero > div::before {
       content: "";
@@ -21,6 +21,9 @@
       background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 50%);
       z-index: 0;
     } 
+    .text-home-index {
+          font-size: clamp(2.75rem, 1.625rem + 3.75vw, 5rem);
+    }
     .messed-up-top{
       margin-top: -62px;
       z-index: 999;
@@ -55,7 +58,7 @@
     
     <div class="container-width-banner">
     <div class="max-w-lg banner_content z-10 relative">
-      <h1 class="text-6xl text-white">We have the perfect addition to your family.</h1>
+      <h1 class="text-home-index text-white">We have the perfect addition to your family.</h1>
       <p role="heading" class="text-white text-lg">Creating happier homes one puppy at a time.</p>
       <div id="breed-search" class="mt-6 flex items-stretch rounded-full bg-white shadow max-w-xl">
         <select class="choices-single flex-1" id="collection-select" aria-label="Find your breed" style="border-bottom: 0px;">
