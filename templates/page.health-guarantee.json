@@ -12,9 +12,15 @@
     "main": {
       "type": "page",
       "settings": {}
+    },
+    "page_health_guarantee_nb4tyA": {
+      "type": "page-health-guarantee",
+      "name": "Health Guarantee Page",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "page_health_guarantee_nb4tyA"
   ]
 }
