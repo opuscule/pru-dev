@@ -7,7 +7,8 @@
             --font_header: "Amatic SC",bradley hand,cursive;
             --font-body: "Open Sans", arial, sans-serif;
             --color-body-copy: #666;
-            --white-color: #ffffff;
+            --headline2-font-size: clamp(2rem,0.5rem + 5vw,5rem);
+            --headline3-font-size: clamp(2rem, 1.6875rem + 1.0417vw, 2.625rem);
 
 
             --border-radius: .3rem;
@@ -30,6 +31,14 @@
          li, ol, p, ul {
             color: var(--color-body-copy);
             font-family: var(--font-body);
+         }
+         .h2-fs {
+            font-size: var(--headline2-font-size);
+         }
+         .h3-fs {
+            font-size: var(--headline3-font-size);
+            font-weight: 700;
+            line-height: 1;
          }
         </style>
 
