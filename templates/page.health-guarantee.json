@@ -9,12 +9,12 @@
  */
 {
   "sections": {
-    "health-guarantee": {
-      "type": "health-guarantee",
+    "main": {
+      "type": "page",
       "settings": {}
     }
   },
   "order": [
-    "health-guarantee"
+    "main"
   ]
 }
