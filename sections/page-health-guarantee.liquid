@@ -5,8 +5,8 @@
             --color-bg-light: #efebdc;
             --headline1-font-size: clamp(3.75rem,2.1875rem + 5.2083vw,6.875rem);
             --font_header: "Amatic SC",bradley hand,cursive;
-            --gray-light: #f5f2e9;
-            --black-color: #2a2a2a;
+            --font-body: "Open Sans", arial, sans-serif;
+            --color-body-copy: #666;
             --white-color: #ffffff;
 
 
@@ -19,9 +19,17 @@
          .h1-fs{
            font-size: var(--headline1-font-size);
          }
+         .h1-fs, .h2-fs {
+            font-weight: 700;
+            line-height: 1;
+         }
          h1, h2, h3 {
             font-family: var(--font_header);
             font-weight: 400;
+         }
+         li, ol, p, ul {
+            color: var(--color-body-copy);
+            font-family: var(--font-body);
          }
         </style>
 
