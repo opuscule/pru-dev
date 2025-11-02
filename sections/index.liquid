@@ -1,18 +1,31 @@
-<section id="homepage-hero">
+
   <style>
-    /* Scoped hero styles: max width, min-height and left->right gradient overlay */
-    #homepage-hero > div {
-     /* max-width: var(--width-container-content);*/
-      min-height: 80vh;
-      margin-inline: auto;
-      position: relative;
-      overflow: visible;
-      background-position: top;
-    }
+
+    #home_banner {
+    background-image: url(https://dr9yafd9jyp80.cloudfront.net/pru/puppysrus-banner-2023.webp);
+    background-position: center -3rem;
+    background-size: cover;
+    isolation: isolate;
+    padding-top: 10rem;
+    position: relative;
+}
+
+#home_banner:before {
+    background: linear-gradient(90deg, #000, transparent 42%);
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+
     .container-width-banner{
       max-width: var(--width-container-content);
       margin-inline: auto;   
     }
+
     #homepage-hero > div::before {
       content: "";
       position: absolute;
@@ -54,8 +67,9 @@
 }
 
   </style>
-  
-  <div class="bg-cover bg-center pt-40 px-12 pb-18 bg-[url(https://dr9yafd9jyp80.cloudfront.net/pru/puppysrus-banner-2023.webp)]">
+
+<section id="homepage-hero">
+  <div class="bg-cover bg-center">
     
     <div class="container-width-banner">
     <div class="max-w-xl banner_content z-10 relative">
