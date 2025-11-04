@@ -11,7 +11,7 @@
         :root {
             --primary-color: #ef6859;
             --secondary-color: oklch(.69 .16 28.69);
-            --theme-light: #efebdc;
+            --theme-light: #edeada;
             --gray-light: #f5f2e9;
             --black-color: #2a2a2a;
             --white-color: #ffffff;
@@ -312,10 +312,10 @@ button.btn.btn-plus {
     </style>
 
 
+<div class="cart-title"><h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">{{ 'cart.title' | t }}</h1></div>
 
 <section class="buy-pod-wrap bg-theme-light section-space" data-cart-section>
   <div class="container">
-      <h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">{{ 'cart.title' | t }}</h1>
     <div class="buy-pod-inner">
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
         <div class="row">
