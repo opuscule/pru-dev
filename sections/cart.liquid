@@ -356,8 +356,8 @@ button.btn.btn-plus {
                             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
                             {% assign diff_seconds = now_ts | minus: dob_ts %}
                             {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-
-                            <ul>
+                            {{ first_collection.title }}
+                           <!-- <ul>
                             <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
                             {% assign first_collection = item.product.collections | first %}
                             {% if first_collection %}
@@ -366,7 +366,7 @@ button.btn.btn-plus {
                             <li><strong>DOB :</strong>{{ item.product.metafields.custom.dob }}</li>
                             <li><strong>Age :</strong>{{ weeks_old | floor }} Weeks Old</li>
                             <li><strong>Price</strong> {{ unit_price | money }}</li>
-                          </ul>
+                          </ul>-->
 
                           {% if item.properties and item.properties.size > 0 %}
                             <details class="mt-2">
