@@ -565,10 +565,10 @@ h2.font-bold.cart-title {
                 {% else %}
                   <li><em>Taxes and shipping calculated at checkout.</em></li>
                 {% endif %}
-                <li>
-                  <strong style="color:var(--text-color12);">Total</strong>
+                <li style="border-bottom: 0px;">
+                  <strong style="color:var(--text-color12); font-family: var(--font-titles);">Total</strong>
                   <span>{{ cart.items_subtotal_price | money }}</span>
-                </li>
+                </li> 
 
               </ul>
 
