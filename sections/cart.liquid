@@ -454,26 +454,8 @@ h2.font-bold.cart-title {
                                   
                       <div class="buy-product-pod main-paddings mt-2">
                        <div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Required Agreements</h2></div>
-                      </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="order-summary">
-              <h4 class="summary-title fw-bold" style="color:var(--primary-color);">Order Summary</h4>
-              <ul>
-                <li>
-                  <strong style="color:var(--primary-color);">Subtotal</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
-                </li>
-
-                {% if shop.taxes_included %}
-                  <li><em>Tax included. Shipping calculated at checkout.</em></li>
-                {% else %}
-                  <li><em>Taxes and shipping calculated at checkout.</em></li>
-                {% endif %}
-              </ul>
-
-              {% if cart.item_count > 0 %}
+                      
+                                    {% if cart.item_count > 0 %}
               <div class="terms-pod mb-3" data-terms>
                 <div class="form-check mb-2">
                   <input class="form-check-input" type="checkbox" id="certifyAge">
@@ -514,6 +496,26 @@ h2.font-bold.cart-title {
               <input  id="checkoutBtn" type="submit" name="checkout" class="btns-cart mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
               <img class="w-100" src="{{ 'cards.png' | asset_url }}" alt="Payment methods">
               {% endif %}
+                       </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="order-summary">
+              <h4 class="summary-title fw-bold" style="color:var(--primary-color);">Order Summary</h4>
+              <ul>
+                <li>
+                  <strong style="color:var(--primary-color);">Subtotal</strong>
+                  <span>{{ cart.items_subtotal_price | money }}</span>
+                </li>
+
+                {% if shop.taxes_included %}
+                  <li><em>Tax included. Shipping calculated at checkout.</em></li>
+                {% else %}
+                  <li><em>Taxes and shipping calculated at checkout.</em></li>
+                {% endif %}
+              </ul>
+
+
             </div>
           </div>
         </div>
