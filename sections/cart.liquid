@@ -518,7 +518,6 @@ h2.font-bold.cart-title {
               </ul>
 
               {% if cart.item_count > 0 %}
-
               <input  id="checkoutBtn" type="submit" name="checkout" class="btns-cart mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
               <img class="w-100" src="{{ 'cards.png' | asset_url }}" alt="Payment methods">
               {% endif %}
