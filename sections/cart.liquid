@@ -380,7 +380,7 @@ h2.font-bold.cart-title {
                             {% assign diff_seconds = now_ts | minus: dob_ts %}
                             {% assign weeks_old = diff_seconds | divided_by: 604800 %}
                             <div class="Breed-title" style="color: #646665;">{{ first_collection.title }}</div>
-                            <span class="main-sex-age">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span>
+                            <div><span class="main-sex-age">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span></div>
                            <!-- <ul>
                             <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
                             {% assign first_collection = item.product.collections | first %}
