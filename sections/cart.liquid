@@ -351,7 +351,7 @@ button.btn.btn-plus {
                       <div class="buy-col col-two">
                         <div class="product-description">
                           <!--<code>#{{ item.sku }}</code>-->
-                          <h2 class="font-bold text-5xl"><a href="{{ item.url }}" style="color: #646665;text-decoration: none;">{{ item.product.title }}</a></h2>
+                          <h2 class="font-bold cart-title"><a href="{{ item.url }}" style="color: #646665;text-decoration: none;">{{ item.product.title }}</a></h2>
                             {% assign dob_val = item.product.metafields.custom.dob.value %}
                             {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
                             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
