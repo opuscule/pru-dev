@@ -409,7 +409,7 @@ h2.font-bold.cart-title {
                               </ul>
                             </details>
                           {% endif %}
-                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;">Remove</a>
+                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="btn-link remove-line mt-2" style="color: #646665;text-decoration: none;font-size: 16.7px;margin-top: 20px !important;">Remove</a>
                           <!--<button class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;" name="updates[{{ item.key }}]" value="0" type="submit" aria-label="Remove {{ item.product.title }}">Remove</button>-->
                         </div>
                          <div class="money-cart">{{ unit_price | money }}</div>
