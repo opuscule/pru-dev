@@ -53,6 +53,9 @@ button.btn.btn-minus {
     color: #646665;
     font-size: 29px;
 }
+.totals-sums{
+  font-size:2rem;
+}
 button.btn.btn-plus {
     margin-bottom: 5px;
 }
@@ -565,7 +568,7 @@ h2.font-bold.cart-title {
                 {% else %}
                   <li><em>Taxes and shipping calculated at checkout.</em></li>
                 {% endif %}
-                <li style="border-bottom: 0px; font-size: 2rem;">
+                <li class="totals-sums" style="border-bottom: 0px;">
                   <strong style="color:var(--text-color12); font-family: var(--font-titles);">Total</strong>
                   <span>{{ cart.items_subtotal_price | money }}</span>
                 </li> 
