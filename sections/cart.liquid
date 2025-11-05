@@ -601,7 +601,7 @@ h2.font-bold.cart-title {
 
               {% if cart.item_count > 0 %}
               <input  id="checkoutBtn" type="submit" name="checkout" class="btns-cart mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
-              <div class="checkout-text">Please accept all terms and select a shipping method</div>
+              <div id="checkout-text1" class="checkout-text">Please accept all terms and select a shipping method</div>
               {% endif %}
             </div>
              <img class="w-100" src="{{ 'puppies Images.png' | asset_url }}" alt="Payment methods" style="margin-left: 20px;">
@@ -659,10 +659,12 @@ h2.font-bold.cart-title {
         checkoutBtn?.classList.remove('is-disabled');
         checkoutBtn?.removeAttribute('disabled');
         checkoutBtn?.setAttribute('aria-disabled','false');
+        document.getElementById('checkout-text1').style.display='none';
       } else {
         checkoutBtn?.classList.add('is-disabled');
         checkoutBtn?.setAttribute('disabled','disabled');
         checkoutBtn?.setAttribute('aria-disabled','true');
+        document.getElementById('checkout-text1').style.display='inline-block';
       }
     }
     checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
