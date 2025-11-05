@@ -59,7 +59,9 @@ button.btn.btn-plus {
         .section-space {
             padding: 5rem 0;
         }
-
+h2.font-bold.cart-title {
+    font-size: 3.5rem;
+}
         .section-space-top {
             padding-top: 5rem;
         }
@@ -357,7 +359,7 @@ button.btn.btn-plus {
                             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
                             {% assign diff_seconds = now_ts | minus: dob_ts %}
                             {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                            <div class="text-3xl" style="color: #646665;">{{ first_collection.title }}</div>
+                            <div class="Breed-title" style="color: #646665;">{{ first_collection.title }}</div>
                            <!-- <ul>
                             <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
                             {% assign first_collection = item.product.collections | first %}
