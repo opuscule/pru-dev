@@ -660,11 +660,13 @@ h2.font-bold.cart-title {
         checkoutBtn?.removeAttribute('disabled');
         checkoutBtn?.setAttribute('aria-disabled','false');
         document.getElementById('checkout-text1').style.display='none';
+        document.getElementById('checkoutBtn').style.backgroundColor='#ef6859';
       } else {
         checkoutBtn?.classList.add('is-disabled');
         checkoutBtn?.setAttribute('disabled','disabled');
         checkoutBtn?.setAttribute('aria-disabled','true');
         document.getElementById('checkout-text1').style.display='inline-block';
+        document.getElementById('checkoutBtn').style.backgroundColor='#D7D5CE';
       }
     }
     checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
