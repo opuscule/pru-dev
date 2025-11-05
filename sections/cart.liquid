@@ -351,9 +351,13 @@ h2.font-bold.cart-title {
 
                     <div class="col-md-9">
                       <div class="buy-col col-two">
-                        <div class="product-description">
+                        <div class="product-description"> 
                           <!--<code>#{{ item.sku }}</code>-->
+                          <div class="title-row">
                           <h2 class="font-bold cart-title"><a href="{{ item.url }}" style="color: #646665;text-decoration: none;">{{ item.product.title }}</a></h2>
+                          <div class="money-cart">{{ unit_price | money }}</div>
+                          </div>
+                        
                             {% assign dob_val = item.product.metafields.custom.dob.value %}
                             {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
                             {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
