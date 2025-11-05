@@ -302,7 +302,9 @@ h2.font-bold.cart-title {
             border-bottom-left-radius: var(--border-radius);
             border-top-left-radius: var(--border-radius);
         }
-
+        .main-info-all{
+          margin-bottom: 0.5rem;
+        }
         .buy-product-pod .two-line-clamp {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -385,7 +387,7 @@ h2.font-bold.cart-title {
                             {% assign diff_seconds = now_ts | minus: dob_ts %}
                             {% assign weeks_old = diff_seconds | divided_by: 604800 %}
                             <div class="Breed-title" style="color: #646665;">{{ first_collection.title }}</div>
-                            <div><span class="main-sex-age">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span></div>
+                            <div class="main-info-all"><span class="main-sex-age">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span></div>
                            <!-- <ul>
                             <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
                             {% assign first_collection = item.product.collections | first %}
