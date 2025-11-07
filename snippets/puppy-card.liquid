@@ -31,7 +31,7 @@
 
   {%- capture card_inner -%}
   <div class="flex flex-col bg-bg-card rounded-3xl overflow-hidden transition-all duration-200 puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
-      <div class="relative">
+      <div class="relative cards-inners">
         {%- if hero -%}
           <img
             src="{{ hero | image_url: width: 600 }}"
