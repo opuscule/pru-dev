@@ -37,13 +37,15 @@
 {%- comment -%} page_description set for meta description usage {%- endcomment -%}
 {%- if page_description -%}{%- endif -%}
 
+
+
 <section class="collection-section w-full bg-bg-extralight pt-8">
 
   <div class="rounded-top-left w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-16 ms-[4vw]" style="--collection-bottom-padding: 200px; --collection-bottom-overlap: -200px;">
   
     <div class="max-w-[var(--width-container-content)] mx-auto">  
 
-      <div class="w-full ms-12">
+      <div class="w-full">
         <h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">{{ collection.title }} Puppies for Sale</h1>
         {% if collection.description != blank %}
           <div class="collection-description mb-8 text-center lg:max-w-[75%] mx-auto">
