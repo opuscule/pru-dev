@@ -12,6 +12,11 @@
   {% render 'puppy-card', product: product, link_entire_card: false %}
 {% enddoc %}
 
+  <style>
+  .cards-inners img { height: 250px; }
+  </style>
+
+
 {%- assign p = product -%}
 {%- if p != blank -%}
   {%- assign hero = p.featured_image | default: p.images.first -%}
