@@ -6,6 +6,7 @@
 
 :root {
   --color-primary: oklch(0.68 0.17 28.69);
+  --card-primary: #bb3c2e;
   --color-primary-hover: oklch(0.69 0.16 28.69);
   --color-secondary: oklch(0.7057 0.158 124.46);
   --color-body-copy: oklch(0.51 0 0);
