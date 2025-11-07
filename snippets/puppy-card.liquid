@@ -90,7 +90,7 @@
   {%- endcapture -%}
 
   {%- if wrap_link -%}
-  <a href="{{ p.url }}" class="block no-underline text-body-copy hover:no-underline max-w-[300px] puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
+  <a href="{{ p.url }}" class="block no-underline text-body-copy hover:no-underline max-w-[250px] puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
       {{ card_inner }}
     </a>
   {%- else -%}
