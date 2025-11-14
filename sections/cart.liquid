@@ -415,7 +415,7 @@ h2.font-bold.cart-title {
             {% else %}
 
               {% for item in cart.items %}
-                  {% unless item.product.title == 'Puppy Delivery Option' %}
+                  {% unless item.product_title == 'Puppy Delivery Option' %}
                 {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
                 {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
                 {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
@@ -516,51 +516,50 @@ h2.font-bold.cart-title {
 
          <div id="delivery-options">
   <h3>Choose Delivery Option</h3>
-  <label><input type="radio" name="delivery" value="41869989871701"> Delivered to Your Home ($500)</label><br>
+  <label><input type="radio" name="delivery" value="41869989871701" checked> Delivered to Your Home ($500)</label><br>
   <label><input type="radio" name="delivery" value="41869989904469"> Delivered to Nearby Location ($400)</label><br>
   <label><input type="radio" name="delivery" value="41869989937237"> Pick Up From Breeder (Free)</label>
   <label><input type="radio" name="delivery" value="41869989970005"> I Will Decide Later ($0)</label>
 </div>
 
+
 <script>
-async function getCart() {
-  return await fetch("/cart.js").then(r => r.json());
-}
-
-async function removeLine(line) {
-  return await fetch("/cart/change.js", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ line: line, quantity: 0 })
-  });
-}
-
-async function addVariant(variantId) {
-  return await fetch("/cart/add.js", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id: variantId, quantity: 1 })
-  });
-}
-
 document.querySelectorAll('input[name="delivery"]').forEach(radio => {
-  radio.addEventListener("change", async (e) => {
+  radio.addEventListener('change', async (e) => {
+
     const selectedVariant = Number(e.target.value);
 
-    const cart = await getCart();
+    // 1️⃣ Get the cart
+    const cart = await fetch('/cart.js').then(r => r.json());
 
-    // 1️⃣ Remove ALL existing delivery variants
+    // 2️⃣ Remove all previously-added delivery options
     for (let i = 0; i < cart.items.length; i++) {
       const item = cart.items[i];
+
+      // Match correct product title EXACTLY as in Shopify Admin
       if (item.product_title === "Puppy Delivery Option") {
-        await removeLine(item.line);
+        await fetch("/cart/change.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            line: item.line,  
+            quantity: 0       // REMOVE
+          })
+        });
       }
     }
 
-    // 2️⃣ Add the selected one
-    await addVariant(selectedVariant);
+    // 3️⃣ Add the new selected delivery option
+    await fetch("/cart/add.js", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: selectedVariant,
+        quantity: 1
+      })
+    });
 
-    // 3️⃣ Refresh the page
+    // 4️⃣ Refresh cart page
     location.reload();
   });
 });
