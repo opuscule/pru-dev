@@ -526,44 +526,41 @@ h2.font-bold.cart-title {
 <script>
 document.querySelectorAll('input[name="delivery"]').forEach(radio => {
   radio.addEventListener('change', async (e) => {
-
     const selectedVariant = Number(e.target.value);
 
-    // 1️⃣ Get the cart
-    const cart = await fetch('/cart.js').then(r => r.json());
+    // 1️⃣ Fetch current cart
+    const cart = await fetch('/cart.js').then(res => res.json());
 
-    // 2️⃣ Remove all previously-added delivery options
-    for (let i = 0; i < cart.items.length; i++) {
-      const item = cart.items[i];
-
-      // Match correct product title EXACTLY as in Shopify Admin
-      if (item.product_title === "Puppy Delivery Option") {
-        await fetch("/cart/change.js", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            line: item.line,  
-            quantity: 0       // REMOVE
-          })
-        });
-      }
+    // 2️⃣ Remove all existing delivery variants
+    const deliveryItems = cart.items.filter(item => item.product_title === "Puppy Delivery Option");
+    
+    for (const item of deliveryItems) {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.key,  // REMOVE by key
+          quantity: 0
+        })
+      });
     }
 
-    // 3️⃣ Add the new selected delivery option
-    await fetch("/cart/add.js", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    // 3️⃣ Add the newly selected delivery variant
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: selectedVariant,
         quantity: 1
       })
     });
 
-    // 4️⃣ Refresh cart page
+    // 4️⃣ Reload cart to update totals
     location.reload();
   });
 });
 </script>
+
 
                       <div class="buy-product-pod main-paddings mt-2">
                        <div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Required Agreements</h2></div>
