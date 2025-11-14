@@ -415,7 +415,7 @@ h2.font-bold.cart-title {
             {% else %}
 
               {% for item in cart.items %}
-                  {% unless item.product_title == 'Puppy Delivery Option' %}
+                    {% unless item.product.title contains 'Delivery Option' %}
                 {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
                 {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
                 {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
@@ -543,7 +543,7 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
           quantity: 0
         })
       });
-    }
+    }  
 
     // 3️⃣ Add the newly selected delivery variant
     await fetch('/cart/add.js', {
