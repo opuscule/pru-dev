@@ -414,8 +414,8 @@ h2.font-bold.cart-title {
               <p>Your cart is empty.</p>
             {% else %}
 
-              {% for item in cart.items %}
-                    {% unless item.product.title contains 'Delivery Option' %}
+              {% for item in cart.items %} 
+                    {% unless item.product.title contains 'Puppy Delivery Option' %}
                 {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
                 {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
                 {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
