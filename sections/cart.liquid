@@ -516,7 +516,7 @@ h2.font-bold.cart-title {
 
          <div id="delivery-options">
   <h3>Choose Delivery Option</h3>
-  <label><input type="radio" name="delivery" value="41869989871701" checked> Delivered to Your Home ($500)</label><br>
+  <label><input type="radio" name="delivery" value="41869989871701"> Delivered to Your Home ($500)</label><br>
   <label><input type="radio" name="delivery" value="41869989904469"> Delivered to Nearby Location ($400)</label><br>
   <label><input type="radio" name="delivery" value="41869989937237"> Pick Up From Breeder (Free)</label>
   <label><input type="radio" name="delivery" value="41869989970005"> I Will Decide Later ($0)</label>
@@ -524,6 +524,27 @@ h2.font-bold.cart-title {
 
 
 <script>
+// ✅ Auto-check the correct radio on page load
+document.addEventListener("DOMContentLoaded", async () => {
+  const radios = document.querySelectorAll('input[name="delivery"]');
+
+  const cart = await fetch('/cart.js').then(res => res.json());
+
+  const deliveryItem = cart.items.find(
+    item => item.product_title === "Puppy Delivery Option"
+  );
+
+  if (deliveryItem) {
+    const selectedId = deliveryItem.variant_id;
+
+    radios.forEach(radio => {
+      radio.checked = (Number(radio.value) === selectedId);
+    });
+  }
+});
+
+
+// ✅ Add / remove delivery options on change
 document.querySelectorAll('input[name="delivery"]').forEach(radio => {
   radio.addEventListener('change', async (e) => {
     const selectedVariant = Number(e.target.value);
@@ -531,21 +552,23 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
     // 1️⃣ Fetch current cart
     const cart = await fetch('/cart.js').then(res => res.json());
 
-    // 2️⃣ Remove all existing delivery variants
-    const deliveryItems = cart.items.filter(item => item.product_title === "Puppy Delivery Option");
-    
+    // 2️⃣ Remove ALL delivery variants
+    const deliveryItems = cart.items.filter(
+      item => item.product_title === "Puppy Delivery Option"
+    );
+
     for (const item of deliveryItems) {
       await fetch('/cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: item.key,  // REMOVE by key
+          id: item.key,
           quantity: 0
         })
       });
-    }  
+    }
 
-    // 3️⃣ Add the newly selected delivery variant
+    // 3️⃣ Add selected variant
     await fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -555,11 +578,12 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
       })
     });
 
-    // 4️⃣ Reload cart to update totals
+    // 4️⃣ Refresh
     location.reload();
   });
 });
 </script>
+
 
 
                       <div class="buy-product-pod main-paddings mt-2">
