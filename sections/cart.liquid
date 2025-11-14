@@ -415,7 +415,7 @@ h2.font-bold.cart-title {
             {% else %}
 
               {% for item in cart.items %}
-                  {% unless item.product_title == 'Delivery Option' %}
+                  {% unless item.product_title == 'Puppy Delivery Option' %}
                 {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
                 {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
                 {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
