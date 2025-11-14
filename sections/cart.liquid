@@ -509,9 +509,48 @@ h2.font-bold.cart-title {
                   </div>
                 </div>
               {% endfor %}
-
+ 
             {% endif %}
-                                  
+
+         <div id="delivery-options">
+  <h3>Choose Delivery Option</h3>
+  <label><input type="radio" name="delivery" value="41869989871701" checked> Delivered to Your Home ($500)</label><br>
+  <label><input type="radio" name="delivery" value="41869989904469"> Delivered to Nearby Location ($400)</label><br>
+  <label><input type="radio" name="delivery" value="41869989937237"> Pick Up From Breeder (Free)</label>
+  <label><input type="radio" name="delivery" value="41869989970005"> I Will Decide Later ($0)</label>
+</div>
+
+<script>
+document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+  radio.addEventListener('change', async e => {
+    const selectedVariant = e.target.value;
+
+    const cart = await fetch('/cart.js').then(res => res.json());
+    const deliveryItem = cart.items.find(i => i.product_title === 'Delivery Option');
+
+    if (deliveryItem) {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          id: deliveryItem.key,
+          quantity: 1,
+          properties: {},
+          updates: {[deliveryItem.id]: 0}, // remove old one
+        })
+      });
+    }
+
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ id: selectedVariant, quantity: 1 })
+    });
+
+    location.reload();
+  });
+});
+</script>
                       <div class="buy-product-pod main-paddings mt-2">
                        <div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Required Agreements</h2></div>
               
