@@ -516,43 +516,56 @@ h2.font-bold.cart-title {
 
          <div id="delivery-options">
   <h3>Choose Delivery Option</h3>
-  <label><input type="radio" name="delivery" value="41869989871701" checked> Delivered to Your Home ($500)</label><br>
+  <label><input type="radio" name="delivery" value="41869989871701"> Delivered to Your Home ($500)</label><br>
   <label><input type="radio" name="delivery" value="41869989904469"> Delivered to Nearby Location ($400)</label><br>
   <label><input type="radio" name="delivery" value="41869989937237"> Pick Up From Breeder (Free)</label>
   <label><input type="radio" name="delivery" value="41869989970005"> I Will Decide Later ($0)</label>
 </div>
 
 <script>
+async function getCart() {
+  return await fetch("/cart.js").then(r => r.json());
+}
+
+async function removeLine(line) {
+  return await fetch("/cart/change.js", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ line: line, quantity: 0 })
+  });
+}
+
+async function addVariant(variantId) {
+  return await fetch("/cart/add.js", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id: variantId, quantity: 1 })
+  });
+}
+
 document.querySelectorAll('input[name="delivery"]').forEach(radio => {
-  radio.addEventListener('change', async e => {
-    const selectedVariant = e.target.value;
+  radio.addEventListener("change", async (e) => {
+    const selectedVariant = Number(e.target.value);
 
-    const cart = await fetch('/cart.js').then(res => res.json());
-    const deliveryItem = cart.items.find(i => i.product_title === 'Delivery Option');
+    const cart = await getCart();
 
-    if (deliveryItem) {
-      await fetch('/cart/change.js', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          id: deliveryItem.key,
-          quantity: 1,
-          properties: {},
-          updates: {[deliveryItem.id]: 0}, // remove old one
-        })
-      });
+    // 1️⃣ Remove ALL existing delivery variants
+    for (let i = 0; i < cart.items.length; i++) {
+      const item = cart.items[i];
+      if (item.product_title === "Puppy Delivery Option") {
+        await removeLine(item.line);
+      }
     }
 
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ id: selectedVariant, quantity: 1 })
-    });
+    // 2️⃣ Add the selected one
+    await addVariant(selectedVariant);
 
+    // 3️⃣ Refresh the page
     location.reload();
   });
 });
 </script>
+
                       <div class="buy-product-pod main-paddings mt-2">
                        <div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Required Agreements</h2></div>
               
