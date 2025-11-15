@@ -156,6 +156,25 @@
   /* Extra bottom spacing with overlap effect for collection section */
   .collection-section { padding-left: 4vw; }
 
+  @media (max-width: 1200px) {
+  .collection-products {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .collection-products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-products {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+
   @media screen and (max-width: 600px) {
     .collection-products {
       margin: 0 1.75rem;
