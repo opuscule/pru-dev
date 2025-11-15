@@ -57,7 +57,21 @@
         <div class="flex flex-col mb-12">
           <div class="breed-filter-container inline-flex items-center justify-center mx-auto mt-2 mb-4 px-12 py-6 bg-[hsla(0,0%,100%,0.7)] rounded">
             <form class="filter-tool flex flex-col sm:flex-row items-center justify-center">
-              <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="gender">
+            <!-- Breeds Filter -->
+            <div class="filter-group mr-0 sm:mr-12 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="breeds">
+              <p class="font-bold mb-1">Breeds:</p>
+              <select id="breed-select" class="border border-gray-300 px-3 py-1 rounded">
+                <option value="">All Breeds</option>
+                {% for c in collections %}
+                  {% if c.products_count > 0 %}
+                    <option value="{{ c.url }}" {% if collection.handle == c.handle %}selected{% endif %}>
+                      {{ c.title }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="gender">
                 <p class="font-bold mb-1">Gender:</p>
                 <label class="mr-3">
                   <input type="radio" name="gender" class="mr-2" value="Male" data-filter="gender">Male
@@ -236,6 +250,15 @@
         }
       }
     }
+
+        // Breed Selector Redirect
+    document.getElementById('breed-select')?.addEventListener('change', function () {
+      if (this.value) {
+        window.location.href = this.value;
+      } else {
+        window.location.href = "/collections/all"; // fallback for "All Breeds"
+      }
+    });
 
     document.addEventListener('change', function(e) {
       if (e.target.matches('input[data-filter="gender"], input[data-filter="ready"]')) {
