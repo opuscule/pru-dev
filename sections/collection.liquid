@@ -122,7 +122,18 @@
                   to get on a reservation list for our next available litter!
                 </div>
               </div>
+              {% comment %}
               {{ paginate | default_pagination }}
+              {% endcomment %}
+              {% if paginate.next %}
+                <div class="load-more-wrapper text-center mt-8">
+                  <button 
+                    class="load-more-btn px-6 py-3 bg-primary text-white rounded" 
+                    data-next-url="{{ paginate.next.url }}">
+                    Load More Puppies
+                  </button>
+                </div>
+              {% endif %}
             {% endif %}
           {% endpaginate %}
         </div>
@@ -158,6 +169,15 @@
     margin-bottom: 1rem;
 }
 
+.load-more-btn {
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.load-more-btn:hover {
+  opacity: 0.85;
+}
   /* Force breed filter bar content to center align */
   .breed-filter-container {
     display: flex; /* ensure flex context even if classes change */
