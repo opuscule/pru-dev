@@ -283,30 +283,31 @@ document.addEventListener("click", async function (e) {
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, "text/html");
 
-    // Extract new cards
-    const newCards = htmlDoc.querySelectorAll(".collection-products .puppy-card");
+    // SELECT ONLY THE OUTER CARD
+    const newCards = htmlDoc.querySelectorAll(".collection-products a.puppy-card");
 
-    // Target main container on current page
+    // Main container
     const container = document.querySelector(".collection-products");
 
-    // Append each product BEFORE the Load More button
+    // Append new product cards
     newCards.forEach(card => container.appendChild(card));
 
-    // Get new next button from fetched HTML
+    // Update next button
     const freshBtn = htmlDoc.querySelector(".load-more-btn");
 
     if (freshBtn) {
       btn.setAttribute("data-next-url", freshBtn.getAttribute("data-next-url"));
       btn.innerText = "Load More Puppies";
     } else {
-      btn.remove(); // No more pages
+      btn.remove();
     }
 
   } catch (error) {
     console.error("Load more failed:", error);
-    btn.innerText = "Error. Try Again";
+    btn.innerText = "Error";
   }
 });
+
 
 
 
