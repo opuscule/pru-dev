@@ -280,6 +280,45 @@
       }
     });
 
+
+    // LOAD MORE AJAX PAGINATION
+    document.addEventListener("click", async function (e) {
+      const btn = e.target.closest(".load-more-btn");
+      if (!btn) return;
+
+      const nextUrl = btn.getAttribute("data-next-url");
+      if (!nextUrl) return;
+
+      btn.innerText = "Loading...";
+
+      try {
+        const response = await fetch(nextUrl);
+        const text = await response.text();
+        const parser = new DOMParser();
+        const htmlDoc = parser.parseFromString(text, "text/html");
+
+        // Get next products HTML
+        const newProducts = htmlDoc.querySelectorAll(".collection-products .puppy-card");
+
+        // Append them
+        const container = document.querySelector(".collection-products");
+        newProducts.forEach(card => container.appendChild(card));
+
+        // Update button or remove if no more pages
+        const newNext = htmlDoc.querySelector(".load-more-btn");
+        if (newNext) {
+          btn.setAttribute("data-next-url", newNext.getAttribute("data-next-url"));
+          btn.innerText = "Load More Puppies";
+        } else {
+          btn.remove();
+        }
+      } catch (error) {
+        console.error("Load more failed:", error);
+        btn.innerText = "Error. Try Again";
+      }
+    });
+
+
     document.addEventListener('change', function(e) {
       if (e.target.matches('input[data-filter="gender"], input[data-filter="ready"]')) {
         applyFilters();
