@@ -95,9 +95,8 @@
             </form>
           </div>
       </div>
-
-
-        <div class="collection-products">
+      </div>
+      <div class="collection-products">
           {% paginate collection.products by 20 %}
             {% if paginate.items == 0 %}
               <div id="no_puppies" class="lg:max-w-[65%] mx-auto flex justify-center">
@@ -128,7 +127,7 @@
               {% if paginate.next %}
                 <div class="load-more-wrapper text-center mt-8">
                   <button 
-                    class="btn btn-primary" 
+                    class="load-more-btn px-6 py-3 bg-primary text-white rounded" 
                     data-next-url="{{ paginate.next.url }}">
                     Load More Puppies
                   </button>
@@ -137,7 +136,6 @@
             {% endif %}
           {% endpaginate %}
         </div>
-      </div>
     </div>
   </div>
 </section>
