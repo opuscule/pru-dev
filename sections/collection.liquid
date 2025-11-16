@@ -101,7 +101,7 @@
       
 {% paginate collection.products by 20 %}
 
-<div class="collection-products hereweare">
+<div class="collection-products {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
   {% if paginate.items == 0 %}
     <!-- no puppies -->
   {% else %}
