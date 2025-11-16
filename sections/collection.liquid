@@ -98,46 +98,29 @@
       </div>
 
       
-      <div class="collection-products">
-          {% paginate collection.products by 20 %}
-            {% if paginate.items == 0 %}
-              <div id="no_puppies" class="lg:max-w-[65%] mx-auto flex justify-center">
-                <div class="p-12 text-center !mt-6 border bg-white border-[#f1aeb5]">
-                  There are no puppies that match your current search…<br>
-                  <a href="/all-puppies/" class="text-primary underline">View all Puppies</a>
-                  or
-                  <a href="/contact-us/" class="text-primary underline">contact us</a>
-                  to get on a reservation list for our next available litter!
-                </div>
-              </div>
-            {% else %}
-              {% for product in collection.products %}
-                {% render 'puppy-card', product: product %}
-              {% endfor %}
-              <div id="filter-no-results" class="hidden lg:max-w-[65%] mx-auto flex justify-center">
-                <div class="p-12 text-center !mt-6 border bg-white border-[#f1aeb5]">
-                  There are no puppies that match your current search…<br>
-                  <a href="/all-puppies/" class="text-primary underline">View all Puppies</a>
-                  or
-                  <a href="/contact-us/" class="text-primary underline">contact us</a>
-                  to get on a reservation list for our next available litter!
-                </div>
-              </div>
-              {% comment %}
-              {{ paginate | default_pagination }}
-              {% endcomment %}
-              {% if paginate.next %}
-                <div class="load-more-wrapper text-center mt-8">
-                  <button 
-                    class="load-more-btn px-6 py-3 bg-primary text-white rounded" 
-                    data-next-url="{{ paginate.next.url }}">
-                    Load More Puppies
-                  </button>
-                </div>
-              {% endif %}
-            {% endif %}
-          {% endpaginate %}
-        </div>
+<div class="collection-products">
+  {% paginate collection.products by 20 %}
+    {% if paginate.items == 0 %}
+      <!-- No puppies message -->
+    {% else %}
+      {% for product in collection.products %}
+        {% render 'puppy-card', product: product %}
+      {% endfor %}
+    {% endif %}
+  {% endpaginate %}
+</div>
+
+{% if paginate.next %}
+  <div class="load-more-wrapper text-center mt-8 mb-12">
+    <button 
+      class="load-more-btn px-6 py-3 bg-primary text-white rounded" 
+      data-next-url="{{ paginate.next.url }}">
+      Load More Puppies
+    </button>
+  </div>
+{% endif %}
+
+
     </div>
   </div>
 </section>
@@ -281,42 +264,47 @@
     });
 
 
-    // LOAD MORE AJAX PAGINATION
-    document.addEventListener("click", async function (e) {
-      const btn = e.target.closest(".load-more-btn");
-      if (!btn) return;
+// LOAD MORE AJAX PAGINATION
+document.addEventListener("click", async function (e) {
+  const btn = e.target.closest(".load-more-btn");
+  if (!btn) return;
 
-      const nextUrl = btn.getAttribute("data-next-url");
-      if (!nextUrl) return;
+  const nextUrl = btn.getAttribute("data-next-url");
+  if (!nextUrl) return;
 
-      btn.innerText = "Loading...";
+  btn.innerText = "Loading...";
 
-      try {
-        const response = await fetch(nextUrl);
-        const text = await response.text();
-        const parser = new DOMParser();
-        const htmlDoc = parser.parseFromString(text, "text/html");
+  try {
+    const response = await fetch(nextUrl);
+    const text = await response.text();
+    const parser = new DOMParser();
+    const htmlDoc = parser.parseFromString(text, "text/html");
 
-        // Get next products HTML
-        const newProducts = htmlDoc.querySelectorAll(".collection-products .puppy-card");
+    // Extract new cards
+    const newCards = htmlDoc.querySelectorAll(".collection-products .puppy-card");
 
-        // Append them
-        const container = document.querySelector(".collection-products");
-        newProducts.forEach(card => container.appendChild(card));
+    // Target main container on current page
+    const container = document.querySelector(".collection-products");
 
-        // Update button or remove if no more pages
-        const newNext = htmlDoc.querySelector(".load-more-btn");
-        if (newNext) {
-          btn.setAttribute("data-next-url", newNext.getAttribute("data-next-url"));
-          btn.innerText = "Load More Puppies";
-        } else {
-          btn.remove();
-        }
-      } catch (error) {
-        console.error("Load more failed:", error);
-        btn.innerText = "Error. Try Again";
-      }
-    });
+    // Append each product BEFORE the Load More button
+    newCards.forEach(card => container.appendChild(card));
+
+    // Get new next button from fetched HTML
+    const freshBtn = htmlDoc.querySelector(".load-more-btn");
+
+    if (freshBtn) {
+      btn.setAttribute("data-next-url", freshBtn.getAttribute("data-next-url"));
+      btn.innerText = "Load More Puppies";
+    } else {
+      btn.remove(); // No more pages
+    }
+
+  } catch (error) {
+    console.error("Load more failed:", error);
+    btn.innerText = "Error. Try Again";
+  }
+});
+
 
 
     document.addEventListener('change', function(e) {
