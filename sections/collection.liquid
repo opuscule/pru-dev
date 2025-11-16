@@ -98,16 +98,16 @@
       </div>
 
       
+{% paginate collection.products by 20 %}
+
 <div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% if paginate.items == 0 %}
-      <!-- No puppies message -->
-    {% else %}
-      {% for product in collection.products %}
-        {% render 'puppy-card', product: product %}
-      {% endfor %}
-    {% endif %}
-  {% endpaginate %}
+  {% if paginate.items == 0 %}
+    <!-- no puppies -->
+  {% else %}
+    {% for product in collection.products %}
+      {% render 'puppy-card', product: product %}
+    {% endfor %}
+  {% endif %}
 </div>
 
 {% if paginate.next %}
@@ -119,6 +119,9 @@
     </button>
   </div>
 {% endif %}
+
+{% endpaginate %}
+
 
 
     </div>
