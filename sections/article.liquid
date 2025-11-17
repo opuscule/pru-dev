@@ -9,12 +9,12 @@
 <section class="article-page py-16 bg-[var(--color-bg-extralight)]">
   <div class="max-w-[var(--width-container-content)] mx-auto px-4">
     
-    <article class="w-full md:w-7/12 mx-auto bg-white rounded-3xl p-6 shadow-lg">
+    <article class="w-full max-w-md mx-auto bg-white rounded-3xl p-6">
       
       {%- comment -%} Featured Image {%- endcomment -%}
       {% if article.image %}
         <div class="mb-6">
-          {{ article.image | image_url: width: 1200 | image_tag: class: "w-full h-auto rounded-2xl object-cover" }}
+          {{ article.image | image_url: width: 700 | image_tag: class: "w-full h-auto rounded-2xl object-cover" }}
         </div>
       {% endif %}
 
@@ -36,7 +36,7 @@
       </div>
 
       {%- comment -%} Article Content {%- endcomment -%}
-      <div class="article-content prose prose-lg max-w-none text-gray-700 leading-relaxed">
+      <div class="article-content prose prose-lg max-w-none leading-relaxed" style="color: var(--color-body-copy);">
         {{ article.content }}
       </div>
 
@@ -50,6 +50,7 @@
 {% stylesheet %}
   .article-content {
     line-height: 1.7;
+    color: var(--color-body-copy);
   }
   
   .article-content h2,
@@ -58,17 +59,19 @@
     margin-top: 2rem;
     margin-bottom: 1rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--color-body-copy);
   }
   
   .article-content p {
     margin-bottom: 1.25rem;
+    color: var(--color-body-copy);
   }
   
   .article-content ul,
   .article-content ol {
     margin-bottom: 1.25rem;
     padding-left: 1.5rem;
+    color: var(--color-body-copy);
   }
   
   .article-content blockquote {
@@ -76,7 +79,7 @@
     padding-left: 1rem;
     margin: 1.5rem 0;
     font-style: italic;
-    color: #6b7280;
+    color: var(--color-body-copy);
   }
 {% endstylesheet %}
 
