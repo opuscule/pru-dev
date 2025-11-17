@@ -40,7 +40,27 @@
         <nav class="header__menu" aria-label="{{ 'general.accessibility.nav_main' | t }}">
           <ul class="header__menu-list flex gap-x-4" role="list">
             <li class="header__menu-item whitespace-nowrap relative group">
-              <a href="/collections/all" class="header__menu-link">Available Puppies</a>
+              <a href="/collections/all" class="header__menu-link submenu-link">Available Puppies
+               <span style="width: 15px;"><svg xmlns="http://www.w3.org/2000/svg" width="150pt" height="150pt" viewBox="0 0 150 150" version="1.1" class="iconadda">
+                    <g>
+                    <g id="Arrow_Down_hhih9qQ-0"><path style=" stroke:none;fill-rule:nonzero;fill:#000001;fill-opacity:1;" d="M 112.5 60 L 82.273438 105 L 52.5 60 Z M 112.5 60 " />
+                    </g></g>
+                </svg></span>
+              </a>
+              <ul class="absolute left-0 top-full z-10 hidden group-hover:block w-max min-w-[200px] rounded-md border border-gray-200 bg-white shadow-lg list-none p-4 m-0">
+                <li>
+                  <a href="/collections/all" class="header__submenu-link block p-2 text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100">All Puppies</a>
+                </li>
+              {% for collection in collections %}
+                  {% if collection.metafields.custom.shown_on_website == true %}
+                    <li>
+                      <a href="{{ collection.url }}" class="header__submenu-link block p-2 text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100">
+                        {{ collection.title }}
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
             </li>
             <li class="header__menu-item whitespace-nowrap relative group">
               <a href="#" class="header__menu-link submenu-link">How to Purchase
