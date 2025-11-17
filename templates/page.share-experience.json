@@ -10,7 +10,7 @@
 {
   "sections": {
     "main": {
-      "type": "page",
+      "type": "page-share-experience",
       "settings": {}
     }
   },
