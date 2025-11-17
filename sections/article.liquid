@@ -6,59 +6,79 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/article
 {% endcomment %}
 
-{% if article.image %}
-  {{ article.image | image_url: width: 1000 | image_tag }}
-{% endif %}
-
-<h1>{{ article.title }}</h1>
-
-{% assign date = article.published_at | time_tag: format: 'date' %}
-<p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-
-{{ article.content }}
-
-{% if blog.comments_enabled? %}
-  <h2>{{ 'blog.article_comments' | t }}</h2>
-
-  <div id="comments">
-    {% paginate article.comments by 10 %}
-      {% for comment in article.comments %}
-        <div>
-          <p>{{ comment.author }}</p>
-          <p>
-            {{- comment.created_at | time_tag: format: 'date' -}}
-          </p>
-          <p>{{ comment.content }}</p>
+<section class="article-page py-16 bg-[var(--color-bg-extralight)]">
+  <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+    
+    <article class="w-full md:w-7/12 mx-auto bg-white rounded-3xl p-6 shadow-lg">
+      
+      {%- comment -%} Featured Image {%- endcomment -%}
+      {% if article.image %}
+        <div class="mb-6">
+          {{ article.image | image_url: width: 1200 | image_tag: class: "w-full h-auto rounded-2xl object-cover" }}
         </div>
-      {% endfor %}
+      {% endif %}
 
-      {{ paginate | default_pagination: anchor: 'comments' }}
-    {% endpaginate %}
+      {%- comment -%} Title {%- endcomment -%}
+      <h1 class="text-3xl lg:text-5xl font-normal tracking-tight text-gray-900 mb-4 leading-tight" style="max-font-size: 3.25rem;">
+        {{ article.title }}
+      </h1>
+
+      {%- comment -%} Meta Information {%- endcomment -%}
+      <div class="flex items-center gap-2 text-gray-600 mb-6 text-sm">
+        <span class="font-bold text-gray-900">Amy</span>
+        <span>•</span>
+        {% assign date = article.published_at | date: "%b. %d, %Y" %}
+        <span>{{ date }}</span>
+        {% if article.tags.size > 0 %}
+          <span>•</span>
+          <span>{{ article.tags.first | capitalize }}</span>
+        {% endif %}
+      </div>
+
+      {%- comment -%} Article Content {%- endcomment -%}
+      <div class="article-content prose prose-lg max-w-none text-gray-700 leading-relaxed">
+        {{ article.content }}
+      </div>
+
+    </article>
+
   </div>
+</section>
 
-  {% form 'new_comment', article %}
-    <h2>{{ 'blog.comment_form_title' | t }}</h2>
 
-    {{ form.errors | default_errors }}
 
-    <div>
-      <label for="author">{{ 'blog.comment_form_name' | t }}</label>
-      <input type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
-    </div>
-
-    <div>
-      <label for="email">{{ 'blog.comment_form_email' | t }}</label>
-      <input type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
-    </div>
-
-    <div>
-      <label for="body">{{ 'blog.comment_form_body' | t }}</label>
-      <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
-    </div>
-
-    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
-  {% endform %}
-{% endif %}
+{% stylesheet %}
+  .article-content {
+    line-height: 1.7;
+  }
+  
+  .article-content h2,
+  .article-content h3,
+  .article-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .article-content p {
+    margin-bottom: 1.25rem;
+  }
+  
+  .article-content ul,
+  .article-content ol {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+  
+  .article-content blockquote {
+    border-left: 4px solid var(--color-primary);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #6b7280;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
