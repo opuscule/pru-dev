@@ -5,430 +5,79 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #ef6859;
-            --secondary-color: oklch(.69 .16 28.69);
-            --theme-light: #edeada;
-            --gray-light: #e3e0d1;
-            --black-color: #2a2a2a;
-            --white-color: #ffffff;
-            --text-color12: #646665;
-
-
-            --border-radius: 30px;
-        }
-button.btn.btn-minus {
-    margin-bottom: 5px;
-}
-.checkout-text {
-    text-align: center;
-    font-size: 13px;
-    padding: 0.5rem 1rem;
-    background-color: white;
-    border-radius: 10px;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-.Breed-title {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.form-check-input:checked {
-    background-color: black !important;
-}
-/*.title-row {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 100%;
-    align-items: center;
-}*/
-.money-cart {
-    font-family: inherit;
-    color: #646665;
-    font-size: 29px;
-}
-.totals-sums{
-  font-size:2rem;
-}
-button.btn.btn-plus {
-    margin-bottom: 5px;
-}
-
-.waves_separator_svg {
-    line-height: 0;
-    transform: rotateX(180deg);
-    margin-top: -1px;
-}
-
-.bg-secondary {
-    background-color: oklch(.7057 .158 124.46) !important;
-}
-
-.btns-cart {
-    border: 2px solid #D7D5CE;
-    border-radius: 10rem;
-    padding: .75rem 2.25rem;
-    font-size: 1.125rem;
-    font-weight: 500;
-    border-width: 2px;
-    border-style: solid;  
-    color: white;
-    background-color: #D7D5CE;
-}
-.btns-cart:hover{
- background-color:#e74c3c;
- border: 2px solid #e74c3c;
- color:#fff;
-}
-
-        body {
-            overflow: hidden;
-            overflow-y: auto;
-        }
-
-        .section-space {
-            padding: 5rem 0;
-        }
-h2.font-bold.cart-title {
-    font-size: 3.5rem;
-}
-        .section-space-top {
-            padding-top: 5rem;
-        }
-
-        .section-space-bottom {
-            padding-bottom: 5rem;
-        }
-
-        .form-check-label {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .bg-theme-light {
-            background-color: var(--theme-light);
-        }
-
-        .btn {
-            border-radius: 50px;
-            padding: 0.35rem 1.5rem;
-            display: inline-block;
-        }
-
-        /* .btn-theme */
-        .btn.btn-theme {
-            background-color: var(--primary-color);
-            color: var(--white-color);
-        }
-
-        .btn.btn-theme:hover {
-            background-color: var(--primary-color);
-        }
-
-
-        /* .btn-bordered */
-        .btn.btn-bordered {
-            border: 1px solid var(--white-color);
-            color: var(--primary-color);
-        }
-
-        .btn.btn-bordered:hover {
-            border: 1px solid var(--white-color);
-            color: var(--primary-color);
-        }
-
-        .order-summary {
-            background-color: var(--gray-light);
-           /* border: 1px solid var(--primary-color); */
-            padding: 1rem;
-            border-radius: var(--border-radius);
-        }
-        .order-summary .form-check{
-            border: 1px solid var(--primary-color);
-            padding: .5rem .5rem .5rem 2rem;
-            border-radius: var(--border-radius);
-        }
-
-        .order-summary ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            margin-bottom:1rem;
-        }
-
-        .order-summary ul li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #b1b1b1;
-        }
-
-        .order-summary ul li.total {
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: var(--primary-color);
-            border-bottom: none !important;
-            margin-bottom: 1rem;
-        }
-
-        .cart-quantity {
-            max-width: 9rem;
-            background-color: var(--primary-color);
-            color: var(--white-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50px;
-            padding: 0.15rem 0.5rem;
-            color: var(--white-color);
-        }
-
-        .cart-quantity input {
-            max-width: 5rem;
-            background-color: transparent;
-            border: none;
-            color: var(--white-color);
-            text-align: center;
-        }
-
-        .cart-quantity input:focus {
-            border: 1px solid var(--white-color) !important;
-            outline: none !important;
-        }
-
-        .cart-quantity button {
-            background-color: transparent;
-            border: none;
-            color: var(--white-color);
-            font-size: 1.5rem;
-            padding: 0 0.5rem;
-            cursor: pointer;
-        }
-
-        .cart-quantity button:focus {
-            box-shadow: none;
-        }
-
-        .buy-product-pod {
-            background-color: var(--gray-light);
-            /*padding: 0.25rem;*/
-            border-radius: var(--border-radius);
-           /* border: 1px solid var(--primary-color); */
-        }
-
-        .buy-product-pod .buy-col {
-            width: 100%;
-            height: 100%;
-        }
-
-        .buy-product-pod .buy-col.col-two {
-          display: flex;
-          padding: 1rem 2rem 1rem 1rem;
-          justify-content: space-between;
-        }
-
-        .buy-product-pod .buy-col.col-two .product-title {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .buy-product-pod .buy-col.col-three {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            padding: 1rem 0;
-            border-left: 1px solid var(--primary-color);
-        }
-
-        span.main-sex-age {
-          color: #646665;
-          font-size: 21.4px;
-        }
-        .buy-product-pod .cart-quantity .btn:hover {
-
-            color: var(--white-color);
-        }
-
-        /* 
-        .buy-product-pod .cart-quantity {
-            max-width: 9rem;
-            background-color: var(--color_secondary);
-            color: var(--color_white);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50px;
-            padding: 0.15rem 0.5rem;
-            color: var(--color_white);
-        }
-
-        .buy-product-pod .cart-quantity input {
-            max-width: 5rem;
-            background-color: transparent;
-            border: none;
-            color: var(--color_white);
-            text-align: center;
-        }
-
-        .buy-product-pod .cart-quantity input:focus {
-            border: 1px solid var(--color_white) !important;
-            outline: none !important;
-        }
-
-        .buy-product-pod .cart-quantity button {
-            background-color: transparent;
-            border: none;
-            color: var(--color_white);
-            font-size: 1.5rem;
-            padding: 0 0.5rem;
-            cursor: pointer;
-        }
-
-        .buy-product-pod .cart-quantity button:focus {
-            box-shadow: none;
-        } */
-
-        .buy-product-pod figure {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .buy-product-pod figure .badge {
-            position: absolute;
-            top: 0.5rem;
-            left: 0.5rem;
-            padding: 0.1rem 0.75rem;
-            color: var(--color_white);
-            font-size: 0.9rem;
-        }
-
-        .buy-product-pod figure img {
-            width: 100%;
-            height: 100%;
-            max-height: 290px;
-            object-fit: cover;
-            border-bottom-left-radius: var(--border-radius);
-            border-top-left-radius: var(--border-radius);
-            border-right: 7px solid var(--primary-color);
-        }
-        .checkout-labels {
-    background-color: white;
-    padding: 2rem;
+{% stylesheet %}
+  .cart-item-pod {
+    background-color: var(--color-bg-card);
+    border-radius: 30px;
+  }
+  
+  
+  .order-summary-box {
+    background-color: var(--color-bg-card);
+    border-radius: 30px;
+  }
+  
+  .order-summary-box ul li {
+    border-bottom: 1px solid #b1b1b1;
+  }
+  
+  .checkout-agreement {
+    background-color: var(--color-white);
     border-radius: 20px;
-}
-.checkout-labels .form-check-label {
-    font-size: 18.7px;
-    font-weight: 500;
-}
-        .main-info-all{
-          margin-bottom: 0.5rem;
-        }
-        .main-paddings input {
-            margin-top: 6px;
-            margin-left: -10px !important;
-        }
-        .main-paddings .label-text {
-            margin-left: 15px;
-        }
-        .buy-product-pod .two-line-clamp {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.4em;
-            max-width: 20rem;
-        }
-
-        
-        .buy-product-pod ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .buy-product-pod ul li:last-child{
-            font-size: 1.25rem;
-            color: var(--white-color);
-            background-color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius);
-            margin-top: 1rem;
-        }
-
-        .buy-product-pod ul strong {
-            color: var(--color_theme);
-            margin-right: 0.5rem;
-        }
-        .main-paddings {
-    padding: 2rem;
-}
-@media screen and (max-width: 600px) {
-
-.buy-product-pod figure img{
-  border-right: 0px solid var(--primary-color);  
-  border-bottom-left-radius: 0px;
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
-}
-.order-summary{
-  margin-top: 1rem;
-}
-.checkout-text{
-  padding:0px;
-}
-}
-@media screen and (max-width: 992px) {
-.totals-sums {
-    font-size: initial;
-}
-.btns-cart{
-  padding: .75rem 1.25rem;
+  }
+  
+  .form-check-input:checked {
+    background-color: var(--color-black);
+    border-color: var(--color-black);
+  }
+  
+  .checkout-btn {
+    border-radius: 10rem;
     font-size: 1.125rem;
-}
-}
-    </style>
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .checkout-btn:disabled {
+    background-color: #D7D5CE;
+    border-color: #D7D5CE;
+    color: var(--color-white);
+  }
+  
+  .checkout-btn:not(:disabled):hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+  }
+  
+  
+{% endstylesheet %}
 
+<div class="text-center mb-8">
+  <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">Order Summary</h1>
+</div>
 
-<div class="cart-title"><h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">Order Summary</h1></div>
-
-<section class="buy-pod-wrap bg-theme-light section-space" data-cart-section>
-  <div class="container">
-    <div class="buy-pod-inner">
+<section class="bg-bg-extralight py-20" data-cart-section>
+  <div class="w-full px-4 mx-auto">
+    <div class="max-w-[var(--width-container-content)] mx-auto">
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
-        <div class="row">
-          <div class="col-md-9">
+        <div class="flex flex-wrap -mx-4">
+          <div class="w-full lg:w-9/12 px-4">
             {% if cart.item_count == 0 %}
-              <p>Your cart is empty.</p>
+              <p class="text-lg">Your cart is empty.</p>
             {% else %}
 
               {% for item in cart.items %} 
-                    {% unless item.product.title contains 'Puppy Delivery Option' %}
-                {% assign gender = item.properties.Gender | default: item.product.metafields.custom.gender %}
-                {% assign age    = item.properties.Age    | default: item.product.metafields.custom.age %}
-                {% assign breed  = item.properties.Breed  | default: item.product.metafields.custom.breed | default: item.product.type %}
+                {% unless item.product.title contains 'Puppy Delivery Option' %}
                 {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
 
-                <div class="buy-product-pod mb-3" data-line="{{ item.key }}">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="buy-col col-one">
-                        <figure>
+                <div class="cart-item-pod mb-3 p-4" data-line="{{ item.key }}">
+                  <div class="flex flex-wrap -mx-4">
+                    <div class="w-full md:w-3/12 px-4">
+                      <div class="w-full h-full">
+                        <figure class="m-0 relative">
                           <a href="{{ item.url }}">
                             {% if item.image %}
-                              <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}" loading="lazy">
+                              <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}" loading="lazy" width="360" height="360" class="w-full h-full max-h-[290px] object-cover rounded-t-[30px] rounded-bl-none border-r-0 md:rounded-l-[30px] md:rounded-tr-none md:border-r-[7px] md:border-primary">
                             {% else %}
                               {{ 'product-apparel-1' | placeholder_svg_tag }}
                             {% endif %}
@@ -437,37 +86,28 @@ h2.font-bold.cart-title {
                       </div>
                     </div>
 
-                    <div class="col-md-9">
-                      <div class="buy-col col-two">
-                        <div class="product-description"> 
-                          <!--<code>#{{ item.sku }}</code>-->
-                          <div class="title-row">
-                          <div class="title-row-main"><h2 class="font-bold cart-title"><a href="{{ item.url }}" style="color: #646665;text-decoration: none;">{{ item.product.title }}</a></h2></div>
-                         
-                          </div>
+                    <div class="w-full md:w-9/12 px-4">
+                      <div class="flex justify-between items-start p-4">
+                        <div class="flex-1"> 
+                          <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl mb-2">
+                            <a href="{{ item.url }}" class="text-[#646665] no-underline hover:text-primary">{{ item.product.title }}</a>
+                          </h2>
                         
-                            {% assign dob_val = item.product.metafields.custom.dob.value %}
-                            {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
-                            {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
-                            {% assign diff_seconds = now_ts | minus: dob_ts %}
-                            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                            <div class="Breed-title" style="color: #646665;">{{ first_collection.title }}</div>
-                            <div class="main-info-all"><span class="main-sex-age">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span></div>
-                           <!-- <ul>
-                            <li><strong>Sex :</strong>{{ item.product.metafields.custom.sex }}</li>
-                            {% assign first_collection = item.product.collections | first %}
-                            {% if first_collection %}
-                              <li><strong>Breed :</strong> {{ first_collection.title }}</li>
-                            {% endif %}
-                            <li><strong>DOB :</strong>{{ item.product.metafields.custom.dob }}</li>
-                            <li><strong>Age :</strong>{{ weeks_old | floor }} Weeks Old</li>
-                            <li><strong>Price</strong> {{ unit_price | money }}</li>
-                          </ul>-->
-
+                          {% assign dob_val = item.product.metafields.custom.dob.value %}
+                          {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
+                          {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
+                          {% assign diff_seconds = now_ts | minus: dob_ts %}
+                          {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+                          
+                          <div class="text-2xl font-medium mb-2 text-[#646665]">{{ item.product.collections.first.title }}</div>
+                          <div class="mb-2">
+                            <span class="text-[#646665] text-xl">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span>
+                          </div>
+                         
                           {% if item.properties and item.properties.size > 0 %}
                             <details class="mt-2">
-                              <summary>Details</summary>
-                              <ul style="margin:8px 0 0 0;">
+                              <summary class="cursor-pointer">Details</summary>
+                              <ul class="mt-2 ml-0 list-none">
                                 {% for p in item.properties %}
                                   {% unless p.last == blank %}
                                     <li><strong>{{ p.first }}:</strong> {{ p.last }}</li>
@@ -476,86 +116,179 @@ h2.font-bold.cart-title {
                               </ul>
                             </details>
                           {% endif %}
-                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="btn-link remove-line mt-2" style="color: #646665;text-decoration: none;font-size: 16.7px;margin-top: 20px !important;">Remove</a>
-                          <!--<button class="btn-link remove-line mt-2" style="color: var(--primary-color);text-decoration: none;font-size: 0.8rem;" name="updates[{{ item.key }}]" value="0" type="submit" aria-label="Remove {{ item.product.title }}">Remove</button>-->
+                          
+                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="inline-block mt-5 text-[#646665] no-underline text-base hover:text-primary">Remove</a>
                         </div>
-                         <div class="money-cart">{{ unit_price | money }}</div>
+                        
+                        <div class="text-[#646665] text-3xl font-body-copy ml-4">{{ unit_price | money }}</div>
                       </div>
-
-
                     </div>
- 
-                   <!-- <div class="col-md-3">
-                      <div class="buy-col col-three">
-                        <div class="qty-pod text-center">
-                          <strong class="d-block mb-2">Quantity</strong>
-                          <div class="cart-quantity mb-2" data-key="{{ item.key }}">
-                            <button class="btn btn-minus" type="button" aria-label="Decrease quantity">-</button>
-                            <input
-                              class="qty-input"
-                              type="text"
-                              name="updates[{{ item.key }}]"
-                              value="{{ item.quantity }}"
-                              inputmode="numeric"
-                              pattern="[0-9]*"
-                              aria-label="Quantity for {{ item.product.title }}"
-                              />
-                            <button class="btn btn-plus" type="button" aria-label="Increase quantity">+</button>
-                          </div>
-                          <div class="line-total"><strong>Line Total:</strong> {{ item.final_line_price | money }}</div>
-                        </div>
-                      </div>
-                    </div>-->
-
                   </div>
                 </div>
                 {% endunless %}
               {% endfor %}
  
             {% endif %}
-<div class="buy-product-pod main-paddings mt-2">
-<div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Choose Delivery Option</h2></div>
-         <div id="delivery-options">
-  <div class="form-check checkout-labels mb-3 mt-5" style="display: flex;align-items: baseline;">
-    <input type="radio" name="delivery" value="41869989871701"> 
-    <div class="label-text">
-        <label class="form-check-label" for="certifyAge">
-          Delivered to Your Home ($500)  
-        </label>
-      </div>
-    </div>
 
-    <div class="form-check checkout-labels mb-3" style="display: flex;align-items: baseline;">
-    <input type="radio" name="delivery" value="41869989904469">
-    <div class="label-text">
-        <label class="form-check-label" for="certifyAge">
-         Delivered to Nearby Location ($400)
-        </label>
-      </div>
-    </div>
+            <div class="cart-item-pod p-8 mt-3">
+              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">Choose Delivery Option</h2>
+              
+              <div id="delivery-options" class="space-y-3">
+                <div class="checkout-agreement p-8 flex items-baseline gap-4">
+                  <input type="radio" name="delivery" value="41869989871701" class="mt-1"> 
+                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
+                    Delivered to Your Home ($500)  
+                  </label>
+                </div>
 
-    <div class="form-check checkout-labels mb-3" style="display: flex;align-items: baseline;">
-    <input type="radio" name="delivery" value="41869989937237">
-    <div class="label-text">
-        <label class="form-check-label" for="certifyAge">
-         Pick Up From Breeder (Free)
-        </label>
-      </div>
-    </div>
+                <div class="checkout-agreement p-8 flex items-baseline gap-4">
+                  <input type="radio" name="delivery" value="41869989904469" class="mt-1">
+                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
+                    Delivered to Nearby Location ($400)
+                  </label>
+                </div>
 
-    <div class="form-check checkout-labels mb-3" style="display: flex;align-items: baseline;">
-    <input type="radio" name="delivery" value="41869989970005">
-    <div class="label-text">
-        <label class="form-check-label" for="certifyAge">
-         I Will Decide Later ($0)
-        </label>
-      </div>
-    </div>
-</div>
-</div>
+                <div class="checkout-agreement p-8 flex items-baseline gap-4">
+                  <input type="radio" name="delivery" value="41869989937237" class="mt-1">
+                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
+                    Pick Up From Breeder (Free)
+                  </label>
+                </div>
+
+                <div class="checkout-agreement p-8 flex items-baseline gap-4">
+                  <input type="radio" name="delivery" value="41869989970005" class="mt-1">
+                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
+                    I Will Decide Later ($0)
+                  </label>
+                </div>
+              </div>
+            </div>
  
+            <div class="cart-item-pod p-8 mt-3">
+              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">Required Agreements</h2>
+              
+              {% if cart.item_count > 0 %}       
+              <div class="space-y-3" data-terms>
+                <div class="checkout-agreement p-8">
+                  <div class="flex items-start gap-4">
+                    <input class="form-check-input mt-1" type="checkbox" id="certifyAge">
+                    <div class="flex-1">
+                      <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
+                        Health Guarantee Agreement 
+                      </label>
+                      <div class="text-sm mt-1">
+                        I have read and agree to the Puppys R Us <a href="https://puppysrusdev.myshopify.com/pages/health-guarantee" class="text-primary no-underline hover:underline">Health Guarantee</a>.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="checkout-agreement p-8">
+                  <div class="flex items-start gap-4">
+                    <input class="form-check-input mt-1" type="checkbox" id="understandTerms">
+                    <div class="flex-1">
+                      <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
+                        Terms & Conditions / Purchase Agreement
+                      </label>
+                      <div class="text-sm mt-1">
+                        I confirm I am 18+ and agree to the Puppys R Us <a href="https://puppysrusdev.myshopify.com/pages/terms-of-service" class="text-primary no-underline hover:underline">Terms & Conditions</a>.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="checkout-agreement p-8">
+                  <div class="flex items-start gap-4">
+                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement">
+                    <div class="flex-1">
+                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
+                        Veterinary Care Acknowledgment
+                      </label>
+                      <div class="text-sm mt-1">
+                        I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving him/her.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="checkout-agreement p-8">
+                  <div class="flex items-start gap-4">
+                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement1">
+                    <div class="flex-1">
+                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
+                        Transportation Agreement
+                      </label>
+                      <div class="text-sm mt-1">
+                        I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I will be contacted to confirm details.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="checkout-agreement p-8">
+                  <div class="flex items-start gap-4">
+                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement2">
+                    <div class="flex-1">
+                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
+                        Puppy Confirmation
+                      </label>
+                      <div class="text-sm mt-1">
+                        I confirm I am purchasing the puppy listed in my order summary.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="w-full lg:w-3/12 px-4">
+            <div class="order-summary-box p-4">
+              <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-4">Total</h4>
+              <ul class="list-none m-0 p-0 mb-4">
+                <li class="flex justify-between items-center py-2">
+                  <strong class="text-[#646665]">Puppy Price</strong>
+                  <span>{{ cart.items_subtotal_price | money }}</span>
+                </li>
+
+                {% if shop.taxes_included %}
+                  <li class="text-sm italic border-b-0">Tax included. Shipping calculated at checkout.</li>
+                {% else %}
+                  <li class="text-sm italic border-b-0">Taxes and shipping calculated at checkout.</li>
+                {% endif %}
+                
+                <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
+                  <strong class="text-[#646665] font-titles">Total</strong>
+                  <span>{{ cart.items_subtotal_price | money }}</span>
+                </li> 
+              </ul>
+
+              {% if cart.item_count > 0 %}
+              <input 
+                id="checkoutBtn" 
+                type="submit" 
+                name="checkout" 
+                class="checkout-btn w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-[var(--color-primary)] border-[var(--color-primary)]" 
+                disabled 
+                aria-disabled="true" 
+                value="{{ 'cart.checkout' | t }}"
+              >
+              <div id="checkout-text1" class="text-center text-sm py-2 px-4 bg-white rounded-lg text-[var(--color-primary)] mb-4">
+                Please accept all terms and select a shipping method
+              </div>
+              {% endif %}
+            </div>
+            <img class="w-full mt-5 ml-5" src="{{ 'puppies Images.png' | asset_url }}" alt="Payment methods" width="300" height="100">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
 <script>
-// ✅ Auto-check the correct radio on page load
+// Auto-check the correct radio on page load
 document.addEventListener("DOMContentLoaded", async () => {
   const radios = document.querySelectorAll('input[name="delivery"]');
 
@@ -574,16 +307,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
-// ✅ Add / remove delivery options on change
+// Add / remove delivery options on change
 document.querySelectorAll('input[name="delivery"]').forEach(radio => {
   radio.addEventListener('change', async (e) => {
     const selectedVariant = Number(e.target.value);
 
-    // 1️⃣ Fetch current cart
+    // Fetch current cart
     const cart = await fetch('/cart.js').then(res => res.json());
 
-    // 2️⃣ Remove ALL delivery variants
+    // Remove ALL delivery variants
     const deliveryItems = cart.items.filter(
       item => item.product_title === "Puppy Delivery Option"
     );
@@ -599,7 +331,7 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
       });
     }
 
-    // 3️⃣ Add selected variant
+    // Add selected variant
     await fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -609,234 +341,75 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
       })
     });
 
-    // 4️⃣ Refresh
+    // Refresh
     location.reload();
   });
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Quantity +/- and auto-submit
+  const form = document.querySelector('.cart-form');
+  const debouncedSubmit = (() => {
+    let t;
+    return () => { clearTimeout(t); t = setTimeout(()=>form.requestSubmit(), 350); }
+  })();
 
+  document.querySelectorAll('.cart-quantity').forEach((wrap)=>{
+    const minus = wrap.querySelector('.btn-minus');
+    const plus  = wrap.querySelector('.btn-plus');
+    const input = wrap.querySelector('.qty-input');
 
-                      <div class="buy-product-pod main-paddings mt-2">
-                       <div class="title-row-main"><h2 class="font-bold cart-title" style="color: #646665;text-decoration: none;">Required Agreements</h2></div>
-              
-              {% if cart.item_count > 0 %}       
-              <div class="terms-pod mb-3 mt-5" data-terms>
-                
-                <div class="form-check checkout-labels mb-3">
-                  <input class="form-check-input" type="checkbox" id="certifyAge">
-                  <div class="label-text">
-                  <label class="form-check-label" for="certifyAge">
-                    Health Guarantee Agreement 
-                  </label>
-                  <div class="below-text">I have read and agree to the Puppys R Us <a style="color:#e74c3c;text-decoration: none;" href="https://puppysrusdev.myshopify.com/pages/health-guarantee">Health Guarantee</a>.</div>
-                  </div>
-
-                </div>
-
-                <div class="form-check checkout-labels mb-3">
-                  <input class="form-check-input" type="checkbox" id="understandTerms">
-                  <div class="label-text">
-                  <label class="form-check-label" for="understandTerms">
-                    Terms & Conditions / Purchase Agreement
-                  </label>
-                  <div class="below-text">I confirm I am 18+ and agree to the Puppys R Us <a style="color:#e74c3c;text-decoration: none;" href="https://puppysrusdev.myshopify.com/pages/terms-of-service">Terms & Conditions</a>.</div>
-                  </div>
-                </div>
-
-                <div class="form-check checkout-labels mb-3">
-                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement">
-                  <div class="label-text">
-                  <label class="form-check-label" for="acknowledgeAgreement">
-                    Veterinary Care Acknowledgment
-                  </label>
-                   <div class="below-text">I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving him/her.</div>
-                  </div>
-                </div>
-
-                <div class="form-check checkout-labels mb-3">
-                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement1">
-                  <div class="label-text">
-                  <label class="form-check-label" for="acknowledgeAgreement1">
-                    Transportation Agreement
-                  </label>
-                  <div class="below-text">I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I will be contacted to confirm details.</div>
-                  </div>
-                </div>
-
-                <div class="form-check checkout-labels">
-                  <input class="form-check-input" type="checkbox" id="acknowledgeAgreement2">
-                   <div class="label-text">
-                  <label class="form-check-label" for="acknowledgeAgreement2">
-                    Puppy Con¸rmation
-                  </label>
-                   <div class="below-text">I confirm I am purchasing the puppy listed in my order summary.</div>
-                  </div>
-                </div>
-
-              </div>
-                {% endif %}
-
-              
-                     
-                     
-                       </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="order-summary">
-              <h4 class="summary-title fw-bold" style="color:var(--text-color12); font-size:3.5rem;">Total</h4>
-              <ul>
-                <li>
-                  <strong style="color:var(--text-color12);">Puppy Price</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
-                </li>
-
-                {% if shop.taxes_included %}
-                  <li><em>Tax included. Shipping calculated at checkout.</em></li>
-                {% else %}
-                  <li><em>Taxes and shipping calculated at checkout.</em></li>
-                {% endif %}
-                <li class="totals-sums" style="border-bottom: 0px;">
-                  <strong style="color:var(--text-color12); font-family: var(--font-titles);">Total</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
-                </li> 
-
-              </ul>
-
-              {% if cart.item_count > 0 %}
-              <input  id="checkoutBtn" type="submit" name="checkout" class="btns-cart mb-3 w-100 d-flex align-items-center justify-content-center gap-2 is-disabled"  disabled aria-disabled="true" value="{{ 'cart.checkout' | t }}">
-              <div id="checkout-text1" class="checkout-text">Please accept all terms and select a shipping method</div>
-              {% endif %}
-            </div>
-             <img class="w-100" src="{{ 'puppies Images.png' | asset_url }}" alt="Payment methods" style="margin-left: 20px;">
-          </div>
-        </div>
-      </form>
-    </div><!-- /.buy-pod-inner -->
-  </div><!-- /.container -->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-  document.addEventListener('DOMContentLoaded', function(){
-    // Quantity +/- and auto-submit
-    const form = document.querySelector('.cart-form');
-    const debouncedSubmit = (() => {
-      let t;
-      return () => { clearTimeout(t); t = setTimeout(()=>form.requestSubmit(), 350); }
-    })();
-
-    document.querySelectorAll('.cart-quantity').forEach((wrap)=>{
-      const minus = wrap.querySelector('.btn-minus');
-      const plus  = wrap.querySelector('.btn-plus');
-      const input = wrap.querySelector('.qty-input');
-
-      plus.addEventListener('click', ()=>{
-        const v = parseInt(input.value || '0', 10) + 1;
-        input.value = Math.max(0, v);
-        debouncedSubmit();
-      });
-
-      minus.addEventListener('click', ()=>{
-        const v = parseInt(input.value || '0', 10) - 1;
-        input.value = Math.max(0, v);
-        debouncedSubmit();
-      });
-
-      input.addEventListener('input', ()=>{
-        const cleansed = input.value.replace(/\D+/g,'');
-        input.value = cleansed === '' ? '0' : cleansed;
-        debouncedSubmit();
-      });
+    plus.addEventListener('click', ()=>{
+      const v = parseInt(input.value || '0', 10) + 1;
+      input.value = Math.max(0, v);
+      debouncedSubmit();
     });
 
-    // Gate checkout until all three boxes are ticked
-    const checks = [
-      document.getElementById('certifyAge'),
-      document.getElementById('understandTerms'),
-      document.getElementById('acknowledgeAgreement'),
-      document.getElementById('acknowledgeAgreement1'),
-      document.getElementById('acknowledgeAgreement2')
-    ].filter(Boolean);
+    minus.addEventListener('click', ()=>{
+      const v = parseInt(input.value || '0', 10) - 1;
+      input.value = Math.max(0, v);
+      debouncedSubmit();
+    });
 
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    function syncCheckoutState(){
-      if(checks.length === 0 || checks.every(cb => cb.checked)){
-        checkoutBtn?.classList.remove('is-disabled');
-        checkoutBtn?.removeAttribute('disabled');
-        checkoutBtn?.setAttribute('aria-disabled','false');
-        document.getElementById('checkout-text1').style.display='none';
-        document.getElementById('checkoutBtn').style.backgroundColor='#ef6859';
-      } else {
-        checkoutBtn?.classList.add('is-disabled');
-        checkoutBtn?.setAttribute('disabled','disabled');
-        checkoutBtn?.setAttribute('aria-disabled','true');
-        document.getElementById('checkout-text1').style.display='inline-block';
-        document.getElementById('checkoutBtn').style.backgroundColor='#D7D5CE';
-      }
-    }
-    checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
-    syncCheckoutState();
+    input.addEventListener('input', ()=>{
+      const cleansed = input.value.replace(/\D+/g,'');
+      input.value = cleansed === '' ? '0' : cleansed;
+      debouncedSubmit();
+    });
   });
-  </script>
 
-</section>
-<div class="waves_separator_svg">
-<svg width="100%" role="presentation" height="7vw" viewBox="0 0 1280 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <g fill="var(--theme-light)">
-      <path d="M1280 86c-19.9-17.21-40.08-39.69-79.89-39.69-57.49 0-56.93 46.59-115 46.59-53.61 0-59.76-39.62-115.6-39.62C923.7 53.27 924.26 87 853.89 87c-89.35 0-78.74-87-188.2-87C554 0 543.95 121.8 423.32 121.8c-100.52 0-117.84-54.88-191.56-54.88-77.06 0-100 48.57-151.75 48.57-40 0-60-12.21-80-29.51v54H1280z"></path>
-    </g>
-  </svg>
-</div>
+  // Gate checkout until all checkboxes are ticked
+  const checks = [
+    document.getElementById('certifyAge'),
+    document.getElementById('understandTerms'),
+    document.getElementById('acknowledgeAgreement'),
+    document.getElementById('acknowledgeAgreement1'),
+    document.getElementById('acknowledgeAgreement2')
+  ].filter(Boolean);
 
-<!--<section class="w-full bg-bg-extralight pt-8">
-
-  <div class="rounded-top-left w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-16 ms-[4vw]" style="padding-bottom: 200px; margin-bottom: -200px;">
+  const checkoutBtn = document.getElementById('checkoutBtn');
   
-    <div class="max-w-[var(--width-container-content)] mx-auto">
+  function syncCheckoutState(){
+    if(checks.length === 0 || checks.every(cb => cb.checked)){
+      checkoutBtn?.classList.remove('is-disabled');
+      checkoutBtn?.removeAttribute('disabled');
+      checkoutBtn?.setAttribute('aria-disabled','false');
+      document.getElementById('checkout-text1').style.display='none';
+    } else {
+      checkoutBtn?.classList.add('is-disabled');
+      checkoutBtn?.setAttribute('disabled','disabled');
+      checkoutBtn?.setAttribute('aria-disabled','true');
+      document.getElementById('checkout-text1').style.display='inline-block';
+    } 
+  }
+  
+  checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
+  syncCheckoutState();
+});
+</script>
 
-
-      <h1 class="text-center font-bold mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">{{ 'cart.title' | t }}</h1>
-
-      <form action="{{ routes.cart_url }}" method="post">
-        
-          {% for item in cart.items %}
-
-          
-          <div class="grid grid-cols-1 gap-6 md:[grid-template-columns:175px_1fr_auto] items-start py-6 border-b border-black/10">
-
-            <div class="w-full max-w-full md:max-w-[175px] overflow-hidden rounded-[1.25rem] shadow-[-8px_8px_0_0_var(--color-primary)]">
-              {% render 'image', image: item.image, url: item.url %}
-            </div>
-            
-           
-            <div class="space-y-1 title-here">
-            {% assign dob_val = item.product.metafields.custom.dob.value %}
-            {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
-            {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
-            {% assign diff_seconds = now_ts | minus: dob_ts %}
-            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-
-            <code>#{{ item.sku }}</code>
-
-            <h2 class="font-bold text-4xl">{{ item.product.title }}</h2>
-            <p>{{ item.product.collections.first.title }}</p>
-            <p>{{ item.product.metafields.custom.sex }} - {{ weeks_old | floor }} Weeks Old</p>
-            </div>
-
-          
-            <div class="text-left md:text-right space-y-3">
-              <div class="font-semibold">{{ item.line_price | money }}</div>
-              <div>{{ 'cart.remove' | t | link_to: item.url_to_remove }}</div>
-            </div>
-          </div>
-          {% endfor %}
-
-
-        <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-      </form>
-    </div>
-  </div>
-</section>-->
 {% schema %}
 {
   "name": "t:general.cart",

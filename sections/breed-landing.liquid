@@ -3,7 +3,23 @@
   Pulls all content from the selected collection
 {% endcomment %}
 
-{%- assign collection = collections[section.settings.collection] -%}
+{% liquid
+  assign collection = nil
+
+  if page and page.metafields and page.metafields.custom and page.metafields.custom.landing_page_breed
+    assign breed_meta = page.metafields.custom.landing_page_breed
+    if breed_meta.value
+      assign collection = breed_meta.value
+    else
+      assign handle = breed_meta | downcase
+      assign collection = collections[handle]
+    endif
+  endif
+
+  if collection == blank and section.settings.collection != blank
+    assign collection = collections[section.settings.collection]
+  endif
+%}
 
 {%- comment -%} Hero Banner with Collection Image Background {%- endcomment -%}
 <section class="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden p-8">

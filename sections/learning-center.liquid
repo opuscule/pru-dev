@@ -15,19 +15,39 @@
 {%- assign max_articles = 200 -%}
 {%- assign article_keys = '' -%}
 {%- assign count = 0 -%}
-{%- for blog in blogs -%}
-  {%- for article in blog.articles -%}
-    {%- if count >= max_articles -%}
-      {%- break -%}
-    {%- endif -%}
-    {%- assign key = blog.handle | append: '::' | append: article.handle -%}
-    {%- if article_keys == '' -%}
-      {%- assign article_keys = key -%}
-    {%- else -%}
-      {%- assign article_keys = article_keys | append: '||' | append: key -%}
-    {%- endif -%}
-    {%- assign count = count | plus: 1 -%}
-  {%- endfor -%}
+
+{%- comment -%} Get blog handles from settings or use defaults {%- endcomment -%}
+{%- liquid
+  if section.settings.blog_handles != blank
+    assign blog_handles_string = section.settings.blog_handles
+  else
+    assign blog_handles_string = 'news'
+  endif
+  assign blog_handles = blog_handles_string | split: ','
+-%}
+
+{%- comment -%} Debug info {%- endcomment -%}
+{%- assign debug_blogs = '' -%}
+
+{%- comment -%} Collect articles from specified blogs {%- endcomment -%}
+{%- for handle_raw in blog_handles -%}
+  {%- assign handle = handle_raw | strip -%}
+  {%- assign current_blog = blogs[handle] -%}
+  {%- if current_blog -%}
+    {%- assign debug_blogs = debug_blogs | append: handle | append: '(' | append: current_blog.articles.size | append: ') ' -%}
+    {%- for article in current_blog.articles -%}
+      {%- if count >= max_articles -%}
+        {%- break -%}
+      {%- endif -%}
+      {%- assign key = handle | append: '::' | append: article.handle -%}
+      {%- if article_keys == '' -%}
+        {%- assign article_keys = key -%}
+      {%- else -%}
+        {%- assign article_keys = article_keys | append: '||' | append: key -%}
+      {%- endif -%}
+      {%- assign count = count | plus: 1 -%}
+    {%- endfor -%}
+  {%- endif -%}
   {%- if count >= max_articles -%}
     {%- break -%}
   {%- endif -%}
@@ -41,7 +61,18 @@
   {%- assign parts = key | split: '::' -%}
   {%- assign b_handle = parts[0] -%}
   {%- assign a_handle = parts[1] -%}
-  {%- assign a = blogs[b_handle].articles[a_handle] -%}
+  {%- comment -%} Remove blog handle prefix from article handle if it exists {%- endcomment -%}
+  {%- assign a_handle_clean = a_handle | remove_first: b_handle | remove_first: '/' -%}
+  {%- assign current_blog = blogs[b_handle] -%}
+  {%- assign a = nil -%}
+  {%- if current_blog -%}
+    {%- for article in current_blog.articles -%}
+      {%- if article.handle == a_handle or article.handle == a_handle_clean -%}
+        {%- assign a = article -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
   {%- if a -%}
     {%- assign ts = a.published_at | date: '%s' -%}
     {%- assign stamped_key = ts | append: '::' | append: key -%}
@@ -72,6 +103,18 @@
       <p class="mt-4 text-base text-gray-600">Articles, guides and tips for caring for your new puppy.</p>
     </header>
 
+    {%- comment -%} Debug info {%- endcomment -%}
+    <div class="mb-8 p-4 bg-gray-100 rounded text-sm">
+      <p><strong>Debug:</strong></p>
+      <p>Blog handles setting: {{ section.settings.blog_handles }}</p>
+      <p>Blogs checked: {{ debug_blogs }}</p>
+      <p>Total article keys collected: {{ article_keys | split: '||' | size }}</p>
+      <p>Total after sorting: {{ sorted_desc.size }}</p>
+      <p>Page {{ page_param }} of {{ total_pages }}</p>
+      <p>Showing articles {{ start_index }} to {{ end_index }}</p>
+      <p>First few keys: {{ article_keys | truncate: 200 }}</p>
+    </div>
+
   <div class="lc-grid grid gap-10 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
       {%- for i in (start_index..end_index) -%}
         {%- assign entry = sorted_desc[i] -%}
@@ -79,11 +122,10 @@
         {%- assign entry_parts = entry | split: '::' -%}
         {%- assign blog_handle = entry_parts[1] -%}
         {%- assign article_handle = entry_parts[2] -%}
-        {%- assign article_collection = blogs[blog_handle].articles -%}
-        {%- assign article = article_collection[article_handle] -%}
-        {%- if article == blank -%}
-          {%- comment -%} Fallback: iterate to locate article by handle because array indexing by handle returns blank {%- endcomment -%}
-          {%- for a in article_collection -%}
+        {%- assign current_blog = blogs[blog_handle] -%}
+        {%- assign article = nil -%}
+        {%- if current_blog -%}
+          {%- for a in current_blog.articles -%}
             {%- if a.handle == article_handle -%}
               {%- assign article = a -%}
               {%- break -%}
@@ -134,12 +176,29 @@
 
 {% schema %}
 {
-  "name": "t:general.learning_center",
+  "name": "Learning Center",
   "settings": [
-    {"type": "range", "id": "per_page", "label": "Articles per page (display only)", "min": 6, "max": 30, "step": 2, "default": 20}
+    {
+      "type": "text",
+      "id": "blog_handles",
+      "label": "Blog handles",
+      "info": "Comma-separated blog handles (e.g., news,guides). Leave blank to use 'news' by default.",
+      "default": "news"
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Articles per page",
+      "min": 6,
+      "max": 30,
+      "step": 2,
+      "default": 20
+    }
   ],
   "presets": [
-    {"name": "Learning Center"}
+    {
+      "name": "Learning Center"
+    }
   ]
 }
 {% endschema %}

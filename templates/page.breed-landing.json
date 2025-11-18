@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "breed-landing",
+      "settings": {
+        "collection": ""
+      }
+    }
+  },
+  "order": ["main"]
+}
