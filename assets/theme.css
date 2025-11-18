@@ -28,3 +28,6 @@
     align-items: center;
     gap: 0.1rem;
 }
+.menu-sub-padding {
+    padding: 0.1rem 0;
+}
