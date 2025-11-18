@@ -54,7 +54,7 @@
               {% for collection in collections %}
                   {% if collection.metafields.custom.shown_on_website == true %}
                     <li>
-                      <a href="{{ collection.url }}" class="header__submenu-link block p-2 text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100">
+                      <a href="{{ collection.url }}" class="header__submenu-link block text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100 menu-sub-padding">
                         {{ collection.title }}
                       </a>
                     </li>
