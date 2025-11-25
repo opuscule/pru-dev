@@ -1,16 +1,15 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
-
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
-    <link rel="preload" as="font" type="font/woff2" href="{{ 'amatic-sc-700.woff2' | asset_url }}" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="{{ 'open-sans-400.woff2' | asset_url }}" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="{{ 'open-sans-700.woff2' | asset_url }}" crossorigin>
+    {{ 'amatic-sc-700.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'open-sans-400.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'open-sans-700.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     <link rel="apple-touch-icon" sizes="180x180" href="{{ 'favicon-180.png' | asset_url }}">
     <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ 'favicon-32.png' | asset_url }}">
@@ -20,39 +19,48 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-  {%- comment -%} Localized fonts & Choices assets {%- endcomment -%}
-  <link href="{{ 'fonts.css' | asset_url }}" rel="stylesheet">
-  <link href="{{ 'choices.min.css' | asset_url }}" rel="stylesheet">
+    {%- comment -%} Localized fonts & Choices assets {%- endcomment -%}
+    <link href="{{ 'fonts.css' | asset_url }}" rel="stylesheet">
+    <link href="{{ 'choices.min.css' | asset_url }}" rel="stylesheet">
     <link href="{{ 'theme.css' | asset_url }}" rel="stylesheet">
-    
-
 
     {{ content_for_header }}
-    
+
     {%- comment -%} Google Tag Manager {%- endcomment -%}
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NVBX4VJ');</script>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-NVBX4VJ');
+    </script>
     <!-- End Google Tag Manager -->
-    
   </head>
 
   <body>
-    
     {%- comment -%} Google Tag Manager (noscript) {%- endcomment -%}
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NVBX4VJ"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NVBX4VJ"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    
+
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
-  <script defer src="{{ 'choices.min.js' | asset_url }}"></script>
+    <script defer src="{{ 'choices.min.js' | asset_url }}"></script>
   </body>
 </html>

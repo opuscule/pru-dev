@@ -3,20 +3,15 @@
   Used in collection pages and product carousels.
 
   @param {object} product - The product to display
+
   @param {boolean} [show_cta=true] - Whether to show the CTA button
   @param {boolean} [link_entire_card=true] - Whether to wrap the entire card in a link
-  
+
   @example
   {% render 'puppy-card', product: product %}
   {% render 'puppy-card', product: product, show_cta: false %}
   {% render 'puppy-card', product: product, link_entire_card: false %}
 {% enddoc %}
-
-  <style>
-  .cards-inners img { height: 250px; }
-  .adding-margins { margin: 0 0.5rem; }
-  </style>
-
 
 {%- assign p = product -%}
 {%- if p != blank -%}
@@ -26,8 +21,8 @@
 
   {%- assign dob_val = p.metafields.custom.dob.value | default: p.metafields.custom.dob -%}
   {%- if dob_val -%}
-    {%- assign dob_ts = dob_val | date: "%s" | plus: 0 -%}
-    {%- assign now_ts = 'now' | date: "%s" | plus: 0 -%}
+    {%- assign dob_ts = dob_val | date: '%s' | plus: 0 -%}
+    {%- assign now_ts = 'now' | date: '%s' | plus: 0 -%}
     {%- assign diff = now_ts | minus: dob_ts -%}
     {%- assign weeks = diff | divided_by: 604800 | round: 0 -%}
   {%- endif -%}
@@ -91,7 +86,12 @@
   {%- endcapture -%}
 
   {%- if wrap_link -%}
-  <a href="{{ p.url }}" class="block no-underline text-body-copy hover:no-underline max-w-[250px] puppy-card" data-sex="{{ sex | escape }}" data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}">
+    <a
+      href="{{ p.url }}"
+      class="block no-underline text-body-copy hover:no-underline max-w-[500px] puppy-card"
+      data-sex="{{ sex | escape }}"
+      data-travel="{% if weeks != blank and weeks < 8 %}false{% else %}true{% endif %}"
+    >
       {{ card_inner }}
     </a>
   {%- else -%}
