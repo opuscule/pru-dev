@@ -58,5 +58,31 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "financing": {
+    "title": "Financing",
+    "boost_power": "Boost your Purchasing Power!",
+    "approval_title": "Approval in seconds:",
+    "approval_description": "Apply online 24/7 for financing approvals in seconds. Applications can be filled out from any device with an internet connection.",
+    "prequalified_title": "Get Prequalified With No Credit Impact:",
+    "prequalified_description": "There are no hard inquiries so you can get prequalified with no impact to your credit score.",
+    "pay_over_time_title": "Pay Over Time:",
+    "pay_over_time_description": "Credova puts the purchasing power in your hands with monthly payments instead of paying for the entire purchase upfront.",
+    "cta_button": "Complete Your Application",
+    "terrace": {
+      "questions": "Questions?",
+      "hours": {
+        "monday_saturday": "Monday-Saturday:",
+        "monday_saturday_time": "9am-11pm(EST)",
+        "sunday": "Sunday:",
+        "sunday_time": "10am-8pm(EST)"
+      },
+      "prequalify_title": "To Pre-Qualify...",
+      "prequalify_subtitle": "all you need is to:",
+      "requirement_employer": "Have been with your current employer for 12 months",
+      "requirement_checking": "Have an open checking account for 3 months",
+      "requirement_income": "Have a minimum net income of $1,300 per month",
+      "disclaimer": "Terrace Finance is not available in the following areas: California, Connecticut, Massachusetts, Minnesota, Nevada, New Jersey, New York, Vermont, Washington, Wisconsin, Puerto Rico, and Canada."
+    }
   }
 }

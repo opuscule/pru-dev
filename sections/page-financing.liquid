@@ -1,25 +1,139 @@
-<section class="bg-bg-extra-light py-16">
-    <div class="bordrer-radius-top-left bg-light">
-        <div class="w-full px-4 mx-auto">
-            <div class="max-w-[var(--width-container-content)] mx-auto py-12">
-                <h1 class="text-4xl font-titles text-center mb-12">Financing</h1>
-                <div class="flex flex-wrap">
-                    <div class="w-full md:w-1/2 min-w-0">
-                        <h2 class="text-2xl font-titles mb-4">Why Financing?</h2>
-                        <p class="mb-4">Financing allows you to make larger purchases while managing your cash flow effectively. It provides flexibility and helps you invest in your business without immediately depleting your resources.</p>
-                        <p class="mb-4">With financing options, you can spread out payments over time, making it easier to budget and plan for future expenses.</p>
-                    </div>
+<section class="bg-bg-light py-16">
+  <div class="w-full px-4 mx-auto">
+    <div class="max-w-[var(--width-container-content)] mx-auto py-12">
+      <h1 class="text-6xl md:text-7xl font-titles text-center mb-16">
+        {{ 'financing.title' | t }}
+      </h1>
 
-                    <div class="w-full md:w-1/2 min-w-0">
-                        <h2 class="text-2xl font-titles mb-4">Our Financing Options</h2>
-                        <p class="mb-4">We offer a variety of financing plans tailored to your needs, including low-interest rates and flexible repayment terms.</p>
-                        <p class="mb-4">Our team is here to help you find the best solution to fit your budget and goals.</p>
-                    </div>
-                </div>
-            </div>
+      <div class="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+        <div class="w-full md:w-1/2">
+            <img src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/credova.webp?v=1763732399" alt="Credova Financing" loading="lazy" decoding="async" width="600" height="400" class="w-full h-auto" style="max-width:320px">
         </div>
+
+        <div class="w-full md:w-1/2">
+          <h2 class="text-4xl md:text-5xl font-titles mb-8">
+            {{ 'financing.boost_power' | t }}
+          </h2>
+
+          <ul class="space-y-6 mb-8">
+            <li class="text-body-copy">
+              <strong class="font-semibold">{{ 'financing.approval_title' | t }}</strong> 
+              {{ 'financing.approval_description' | t }}
+            </li>
+            <li class="text-body-copy">
+              <strong class="font-semibold">{{ 'financing.prequalified_title' | t }}</strong> 
+              {{ 'financing.prequalified_description' | t }}
+            </li>
+            <li class="text-body-copy">
+              <strong class="font-semibold">{{ 'financing.pay_over_time_title' | t }}</strong> 
+              {{ 'financing.pay_over_time_description' | t }}
+            </li>
+          </ul>
+
+          <div class="text-center md:text-left">
+            <a 
+              href="https://credova.com/Apply/MAL000" 
+              class="btn btn-primary inline-block hover:opacity-90 transition-opacity"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ 'financing.cta_button' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
+
+
+
+{% render 'wave-separator' %}
+
+<section class="bg-bg-extralight pb-[200px]" style="margin-bottom:-200px;">
+  <div class="w-full px-4 mx-auto">
+    <div class="max-w-[var(--width-container-content)] mx-auto py-12">
+      <div class="flex flex-col md:flex-row gap-8 md:gap-12">
+        <div class="w-full md:w-1/2">
+          <img 
+            src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/Terrace-Logo-Powered-by-350-300x89.png?v=1763732701" 
+            alt="Powered by Terrace Finance" 
+            loading="lazy" 
+            decoding="async" 
+            width="350" 
+            height="89" 
+            class="mb-8" 
+            style="max-width:350px"
+          >
+
+          <h3 class="text-3xl md:text-4xl font-titles mb-4">
+            {{ 'financing.terrace.questions' | t }}
+          </h3>
+
+          <p class="mb-2">
+            <a href="mailto:info@terracefinance.com" class="text-primary hover:underline">
+              info@terracefinance.com
+            </a>
+          </p>
+          <p class="mb-4">
+            <a href="tel:+18885091370" class="text-primary hover:underline">
+              888-509-1370
+            </a>
+          </p>
+
+          <p class="mb-1">
+            <strong class="font-semibold">{{ 'financing.terrace.hours.monday_saturday' | t }}</strong> 
+            {{ 'financing.terrace.hours.monday_saturday_time' | t }}
+          </p>
+          <p>
+            <strong class="font-semibold">{{ 'financing.terrace.hours.sunday' | t }}</strong> 
+            {{ 'financing.terrace.hours.sunday_time' | t }}
+          </p>
+        </div>
+
+        <div class="w-full md:w-1/2">
+          <h2 class="text-4xl md:text-5xl font-titles mb-6">
+            {{ 'financing.terrace.prequalify_title' | t }}
+          </h2>
+
+          <h3 class="text-2xl font-titles mb-6">
+            {{ 'financing.terrace.prequalify_subtitle' | t }}
+          </h3>
+
+          <ul class="space-y-4 mb-8">
+            <li class="text-body-copy">
+              {{ 'financing.terrace.requirement_employer' | t }}
+            </li>
+            <li class="text-body-copy">
+              {{ 'financing.terrace.requirement_checking' | t }}
+            </li>
+            <li class="text-body-copy">
+              {{ 'financing.terrace.requirement_income' | t }}
+            </li>
+          </ul>
+
+          <div class="text-center md:text-left">
+            <a 
+              href="https://terracefinance.azurewebsites.net/onlineApplication/preApplication?source=1&identifier=2616" 
+              class="btn btn-primary inline-block hover:opacity-90 transition-opacity"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ 'financing.cta_button' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-body-copy italic">
+          {{ 'financing.terrace.disclaimer' | t }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% schema %}
 {
   "name": "Financing Page",
