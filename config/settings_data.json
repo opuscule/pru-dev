@@ -9,13 +9,14 @@
  */
 {
   "current": {
+    "contentful_space_id": "23jezwfidcn5",
+    "contentful_access_token": "3uiYRdn8EGox5tTXNXlhxe0API5BcOE56ojWP9dkz64",
     "sections": {
       "header": {
         "type": "header",
-        "settings": {
-          "menu": "main-menu"
-        }
+        "settings": {}
       }
-    }
+    },
+    "content_for_index": []
   }
 }
