@@ -15,3 +15,6 @@ node_modules/
 ## Release files
 release
 *.zip
+
+# Theme settings with sensitive data (API keys, credentials, etc.)
+config/settings_data.json

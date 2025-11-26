@@ -1,46 +1,9 @@
 <section id="happy-families" class="pt-24 pb-24 bg-[var(--color-bg-extralight)]">
   <div class="max-w-[var(--width-container-content)] mx-auto px-4">
     <h2 class="font-titles text-center text-5xl mb-16">Happy Families</h2>
-    <div id="happy-families-slider" class="relative max-w-5xl mx-auto">
-      <div id="happy-families-track" class="overflow-hidden">
-        <div class="slides transition-all duration-500"></div>
-      </div>
-
-      <!-- Navigation arrows -->
-      <button
-        id="happy-families-prev"
-        type="button"
-        aria-label="Previous testimonial"
-        class="
-          absolute top-1/2 -translate-y-1/2 left-0 md:-left-12
-          bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
-          w-12 h-12 rounded-full z-10 flex items-center justify-center
-          text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
-          focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
-          focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
-        "
-      >
-        <span class="block translate-y-[2px]" style="margin-top: -10px;">&lsaquo;</span>
-      </button>
-
-      <button
-        id="happy-families-next"
-        type="button"
-        aria-label="Next testimonial"
-        class="
-          absolute top-1/2 -translate-y-1/2 right-0 md:-right-12
-          bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
-          w-12 h-12 rounded-full z-10 flex items-center justify-center
-          text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
-          focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
-          focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
-        "
-      >
-        <span class="block translate-y-[2px]" style="margin-top: -10px;">&rsaquo;</span>
-      </button>
-
-      <div class="dots flex items-center justify-center gap-4 mt-10" id="happy-families-dots"></div>
-    </div>
+    
+    <!-- Masonry Grid Container -->
+    <div id="happy-families-grid" class="masonry-grid"></div>
   </div>
 </section>
 
@@ -50,6 +13,7 @@
       const SPACE_ID = '{{ settings.contentful_space_id | escape }}';
       const ACCESS_TOKEN = '{{ settings.contentful_access_token | escape }}';
       const CONTENT_TYPE = 'happy_families';
+      console.log("Debug Contentful - SPACE_ID:", SPACE_ID, "ACCESS_TOKEN length:", ACCESS_TOKEN.length);
 
       if (!SPACE_ID || !ACCESS_TOKEN) {
         console.warn('Happy Families: Contentful credentials not configured');
@@ -61,11 +25,10 @@
         const res = await fetch(endpoint);
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
-        const track = document.querySelector('#happy-families-track .slides');
-        const dotsWrap = document.getElementById('happy-families-dots');
-
+        const grid = document.getElementById('happy-families-grid');
+        
         if (!data.items || data.items.length === 0) {
-          track.innerHTML = '<p class="text-center">No testimonials found.</p>';
+          grid.innerHTML = '<p class="text-center col-span-2">No testimonials found.</p>';
           return;
         }
 
@@ -74,13 +37,15 @@
           for (const a of data.includes.Asset) assetMap.set(a.sys.id, a.fields);
         }
 
-        // Show all testimonials on dedicated page (no limit)
+        // Show all testimonials
         const testimonials = data.items
           .map((v) => ({ v, r: Math.random() }))
           .sort((a, b) => a.r - b.r)
           .map(({ v }) => v);
 
-        const slides = [];
+        const cards = [];
+        const schemas = [];
+        
         testimonials.forEach((item, i) => {
           const f = item.fields;
           let imageUrl = '';
@@ -90,101 +55,126 @@
               imageUrl = asset.file.url.startsWith('//') ? 'https:' + asset.file.url : asset.file.url;
             }
           }
+          
           const stars = '<span class="text-[#F2635B]">★</span>'.repeat(5);
-          slides.push(`
-              <div class="slide flex flex-col md:flex-row gap-8 items-start w-full shrink-0" data-index="${i}">
-                <div class="relative shrink-0 mx-auto md:mx-0">
-                  <div class="absolute -left-3 -bottom-3 w-[180px] h-[180px] rounded-[32px] bg-[#F2635B]"></div>
+          
+          // Generate card HTML with masonry-friendly structure
+          cards.push(`
+            <div class="testimonial-card bg-[#E8E4D9] rounded-[32px] p-8 break-inside-avoid mb-8">
+              <div class="flex items-start gap-6 mb-4">
+                <div class="relative shrink-0">
+                  <div class="absolute -left-2 -bottom-2 w-[120px] h-[120px] rounded-[24px] bg-[#F2635B]"></div>
                   ${
                     imageUrl
-                      ? `<img src="${imageUrl}?w=400&h=400" alt="${
+                      ? `<img src="${imageUrl}?w=300&h=300" alt="${
                           f.puppysName || ''
-                        }" width="400" height="400" class="relative rounded-[32px] w-[180px] h-[180px] object-cover" loading="lazy">`
-                      : '<div class="relative rounded-[32px] w-[180px] h-[180px] bg-gray-200"></div>'
+                        }" width="300" height="300" class="relative rounded-[24px] w-[120px] h-[120px] object-cover" loading="lazy">`
+                      : '<div class="relative rounded-[24px] w-[120px] h-[120px] bg-gray-300"></div>'
                   }
                 </div>
-                <div class="flex-1 max-w-2xl mx-auto md:mx-0">
-                  <div class="mb-3 leading-none">${stars}</div>
-                  <h3 class="font-titles text-5xl tracking-wide mb-5">${f.title || ''}</h3>
-                  <p class="text-[1.35rem] leading-relaxed text-gray-700">${f.quote || ''}</p>
+                <div class="flex-1 pt-2">
+                  <div class="mb-2 leading-none text-lg">${stars}</div>
                 </div>
-              </div>`);
-        });
-
-        track.style.display = 'flex';
-        track.style.width = '100%';
-        track.innerHTML = slides.join('');
-
-        // Slider state
-        let current = 0;
-        function render() {
-          const all = track.querySelectorAll('.slide');
-          all.forEach((s, i) => {
-            s.style.display = i === current ? 'flex' : 'none';
-          });
-          dotsWrap.querySelectorAll('button').forEach((b, i) => {
-            b.classList.toggle('opacity-100', i === current);
-            b.classList.toggle('opacity-30', i !== current);
-          });
-        }
-
-        // Dots
-        dotsWrap.innerHTML = slides
-          .map(
-            (_, i) =>
-              `<button aria-label="Show testimonial ${
-                i + 1
-              }" class="w-5 h-5 rounded-full bg-neutral-700 opacity-30 transition" data-to="${i}"></button>`
-          )
-          .join('');
-        dotsWrap.addEventListener('click', (e) => {
-          const btn = e.target.closest('button[data-to]');
-          if (!btn) return;
-          current = parseInt(btn.dataset.to, 10);
-          render();
-        });
-
-        // Navigation arrows
-        const prevBtn = document.getElementById('happy-families-prev');
-        const nextBtn = document.getElementById('happy-families-next');
-
-        if (prevBtn) {
-          prevBtn.addEventListener('click', () => {
-            current = (current - 1 + slides.length) % slides.length;
-            render();
-          });
-        }
-
-        if (nextBtn) {
-          nextBtn.addEventListener('click', () => {
-            current = (current + 1) % slides.length;
-            render();
-          });
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') {
-            current = (current - 1 + slides.length) % slides.length;
-            render();
-          } else if (e.key === 'ArrowRight') {
-            current = (current + 1) % slides.length;
-            render();
+              </div>
+              <h3 class="font-titles text-3xl tracking-wide mb-4 leading-tight" style="font-family: var(--font-titles);">${f.title || ''}</h3>
+              <p class="text-[1.1rem] leading-relaxed text-gray-800">${f.quote || ''}</p>
+            </div>`);
+          
+          // Format date for schema (YYYY-MM-DD format)
+          let formattedDate = '';
+          if (f.dateSubmitted) {
+            const date = new Date(f.dateSubmitted);
+            if (!isNaN(date.getTime())) {
+              formattedDate = date.toISOString().split('T')[0];
+            }
           }
+          
+          // Generate schema.org Review markup
+          const schema = {
+            "@context": "https://schema.org/",
+            "@type": "Review",
+            "itemReviewed": {
+              "@type": "Organization",
+              "name": "Puppys R Us, LLC.",
+              "url": "https://puppysrus.com/",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1404 Southern Hills #246",
+                "addressLocality": "West Plains",
+                "addressRegion": "MO",
+                "postalCode": "65775",
+                "addressCountry": "US"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+1-844-733-7877",
+                "contactType": "Sales",
+                "email": "sales@puppysrus.com"
+              }
+            },
+            "author": {
+              "@type": "Person",
+              "name": f.ownersName || "Anonymous"
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5",
+              "bestRating": "5",
+              "worstRating": "1"
+            },
+            "reviewBody": f.quote || ""
+          };
+          
+          // Only add datePublished if we have a valid date
+          if (formattedDate) {
+            schema.datePublished = formattedDate;
+          }
+          
+          schemas.push(`<script type="application/ld+json">${JSON.stringify(schema)}<\/script>`);
         });
 
-        render();
+        grid.innerHTML = cards.join('');
+        
+        // Append all schema markup to the page head
+        const schemaContainer = document.createElement('div');
+        schemaContainer.innerHTML = schemas.join('');
+        document.head.appendChild(schemaContainer);
+
       } catch (e) {
         console.error('Happy Families testimonials load error', e);
-        const track = document.querySelector('#happy-families-track .slides');
-        if (track) {
-          track.innerHTML =
-            '<p class="text-center text-red-600">Error loading testimonials. Please try again later.</p>';
+        const grid = document.getElementById('happy-families-grid');
+        if (grid) {
+          grid.innerHTML =
+            '<p class="text-center text-red-600 col-span-2">Error loading testimonials. Please try again later.</p>';
         }
       }
     })();
   });
 </script>
+
+{% stylesheet %}
+  .masonry-grid {
+    column-count: 1;
+    column-gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .masonry-grid {
+      column-count: 2;
+    }
+  }
+
+  .testimonial-card {
+    display: inline-block;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
