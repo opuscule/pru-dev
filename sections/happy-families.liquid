@@ -1,0 +1,199 @@
+<section id="happy-families" class="pt-24 pb-24 bg-[var(--color-bg-extralight)]">
+  <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+    <h2 class="font-titles text-center text-5xl mb-16">Happy Families</h2>
+    <div id="happy-families-slider" class="relative max-w-5xl mx-auto">
+      <div id="happy-families-track" class="overflow-hidden">
+        <div class="slides transition-all duration-500"></div>
+      </div>
+
+      <!-- Navigation arrows -->
+      <button
+        id="happy-families-prev"
+        type="button"
+        aria-label="Previous testimonial"
+        class="
+          absolute top-1/2 -translate-y-1/2 left-0 md:-left-12
+          bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
+          w-12 h-12 rounded-full z-10 flex items-center justify-center
+          text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
+          focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
+          focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
+        "
+      >
+        <span class="block translate-y-[2px]" style="margin-top: -10px;">&lsaquo;</span>
+      </button>
+
+      <button
+        id="happy-families-next"
+        type="button"
+        aria-label="Next testimonial"
+        class="
+          absolute top-1/2 -translate-y-1/2 right-0 md:-right-12
+          bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
+          w-12 h-12 rounded-full z-10 flex items-center justify-center
+          text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
+          focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
+          focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
+        "
+      >
+        <span class="block translate-y-[2px]" style="margin-top: -10px;">&rsaquo;</span>
+      </button>
+
+      <div class="dots flex items-center justify-center gap-4 mt-10" id="happy-families-dots"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    (async () => {
+      const SPACE_ID = '{{ settings.contentful_space_id | escape }}';
+      const ACCESS_TOKEN = '{{ settings.contentful_access_token | escape }}';
+      const CONTENT_TYPE = 'happy_families';
+
+      if (!SPACE_ID || !ACCESS_TOKEN) {
+        console.warn('Happy Families: Contentful credentials not configured');
+        return;
+      }
+
+      const endpoint = `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/master/entries?access_token=${ACCESS_TOKEN}&content_type=${CONTENT_TYPE}&include=2`;
+      try {
+        const res = await fetch(endpoint);
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        const track = document.querySelector('#happy-families-track .slides');
+        const dotsWrap = document.getElementById('happy-families-dots');
+
+        if (!data.items || data.items.length === 0) {
+          track.innerHTML = '<p class="text-center">No testimonials found.</p>';
+          return;
+        }
+
+        const assetMap = new Map();
+        if (data.includes && data.includes.Asset) {
+          for (const a of data.includes.Asset) assetMap.set(a.sys.id, a.fields);
+        }
+
+        // Show all testimonials on dedicated page (no limit)
+        const testimonials = data.items
+          .map((v) => ({ v, r: Math.random() }))
+          .sort((a, b) => a.r - b.r)
+          .map(({ v }) => v);
+
+        const slides = [];
+        testimonials.forEach((item, i) => {
+          const f = item.fields;
+          let imageUrl = '';
+          if (f.image && f.image.sys && f.image.sys.id) {
+            const asset = assetMap.get(f.image.sys.id);
+            if (asset && asset.file && asset.file.url) {
+              imageUrl = asset.file.url.startsWith('//') ? 'https:' + asset.file.url : asset.file.url;
+            }
+          }
+          const stars = '<span class="text-[#F2635B]">★</span>'.repeat(5);
+          slides.push(`
+              <div class="slide flex flex-col md:flex-row gap-8 items-start w-full shrink-0" data-index="${i}">
+                <div class="relative shrink-0 mx-auto md:mx-0">
+                  <div class="absolute -left-3 -bottom-3 w-[180px] h-[180px] rounded-[32px] bg-[#F2635B]"></div>
+                  ${
+                    imageUrl
+                      ? `<img src="${imageUrl}?w=400&h=400" alt="${
+                          f.puppysName || ''
+                        }" width="400" height="400" class="relative rounded-[32px] w-[180px] h-[180px] object-cover" loading="lazy">`
+                      : '<div class="relative rounded-[32px] w-[180px] h-[180px] bg-gray-200"></div>'
+                  }
+                </div>
+                <div class="flex-1 max-w-2xl mx-auto md:mx-0">
+                  <div class="mb-3 leading-none">${stars}</div>
+                  <h3 class="font-titles text-5xl tracking-wide mb-5">${f.title || ''}</h3>
+                  <p class="text-[1.35rem] leading-relaxed text-gray-700">${f.quote || ''}</p>
+                </div>
+              </div>`);
+        });
+
+        track.style.display = 'flex';
+        track.style.width = '100%';
+        track.innerHTML = slides.join('');
+
+        // Slider state
+        let current = 0;
+        function render() {
+          const all = track.querySelectorAll('.slide');
+          all.forEach((s, i) => {
+            s.style.display = i === current ? 'flex' : 'none';
+          });
+          dotsWrap.querySelectorAll('button').forEach((b, i) => {
+            b.classList.toggle('opacity-100', i === current);
+            b.classList.toggle('opacity-30', i !== current);
+          });
+        }
+
+        // Dots
+        dotsWrap.innerHTML = slides
+          .map(
+            (_, i) =>
+              `<button aria-label="Show testimonial ${
+                i + 1
+              }" class="w-5 h-5 rounded-full bg-neutral-700 opacity-30 transition" data-to="${i}"></button>`
+          )
+          .join('');
+        dotsWrap.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-to]');
+          if (!btn) return;
+          current = parseInt(btn.dataset.to, 10);
+          render();
+        });
+
+        // Navigation arrows
+        const prevBtn = document.getElementById('happy-families-prev');
+        const nextBtn = document.getElementById('happy-families-next');
+
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            current = (current - 1 + slides.length) % slides.length;
+            render();
+          });
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            current = (current + 1) % slides.length;
+            render();
+          });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') {
+            current = (current - 1 + slides.length) % slides.length;
+            render();
+          } else if (e.key === 'ArrowRight') {
+            current = (current + 1) % slides.length;
+            render();
+          }
+        });
+
+        render();
+      } catch (e) {
+        console.error('Happy Families testimonials load error', e);
+        const track = document.querySelector('#happy-families-track .slides');
+        if (track) {
+          track.innerHTML =
+            '<p class="text-center text-red-600">Error loading testimonials. Please try again later.</p>';
+        }
+      }
+    })();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Happy Families",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Happy Families"
+    }
+  ]
+}
+{% endschema %}
