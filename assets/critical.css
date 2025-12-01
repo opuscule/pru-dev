@@ -16,7 +16,7 @@
   --color-white: oklch(0.99 0 0);
   --color-black: oklch(0.2 0 0);
   --font-titles: "Amatic SC",sans-serif;
-  --font-body-copy: "Open Sans",sans-serif;
+  --font-body-copy: "Open Sans",sans-serif !important;
   --width-container-content: 1280px;
 }
 
