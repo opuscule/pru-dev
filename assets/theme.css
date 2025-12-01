@@ -191,6 +191,11 @@ hr {
   /* 3 */
 }
 
+
+.adding-margins {
+    margin: 0 0.70rem;
+}
+
 /*
 Add the correct text decoration in Chrome, Edge, and Safari.
 */
