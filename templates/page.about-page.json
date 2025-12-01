@@ -12,9 +12,15 @@
     "main": {
       "type": "page",
       "settings": {}
+    },
+    "page_about_us_gbB4DD": {
+      "type": "page-about-us",
+      "name": "About us Page",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "page_about_us_gbB4DD"
   ]
 }
