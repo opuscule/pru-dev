@@ -90,3 +90,11 @@ p:empty {
 .adding-margins {
     margin: 0 0.70rem;
 }
+
+
+.about_image_wrapper {
+    box-shadow: 0 12px 10vw -6px rgba(0, 0, 0, .3);
+    max-width: 90%;
+    overflow: hidden;
+    transform: rotate(347deg);
+}
