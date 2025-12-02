@@ -152,3 +152,15 @@ p:empty {
   transform: translateY(0);
   pointer-events: auto;
 }
+
+.about_sm {
+    display: inline-flex;
+    list-style-type: none;
+}
+
+.about_sm li a {
+    background-color: var(--color-primary);
+    border-radius: 5rem;
+    height: 3rem;
+    width: 3rem;
+}
