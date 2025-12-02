@@ -163,6 +163,9 @@ p:empty {
     border-radius: 5rem;
     height: 3rem;
     width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .about_sm li a svg {
