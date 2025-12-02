@@ -109,3 +109,7 @@ p:empty {
 .border-bottom-1 {
     border-bottom: .75rem solid var(--color-primary);
 }
+
+.carsoual-width .inner-container-image img {
+    max-height: 32vw;
+}
