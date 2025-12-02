@@ -105,3 +105,7 @@ p:empty {
     width: 90%;
     margin: 0 auto;
 }
+
+.border-bottom-1 {
+    border-bottom: .75rem solid var(--color-primary);
+}
