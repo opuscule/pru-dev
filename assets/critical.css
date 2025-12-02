@@ -188,6 +188,6 @@ p:empty {
     gap: 0.1rem;
 }
 
-.header__menu li {
+.header__menu .header__menu-item {
     padding-top: 1rem;
 }
