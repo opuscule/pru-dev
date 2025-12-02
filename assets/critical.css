@@ -94,8 +94,9 @@ p:empty {
 
 .about_image_wrapper {
     background-color: #e0dbc9;
-    box-shadow: 0 12px 10vw -6px rgba(0, 0, 0, .3);
+    box-shadow: 0 12px 10vw -6px rgba(0,0,0,.3);
     max-width: 90%;
     overflow: hidden;
     transform: rotate(347deg);
+    border-radius:6rem;
 }
