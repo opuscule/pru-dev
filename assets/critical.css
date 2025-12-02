@@ -194,3 +194,8 @@ p:empty {
 .header__menu .header__submenu-link {
     padding: 0.25rem 0;
 }
+
+.header__menu .header__submenu-link:hover {
+    background-color: transparent;
+    color: var(--color-black);
+}
