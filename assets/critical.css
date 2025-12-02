@@ -187,3 +187,7 @@ p:empty {
     justify-content: center;
     gap: 0.1rem;
 }
+
+.header__menu li {
+    padding-top: 1rem;
+}
