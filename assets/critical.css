@@ -113,3 +113,42 @@ p:empty {
 .carsoual-width .inner-container-image img {
     max-height: 32vw;
 }
+
+.inner-container-image{
+  position: relative;
+}
+
+/* Make images responsive & keep rounded if you want */
+.inner-container-image .card-img{
+  display:block;
+  width:100%;
+
+}
+
+/* Hidden caption overlay */
+.inner-container-image .caption {
+  
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0rem;
+    margin: 0 0rem;
+    padding: 0.5rem 0.75rem;
+    background: linear-gradient(180deg, transparent, #000);
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 0rem;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all .25s ease;
+    pointer-events: none;
+}
+
+/* Reveal on hover or keyboard focus */
+.inner-container-image:hover .caption,
+.inner-container-image:focus-within .caption{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
