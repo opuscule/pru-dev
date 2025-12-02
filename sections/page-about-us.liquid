@@ -72,41 +72,84 @@
   </h2>
 </div>
 
+
+<!-- HTML -->
 <div class="carsoual-width">
   <div class="flex space-x-8 px-4 pb-6">
 
     <!-- CARD 1 -->
     <div class="inner-container-image">
       <img src="https://dr9yafd9jyp80.cloudfront.net/pru/breeder-1.jpeg"
-           class="shadow-md mb-3"
+           class="card-img"
            alt="Travis & McKale" />
-      <div class="text-center font-semibold">
-        Travis & McKale: Beagles & Aussiedoodles
-      </div>
+      <div class="caption">Travis & McKale: Beagles & Aussiedoodles</div>
     </div>
 
-    <!-- CARD 2 --> 
+    <!-- CARD 2 -->
     <div class="inner-container-image">
       <img src="https://dr9yafd9jyp80.cloudfront.net/pru/pru-breeder.jpeg"
-           class="shadow-md mb-3"
+           class="card-img"
            alt="Ashton" />
-      <div class="text-center font-semibold">
-        Ashton: Poodles, Beagles & Dachshunds
-      </div>
+      <div class="caption">Ashton: Poodles, Beagles & Dachshunds</div>
     </div>
 
     <!-- CARD 3 -->
-    <div class="inner-container-image">  
+    <div class="inner-container-image">
       <img src="https://dr9yafd9jyp80.cloudfront.net/pru/breeder-2.jpeg"
-           class="shadow-md mb-3"
+           class="card-img"
            alt="Bobby & Samantha" />
-      <div class="text-center font-semibold">
-        Bobby & Samantha: Labrador Retrievers & Corgis
-      </div>
+      <div class="caption">Bobby & Samantha: Labrador Retrievers & Corgis</div>
     </div>
 
   </div>
 </div>
+
+<!-- CSS (put in your stylesheet) -->
+<style>
+.inner-container-image{
+  position: relative;
+  width: 18rem; /* adjust as needed */
+  flex-shrink: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Make images responsive & keep rounded if you want */
+.inner-container-image .card-img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius: 0.5rem;
+}
+
+/* Hidden caption overlay */
+.inner-container-image .caption{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.75rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none; /* prevents accidental clicks on invisible caption */
+}
+
+/* Reveal on hover or keyboard focus */
+.inner-container-image:hover .caption,
+.inner-container-image:focus-within .caption{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+</style>
+
 
 
   <!-- MEET A BREEDER TITLE -->
