@@ -172,3 +172,10 @@ p:empty {
 .about_sm li a svg {
     fill: #fff;
 }
+
+.small_separator {
+    background-color: var(--color-primary);
+    height: .125rem;
+    margin-bottom: 1rem;
+    width: 4rem;
+}
