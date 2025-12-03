@@ -1,20 +1,20 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+    This section is used in the collection template to render collection page
+    listing all products within a collection.
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+    https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
 {%- comment -%}
-  SEO: Override the document <title> via page_title variable.
-  Format: "<Collection Title> Puppies for Sale | Buy a <Collection Title> Puppy Online Today"
+    SEO: Override the document <title> via page_title variable.
+    Format: "<Collection Title> Puppies for Sale | Buy a <Collection Title> Puppy Online Today"
 {%- endcomment -%}
 {%- if collection.title == 'All' or collection.title == 'Home Page' -%}
-  {%- capture page_title -%}
+    {%- capture page_title -%}
     Adorable Puppies for Sale | Find Your Perfect Puppy Companion Today
   {%- endcapture -%}
 {%- else -%}
-  {%- capture page_title -%}
+    {%- capture page_title -%}
     {{ collection.title | escape }} Puppies for Sale | Buy a {{ collection.title | escape }} Puppy Online Today
   {%- endcapture -%}
 {%- endif -%}
@@ -22,352 +22,348 @@
 {%- if page_title -%}{%- endif -%}
 
 {%- comment -%}
-  SEO: Override meta description via page_description variable.
-  Uses collection title injected into marketing sentence.
+    SEO: Override meta description via page_description variable.
+    Uses collection title injected into marketing sentence.
 {%- endcomment -%}
 {%- if collection.title == 'All' or collection.title == 'Home Page' -%}
-  {%- capture page_description -%}
+    {%- capture page_description -%}
     Browse our adorable puppies for sale right now. Healthy, happy, well-socialized puppies from trusted breeders—find the perfect addition to your family today!
   {%- endcapture -%}
 {%- else -%}
-  {%- capture page_description -%}
+    {%- capture page_description -%}
     Check out our available {{ collection.title | escape }} puppies for sale right now. Buy from trusted breeders, with a health guarantee. Come find the perfect addition to your family!
   {%- endcapture -%}
 {%- endif -%}
 {%- comment -%} page_description set for meta description usage {%- endcomment -%}
 {%- if page_description -%}{%- endif -%}
 
-
 <div class="pup_card_bg footer_overlap">
-<section class="collection-section w-full bg-bg-extralight pt-8">
-<!-- ms-[4vw] -->
-  <div class="rounded-top-left w-full bg-bg-light rounded-none rounded-tl-[12.5vw] py-12" style="--collection-bottom-padding: 200px; --collection-bottom-overlap: -200px;">
-  
-    <div class="max-w-[var(--width-container-content)] mx-auto">  
+    <section class="collection-section w-full bg-bg-extralight pt-12">
+        <!-- ms-[4vw] -->
+        <div class="rounded-top-left w-full bg-bg-light rounded-tl-[12.5vw] py-12" style="--collection-bottom-padding: 200px; --collection-bottom-overlap: -200px;">
+            <div class="max-w-[var(--width-container-content)] mx-auto">
+                <div class="w-full">
+                    {% if collection.title == 'all' or collection.title == 'Products' %}
+                        <h1 class="text-center font-bold mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl collections">Purebred Puppies for sale</h1>
+                    {% else %}
+                        <h1 class="text-center font-bold mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl cooletall">{{ collection.title }} Puppies for sale</h1>
+                    {% endif %}
 
-      <div class="w-full">
-        {% if collection.title == 'all' or collection.title == 'Products' %}
-          <h1 class="text-center font-bold mb-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl collections">
-            Purebred Puppies for sale
-          </h1>
-        {% else %}
-          <h1 class="text-center font-bold mb-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl cooletall">
-            {{ collection.title }} Puppies for sale
-          </h1>
-        {% endif %}
+                    {% if collection.description != blank %}
+                        <div class="collection-description mb-8 text-center lg:max-w-[75%] mx-auto px-6">
+                            {{ collection.description }}
+                        </div>
+                    {% endif %}
 
-        <h3 class="text-center sm:text-3xl mb-6">We have the perfect addition to your family!</h3>
-        {% if collection.description != blank %}
-          <div class="collection-description mb-8 text-center lg:max-w-[75%] mx-auto px-6">
-            {{ collection.description }}
-          </div>
-        {% endif %}
+                    <!-- Filters -->
+                    <div class="flex flex-col mb-12">
+                        {% if collection.products_count > 0 %}
+                            <div class="breed-filter-container inline-flex items-center justify-center mx-auto mt-2 mb-4 px-12 py-6 bg-[hsla(0,0%,100%,0.7)] rounded">
+                                <form class="filter-tool flex flex-col sm:flex-row items-center justify-center">
+                                    <!-- Breeds Filter -->
+                                    {% if collection.title == 'all' or collection.title == 'Products' %}
+                                        <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="breeds">
+                                            <p class="font-bold mb-1">Breeds:</p>
+                                            <select id="breed-select" class="border border-gray-300 px-3 py-1 rounded">
+                                                <option value="">All Breeds</option>
+                                                {% for c in collections %}
+                                                    {% if c.products_count > 0 %}
+                                                        <option
+                                                            value="{{ c.url }}"
+                                                            {% if collection.handle == c.handle %}
+                                                                selected
+                                                            {% endif %}
+                                                        >
+                                                            {{ c.title }}
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    {% endif %}
+                                    <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="gender">
+                                        <p class="font-bold mb-1">Gender:</p>
+                                        <label class="mr-3">
+                                            <input type="radio" name="gender" class="mr-2" value="Male" data-filter="gender">
+                                            Male
+                                        </label>
+                                        <label class="mr-0 sm:mr-3">
+                                            <input type="radio" name="gender" class="mr-2" value="Female" data-filter="gender">
+                                            Female
+                                        </label>
+                                    </div>
 
-        <!-- Filters -->
-        <div class="flex flex-col mb-12">
-          <div class="breed-filter-container inline-flex items-center justify-center mx-auto mt-2 mb-4 px-12 py-6 bg-[hsla(0,0%,100%,0.7)] rounded">
-            <form class="filter-tool flex flex-col sm:flex-row items-center justify-center">
-            <!-- Breeds Filter -->
-            {% if collection.title == 'all' or collection.title == 'Products' %}
+                                    <div class="filter-group mr-0 sm:mr-12 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="ready">
+                                        <p class="font-bold mb-1">Is Ready to Travel:</p>
+                                        <label class="mr-3">
+                                            <input type="radio" name="readyToTravel" class="mr-2" value="true" data-filter="ready">
+                                            Yes
+                                        </label>
+                                        <label class="mr-0 sm:mr-3">
+                                            <input type="radio" name="readyToTravel" class="mr-2" value="false" data-filter="ready">
+                                            No
+                                        </label>
+                                    </div>
 
-            <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="breeds">
-              <p class="font-bold mb-1">Breeds:</p>
-              <select id="breed-select" class="border border-gray-300 px-3 py-1 rounded">
-                <option value="">All Breeds</option>
-                {% for c in collections %}
-                  {% if c.products_count > 0 %}
-                    <option value="{{ c.url }}" {% if collection.handle == c.handle %}selected{% endif %}>
-                      {{ c.title }}
-                    </option>
-                  {% endif %}
-                {% endfor %}
-              </select>
+                                    <button type="button" class="btn btn-primary text-sm" id="filter-reset">Reset</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% paginate collection.products by 20 %}
+                    {% if paginate.items == 0 %}
+                        <div class="text-center px-4 w-full max-w-3xl mx-auto mb-32">
+                            <div class="bg-white border border-primary p-12 mx-auto md:w-3xl">
+                                <p class="text-xl color-body-copy mb-1">Sorry, there are no {{ collection.title }} puppies available at this time&hellip;</p>
+                                <p class="text-xl color-body-copy">
+                                    <a href="{{ routes.all_products_collection_url }}" class="text-primary underline hover:no-underline">View all Puppies</a>
+                                    or
+                                    <a href="{{ pages.contact.url | default: '/pages/contact' }}" class="text-primary underline hover:no-underline">contact us</a>
+                                    to get on a reservation list for our next available litter!
+                                </p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="collection-products {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
+                            {% for product in collection.products %}
+                                {% render 'puppy-card', product: product %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if paginate.next %}
+                        <div class="load-more-wrapper text-center mt-8 mb-12">
+                            <button class="load-more-btn btn btn-primary" data-next-url="{{ paginate.next.url }}">Load More Puppies</button>
+                        </div>
+                    {% endif %}
+                {% endpaginate %}
             </div>
-           {% endif %}
-            <div class="filter-group mr-0 sm:mr-4 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="gender">
-                <p class="font-bold mb-1">Gender:</p>
-                <label class="mr-3">
-                  <input type="radio" name="gender" class="mr-2" value="Male" data-filter="gender">Male
-                </label>
-                <label class="mr-0 sm:mr-3">
-                  <input type="radio" name="gender" class="mr-2" value="Female" data-filter="gender">Female
-                </label>
-              </div>
-
-              <div class="filter-group mr-0 sm:mr-12 mb-4 sm:mb-0 text-center sm:text-left" data-filter-group="ready">
-                <p class="font-bold mb-1">Is Ready to Travel:</p>
-                <label class="mr-3">
-                  <input type="radio" name="readyToTravel" class="mr-2" value="true" data-filter="ready">Yes
-                </label>
-                <label class="mr-0 sm:mr-3">
-                  <input type="radio" name="readyToTravel" class="mr-2" value="false" data-filter="ready">No
-                </label>
-              </div>
-
-              <button type="button" class="btn btn-primary text-sm" id="filter-reset">Reset</button>
-            </form>
-          </div>
-      </div>
-      </div>
-
-      
-{% paginate collection.products by 20 %}
-
-<div class="collection-products {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
-  {% if paginate.items == 0 %}
-    <!-- no puppies -->
-  {% else %}
-    {% for product in collection.products %}
-      {% render 'puppy-card', product: product %}
-    {% endfor %}
-  {% endif %}
-</div>
-
-{% if paginate.next %}
-  <div class="load-more-wrapper text-center mt-8 mb-12">
-    <button 
-      class="load-more-btn btn btn-primary" 
-      data-next-url="{{ paginate.next.url }}">
-      Load More Puppies
-    </button>
-  </div>
-{% endif %}
-
-{% endpaginate %}
-
-
-
-    </div>
-  </div>
-</section>
+        </div>
+    </section>
 </div>
 
 {% stylesheet %}
-.collection-products {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
-  justify-items: center;
-  width: 95%;
-  margin: auto;
-  gap:1.2rem;
-}
+    .collection-products {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+        justify-items: center;
+        width: 95%;
+        margin: auto;
+        gap: 1.2rem;
+    }
 
-.no-pagination.is-collection {
-    margin-bottom: 3rem;
-}
-.collection-description p {
-    margin-bottom: 30px;
-}
-  .pup_card_bg {
-      background-color: #f6f3ea;
-      padding-top: 4rem;
-  }
-  .footer_overlap {
-    margin-bottom: -200px;
-    padding-bottom: 50px;
-  }
-  .pup_card_bg .collection-section {
-      background-color: #f6f3ea;
-  }
+    .no-pagination.is-collection {
+        margin-bottom: 3rem;
+    }
+    .collection-description p {
+        margin-bottom: 30px;
+    }
+    .footer_overlap {
+        margin-bottom: -200px;
+        padding-bottom: 50px;
+    }
 
+    .load-more-btn {
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s ease;
+    }
 
+    .load-more-btn:hover {
+        opacity: 0.85;
+    }
+    /* Force breed filter bar content to center align */
+    .breed-filter-container {
+        display: flex; /* ensure flex context even if classes change */
+        justify-content: center;
+        align-items: center;
+        text-align: center; /* center text in child inline elements */
+    }
 
-  .puppy-card {
-    margin-bottom: 1rem;
-}
+    /* Filtering animation */
+    .puppy-card {
+        transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .puppy-card[data-hidden='true'] {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.97);
+    }
+    .puppy-card[data-hidden='false'] {
+        opacity: 1;
+        transform: scale(1);
+    }
 
-.load-more-btn {
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.2s ease;
-}
+    /* Extra bottom spacing with overlap effect for collection section */
+    .collection-section {
+        padding-left: 4vw;
+    }
 
-.load-more-btn:hover {
-  opacity: 0.85;
-}
-  /* Force breed filter bar content to center align */
-  .breed-filter-container {
-    display: flex; /* ensure flex context even if classes change */
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* center text in child inline elements */
-  }
+    @media (max-width: 1200px) {
+        .collection-products {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
 
-  /* Filtering animation */
-  .puppy-card { transition: opacity 180ms ease, transform 180ms ease; }
-  .puppy-card[data-hidden="true"] { opacity: 0; pointer-events: none; transform: scale(.97); }
-  .puppy-card[data-hidden="false"] { opacity: 1; transform: scale(1); }
-  
-  /* Extra bottom spacing with overlap effect for collection section */
-  .collection-section { padding-left: 4vw; }
+    @media (max-width: 900px) {
+        .collection-products {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 
-  @media (max-width: 1200px) {
-  .collection-products {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+    @media (max-width: 600px) {
+        .collection-products {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .puppy-card {
+            width: 95%;
+        }
+    }
 
-@media (max-width: 900px) {
-  .collection-products {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .collection-products {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .puppy-card{
-    width:95%;
-  }
-}
-
-
-  @media screen and (max-width: 600px) {
-  /*  .collection-products {
+    @media screen and (max-width: 600px) {
+        /*  .collection-products {
       margin: 0 1.75rem;
     } */
-  }
+    }
 {% endstylesheet %}
 
 {% javascript %}
-  (function() {
-    function applyFilters() {
-      const gender = document.querySelector('input[name="gender"]:checked')?.value || '';
-      const ready = document.querySelector('input[name="readyToTravel"]:checked')?.value || '';
-      const cards = document.querySelectorAll('.collection-products .puppy-card');
-      let visibleCount = 0;
-      cards.forEach(card => {
-        const sex = (card.getAttribute('data-sex') || '').toLowerCase();
-        const travel = (card.getAttribute('data-travel') || '').toLowerCase();
-        let show = true;
-        if (gender) {
-          show = show && sex === gender.toLowerCase();
-        }
-        if (ready) {
-          show = show && travel === ready.toLowerCase();
-        }
-        if (show) {
-          visibleCount++;
-        }
-        // animation: toggle via data-hidden attribute; delay display removal for smooth fade
-        const alreadyHidden = card.getAttribute('data-hidden') === 'true';
-        if (show && alreadyHidden) {
-          card.style.display = '';
-          requestAnimationFrame(() => {
-            card.setAttribute('data-hidden', 'false');
-          });
-        } else if (!show && !alreadyHidden) {
-          card.setAttribute('data-hidden', 'true');
-          // after transition, hide from layout for a11y (optional could leave height collapse immediate)
-          setTimeout(() => {
-            if (card.getAttribute('data-hidden') === 'true') {
-              card.style.display = 'none';
-            }
-          }, 190);
-        } else if (show) {
-          card.setAttribute('data-hidden', 'false');
-          card.style.display = '';
-        }
-      });
+    (function () {
+        function applyFilters() {
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || '';
+            const ready = document.querySelector('input[name="readyToTravel"]:checked')?.value || '';
+            const cards = document.querySelectorAll('.collection-products .puppy-card');
+            let visibleCount = 0;
+            cards.forEach((card) => {
+                const sex = (card.getAttribute('data-sex') || '').toLowerCase();
+                const travel = (card.getAttribute('data-travel') || '').toLowerCase();
+                let show = true;
+                if (gender) {
+                    show = show && sex === gender.toLowerCase();
+                }
+                if (ready) {
+                    show = show && travel === ready.toLowerCase();
+                }
+                if (show) {
+                    visibleCount++;
+                }
+                // animation: toggle via data-hidden attribute; delay display removal for smooth fade
+                const alreadyHidden = card.getAttribute('data-hidden') === 'true';
+                if (show && alreadyHidden) {
+                    card.style.display = '';
+                    requestAnimationFrame(() => {
+                        card.setAttribute('data-hidden', 'false');
+                    });
+                } else if (!show && !alreadyHidden) {
+                    card.setAttribute('data-hidden', 'true');
+                    // after transition, hide from layout for a11y (optional could leave height collapse immediate)
+                    setTimeout(() => {
+                        if (card.getAttribute('data-hidden') === 'true') {
+                            card.style.display = 'none';
+                        }
+                    }, 190);
+                } else if (show) {
+                    card.setAttribute('data-hidden', 'false');
+                    card.style.display = '';
+                }
+            });
 
-      const noResultsEl = document.getElementById('filter-no-results');
-      if (noResultsEl) {
-        if (visibleCount === 0) {
-          noResultsEl.classList.remove('hidden');
-        } else {
-          noResultsEl.classList.add('hidden');
+            const noResultsEl = document.getElementById('filter-no-results');
+            if (noResultsEl) {
+                if (visibleCount === 0) {
+                    noResultsEl.classList.remove('hidden');
+                } else {
+                    noResultsEl.classList.add('hidden');
+                }
+            }
         }
-      }
-    }
 
         // Breed Selector Redirect
-    document.getElementById('breed-select')?.addEventListener('change', function () {
-      if (this.value) {
-        window.location.href = this.value;
-      } else {
-        window.location.href = "/collections/all"; // fallback for "All Breeds"
-      }
-    });
+        document.getElementById('breed-select')?.addEventListener('change', function () {
+            if (this.value) {
+                window.location.href = this.value;
+            } else {
+                window.location.href = '/collections/all'; // fallback for "All Breeds"
+            }
+        });
 
+        // LOAD MORE AJAX PAGINATION
+        document.addEventListener('click', async function (e) {
+            const btn = e.target.closest('.load-more-btn');
+            if (!btn) return;
 
-// LOAD MORE AJAX PAGINATION
-document.addEventListener("click", async function (e) {
-  const btn = e.target.closest(".load-more-btn");
-  if (!btn) return;
+            const nextUrl = btn.getAttribute('data-next-url');
+            if (!nextUrl) return;
 
-  const nextUrl = btn.getAttribute("data-next-url");
-  if (!nextUrl) return;
+            btn.innerText = 'Loading...';
 
-  btn.innerText = "Loading...";
+            try {
+                const response = await fetch(nextUrl);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
 
-  try {
-    const response = await fetch(nextUrl);
-    const text = await response.text();
-    const parser = new DOMParser();
-    const htmlDoc = parser.parseFromString(text, "text/html");
+                // SELECT ONLY THE OUTER CARD
+                const newCards = htmlDoc.querySelectorAll('.collection-products a.puppy-card');
 
-    // SELECT ONLY THE OUTER CARD
-    const newCards = htmlDoc.querySelectorAll(".collection-products a.puppy-card");
+                // Main container
+                const container = document.querySelector('.collection-products');
 
-    // Main container
-    const container = document.querySelector(".collection-products");
+                // Append new product cards
+                newCards.forEach((card) => container.appendChild(card));
 
-    // Append new product cards
-    newCards.forEach(card => container.appendChild(card));
+                // Update next button
+                const freshBtn = htmlDoc.querySelector('.load-more-btn');
 
-    // Update next button
-    const freshBtn = htmlDoc.querySelector(".load-more-btn");
+                if (freshBtn) {
+                    btn.setAttribute('data-next-url', freshBtn.getAttribute('data-next-url'));
+                    btn.innerText = 'Load More Puppies';
+                } else {
+                    btn.remove();
+                }
+            } catch (error) {
+                console.error('Load more failed:', error);
+                btn.innerText = 'Error';
+            }
+        });
 
-    if (freshBtn) {
-      btn.setAttribute("data-next-url", freshBtn.getAttribute("data-next-url"));
-      btn.innerText = "Load More Puppies";
-    } else {
-      btn.remove();
-    }
+        document.addEventListener('change', function (e) {
+            if (e.target.matches('input[data-filter="gender"], input[data-filter="ready"]')) {
+                applyFilters();
+            }
+        });
 
-  } catch (error) {
-    console.error("Load more failed:", error);
-    btn.innerText = "Error";
-  }
-});
+        document.getElementById('filter-reset')?.addEventListener('click', function () {
+            const genderChecked = document.querySelector('input[name="gender"]:checked');
+            const readyChecked = document.querySelector('input[name="readyToTravel"]:checked');
+            if (genderChecked) genderChecked.checked = false;
+            if (readyChecked) readyChecked.checked = false;
+            applyFilters();
+        });
 
+        document.getElementById('filter-reset-inline')?.addEventListener('click', function () {
+            const genderChecked = document.querySelector('input[name="gender"]:checked');
+            const readyChecked = document.querySelector('input[name="readyToTravel"]:checked');
+            if (genderChecked) genderChecked.checked = false;
+            if (readyChecked) readyChecked.checked = false;
+            applyFilters();
+        });
 
-
-
-    document.addEventListener('change', function(e) {
-      if (e.target.matches('input[data-filter="gender"], input[data-filter="ready"]')) {
-        applyFilters();
-      }
-    });
-
-    document.getElementById('filter-reset')?.addEventListener('click', function() {
-      const genderChecked = document.querySelector('input[name="gender"]:checked');
-      const readyChecked = document.querySelector('input[name="readyToTravel"]:checked');
-      if (genderChecked) genderChecked.checked = false;
-      if (readyChecked) readyChecked.checked = false;
-      applyFilters();
-    });
-
-    document.getElementById('filter-reset-inline')?.addEventListener('click', function() {
-      const genderChecked = document.querySelector('input[name="gender"]:checked');
-      const readyChecked = document.querySelector('input[name="readyToTravel"]:checked');
-      if (genderChecked) genderChecked.checked = false;
-      if (readyChecked) readyChecked.checked = false;
-      applyFilters();
-    });
-
-    // Initialize states
-    requestAnimationFrame(() => {
-      const cards = document.querySelectorAll('.collection-products .puppy-card');
-      cards.forEach(c => { c.setAttribute('data-hidden', 'false'); });
-    });
-  })();
+        // Initialize states
+        requestAnimationFrame(() => {
+            const cards = document.querySelectorAll('.collection-products .puppy-card');
+            cards.forEach((c) => {
+                c.setAttribute('data-hidden', 'false');
+            });
+        });
+    })();
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "t:general.collection",
-  "settings": []
+    "name": "t:general.collection",
+    "settings": []
 }
 {% endschema %}

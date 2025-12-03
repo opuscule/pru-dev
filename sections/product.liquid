@@ -1,513 +1,610 @@
 <style>
+    .puppy_listing_container {
+        display: flex;
+        flex-direction: row;
 
-  .puppy_listing_container {
-    display: flex;
-    flex-direction: row;
-
-    .puppy_listing_col {
-      flex: 1;
+        .puppy_listing_col {
+            flex: 1;
+        }
     }
-  }
-    .puppy-gallery { --r:24px; }
-    .pg-hero { 
-      display:block; 
-      width:100%; 
-      padding:0; 
-      background:transparent; 
-      overflow:hidden; 
+    .puppy-gallery {
+        --r: 24px;
+    }
+    .pg-hero {
+        display: block;
+        width: 100%;
+        padding: 0;
+        background: transparent;
+        overflow: hidden;
 
-      img { 
-        width:100%; 
-        height:auto; 
-        display:block; 
-      }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
     }
 
-    
-    .pg-thumb.is-active { outline:2px solid rgba(0,0,0,.2); opacity:1; }
+    .pg-thumb.is-active {
+        outline: 2px solid rgba(0, 0, 0, 0.2);
+        opacity: 1;
+    }
 
-    .pg-lightbox { position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:9999; }
-    .pg-lightbox[aria-hidden="false"] { display:flex; }
-    .pg-stage { max-width:min(92vw, 1200px); max-height:86vh; position:relative; }
-    .pg-slide { max-width:100%; max-height:86vh; display:block; margin:auto; }
-    .pg-close { position:absolute; top:16px; right:20px; font-size:36px; color:#fff; background:transparent; border:0; cursor:pointer; }
-    .pg-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:42px; color:#fff; background:rgba(0,0,0,.35); border:0; width:56px; height:56px; border-radius:50%; cursor:pointer; }
-    .pg-prev { left:16px; } .pg-next { right:16px; }
+    .pg-lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+    .pg-lightbox[aria-hidden='false'] {
+        display: flex;
+    }
+    .pg-stage {
+        max-width: min(92vw, 1200px);
+        max-height: 86vh;
+        position: relative;
+    }
+    .pg-slide {
+        max-width: 100%;
+        max-height: 86vh;
+        display: block;
+        margin: auto;
+    }
+    .pg-close {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        font-size: 36px;
+        color: #fff;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+    .pg-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 42px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.35);
+        border: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .pg-prev {
+        left: 16px;
+    }
+    .pg-next {
+        right: 16px;
+    }
 
     .puppy_meta_grid {
-      display: grid;
-      grid-template-rows: auto;
-      grid-template-columns: minmax(100px, max-content) 1fr;
-      grid-auto-columns: 1fr;
-      grid-auto-flow: dense;
-      justify-content: stretch;
-      margin-top: 1rem;
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: minmax(100px, max-content) 1fr;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: dense;
+        justify-content: stretch;
+        margin-top: 1rem;
 
-      p {
-        border-bottom: 1px solid rgb(0 0 0 / 0.125);
-        padding-top: 10px;
-        padding-bottom: 10px;
-        display: block;
-      }
+        p {
+            border-bottom: 1px solid rgb(0 0 0 / 0.125);
+            padding-top: 10px;
+            padding-bottom: 10px;
+            display: block;
+        }
     }
-  </style>
+</style>
 
 <div class="puppy_listing_container bg-bg-light pt-12">
+    <div class="w-full px-4 mx-auto">
+        <div class="max-w-[var(--width-container-content)] mx-auto">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-[48%] min-w-0">
+                    <div class="puppy-gallery puppy_listing_col" data-gallery>
+                        {%- assign imgs = product.images -%}
 
+                        <!-- Hero -->
+                        {%- if imgs.size > 0 -%}
+                            {%- assign hero = imgs.first -%}
+                            <button class="pg-hero border-[2rem] border-[#e0dbc9] rounded-[4rem] mb-6" data-open-lightbox data-index="0" aria-label="Open image 1 of {{ imgs.size }}">
+                                <img
+                                    src="{{ hero | image_url: width: 1200 }}"
+                                    srcset="{{ hero | image_url: width: 600 }} 600w, {{ hero | image_url: width: 900 }} 900w, {{ hero | image_url: width: 1200 }} 1200w"
+                                    sizes="(min-width: 768px) 800px, 100vw"
+                                    alt="{{ hero.alt | escape }}"
+                                    loading="eager"
+                                    width="1200"
+                                    height="1200"
+                                >
+                            </button>
+                        {%- endif -%}
 
-  <div class="w-full px-4 mx-auto">
-    <div class="max-w-[var(--width-container-content)] mx-auto">
-      <div class="flex flex-wrap justify-between">
-        <div class="w-full md:w-[48%] min-w-0">
-          <div class="puppy-gallery puppy_listing_col" data-gallery>
-          {%- assign imgs = product.images -%}
+                        <!-- Thumbs -->
+                        <div class="flex gap-4 mt-5 flex-wrap">
+                            {%- for image in imgs -%}
+                                <button
+                                    class="pg-thumb border-0 p-0 bg-transparent w-[120px] aspect-square rounded-2xl overflow-hidden opacity-90 hover:opacity-100"
+                                    data-open-lightbox
+                                    data-index="{{ forloop.index0 }}"
+                                    aria-label="Open image {{ forloop.index }} of {{ imgs.size }}"
+                                >
+                                    <img
+                                        src="{{ image | image_url: width: 220 }}"
+                                        alt="{{ image.alt | default: 'Thumbnail ' | append: forloop.index | escape }}"
+                                        loading="lazy"
+                                        width="220"
+                                        height="220"
+                                        class="w-full h-full object-cover block"
+                                    >
+                                </button>
+                            {%- endfor -%}
+                        </div>
 
-          <!-- Hero -->
-          {%- if imgs.size > 0 -%}
-            {%- assign hero = imgs.first -%}
-            <button class="pg-hero border-[2rem] border-[#e0dbc9] rounded-[4rem] mb-6" data-open-lightbox data-index="0" aria-label="Open image 1 of {{ imgs.size }}">
-              <img
-                src="{{ hero | image_url: width: 1200 }}"
-                srcset="{{ hero | image_url: width: 600 }} 600w, {{ hero | image_url: width: 900 }} 900w, {{ hero | image_url: width: 1200 }} 1200w"
-                sizes="(min-width: 768px) 800px, 100vw"
-                alt="{{ hero.alt | escape }}"
-                loading="eager"
-                width="1200"
-                height="1200"
-              >
-            </button>
-          {%- endif -%}
+                        <!-- Lightbox -->
+                        <div class="pg-lightbox" data-lightbox aria-hidden="true">
+                            <button class="pg-close" data-close aria-label="Close">&times;</button>
+                            <button class="pg-nav pg-prev" data-prev aria-label="Previous">&#10094;</button>
+                            <button class="pg-nav pg-next" data-next aria-label="Next">&#10095;</button>
 
-            <!-- Thumbs -->
-            <div class="flex gap-4 mt-5 flex-wrap">
-              {%- for image in imgs -%}
-                <button class="pg-thumb border-0 p-0 bg-transparent w-[120px] aspect-square rounded-2xl overflow-hidden opacity-90 hover:opacity-100" 
-                  data-open-lightbox 
-                  data-index="{{ forloop.index0 }}" 
-                  aria-label="Open image {{ forloop.index }} of {{ imgs.size }}"
-                >
-                  <img
-                    src="{{ image | image_url: width: 220 }}"
-                    alt="{{ image.alt | default: 'Thumbnail ' | append: forloop.index | escape }}"
-                    loading="lazy"
-                    width="220"
-                    height="220"
-                    class="w-full h-full object-cover block"
-                  >
-                </button>
-              {%- endfor -%}
-            </div>
-
-            <!-- Lightbox -->
-            <div class="pg-lightbox" data-lightbox aria-hidden="true">
-              <button class="pg-close" data-close aria-label="Close">&times;</button>
-              <button class="pg-nav pg-prev" data-prev aria-label="Previous">&#10094;</button>
-              <button class="pg-nav pg-next" data-next aria-label="Next">&#10095;</button>
-
-              <div class="pg-stage">
-                {%- for image in imgs -%}
-                  <img class="pg-slide max-w-[var(--width-container-content)] h-auto block mx-auto" data-slide="{{ forloop.index0 }}" src="{{ image | image_url: width: 1600 }}" alt="{{ image.alt | escape }}" loading="lazy" {% unless forloop.first %}hidden{% endunless %} />
-                {%- endfor -%}
-                <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                  document.querySelectorAll('.pg-slide').forEach(function(img) {
-                    if (img.complete) {
-                      if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                      if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                    } else {
-                      img.addEventListener('load', function() {
-                        if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                        if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                      });
-                    }
-                  });
-                });
-                </script>
-              </div>
-            </div>
-          </div>
-        </div><!-- # left column -->
-
-     
-        
-        <div class="w-full md:w-[48%] min-w-0">
-          
-          <div class="product-info puppy_listing_col">
-            {% if product.metafields.custom.availability == 'Reserved' %}
-              <div class="puppy-status">
-                This puppy is not available: <span>I AM RESERVED</span>
-              </div> 
-            {% endif %} 
-            {% if product.metafields.custom.availability == 'Sold, but Show' %}
-              <div class="puppy-status">
-                This puppy is not available: <span>I FOUND MY NEW HOME</span>
-              </div> 
-            {% endif %} 
-            
-            <p>Meet&hellip;</p>
-            <h1 class="mt-0 text-8xl leading-[1.2]">{{ product.title }}</h1>
-            <p style="line-height:1.6;">Take home {{ product.title }}, an adorable {{ product.collections.first.title }} puppy, or any of the other <a href="{{ product.collections.first.url }}" class="text-primary">{{ product.collections.first.title }}</a> puppies. Puppys R Us works closely with responsible dog breeders to offer healthy designer &amp; purebred puppies for sale to loving homes.</p>
-            
-             {% if product.metafields.custom.availability == 'Reserved' %}
-             {% elsif product.metafields.custom.availability == 'Sold, but Show' %}
-             {% else %}
-            <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
-
-            <!-- CTAs -->
-            <div class="flex gap-4 mt-4 items-center">
-              <button type="button" id="ask-about-btn" class="btn btn-secondary">Ask About {{ product.title }}</button>
-              <!--<button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button>-->
-              <div class="product-form">
-              {% form 'product', product %} 
-                {% assign current_variant = product.selected_or_first_available_variant %}
-
-                <!-- Hidden variant ID (always adds the first available variant) -->
-                <input type="hidden" name="id" value="{{ current_variant.id }}">
-
-                <!-- Hidden quantity -->
-                <input type="hidden" name="quantity" value="1">
-
-                <!-- Add to Cart button -->
-                <input type="submit" id="take-me-home-btn" value="Take Me Home" class="btn btn-primary">
-              {% endform %}
-            </div>
-            </div>
-               {% endif %} 
-            <!-- Ask modal -->
-            <div id="ask-modal" class="fixed inset-0 hidden items-center justify-center z-50" style="background-color:rgb(0 0 0 / 25%)" aria-hidden="true">
-              <div class="bg-[var(--color-bg-light)] rounded-lg p-6 max-w-lg w-full overflow-y-auto max-h-[90vh]">
-                <h3 class="text-3xl font-titles font-bold leading-tight mb-4">Ask About {{ product.title }}</h3>
-                <p class="text leading-relaxed mb-4">Interested in learning more about this adorable puppy? <a href="/pages/contact" class="text-[var(--color-primary)] underline">Contact us</a>, or fill out the form below and we'll get back to you as soon as possible.</p>
-                <p class="text leading-relaxed mb-6">Other questions? Check out our information about <a href="/pages/financing" class="text-[var(--color-primary)] underline">financing</a>, <a href="/pages/travel" class="text-[var(--color-primary)] underline">travel</a>, and our <a href="/pages/health-guarantee" class="text-[var(--color-primary)] underline">health guarantee</a>.</p>
-
-                <form action='https://forms.zohopublic.com/zohodocs3024/form/PuppyInquiry1/formperma/Go2Q3b87Xj8bkbCxFeyfUMb1YkGJdiHx0Qsehvip7lM/htmlRecords/submit' name='form' id='form' method='POST' accept-charset='UTF-8' enctype='multipart/form-data' class="space-y-4 text-[var(--color-body-copy)]">
-                  <input type="hidden" name="zf_referrer_name" value="">
-                  <input type="hidden" name="zf_redirect_url" value="">
-                  <input type="hidden" name="zc_gad" value="">
-
-                 
-                  <!-- Two-column (on md+) wrapper for Name & ID -->
-                  <div class="md:flex md:gap-4">
-                    <div class="md:w-1/2 w-full mb-4 md:mb-0">
-                      <label for="SingleLine" class="block mb-1">Puppy's Name</label>
-                      <input type="text" name="SingleLine" value="{{ product.title }}" fieldType=1 maxlength="55" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100" />
+                            <div class="pg-stage">
+                                {%- for image in imgs -%}
+                                    <img
+                                        class="pg-slide max-w-[var(--width-container-content)] h-auto block mx-auto"
+                                        data-slide="{{ forloop.index0 }}"
+                                        src="{{ image | image_url: width: 1600 }}"
+                                        alt="{{ image.alt | escape }}"
+                                        loading="lazy"
+                                        {% unless forloop.first %}
+                                            hidden
+                                        {% endunless %}
+                                    >
+                                {%- endfor -%}
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        document.querySelectorAll('.pg-slide').forEach(function (img) {
+                                            if (img.complete) {
+                                                if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
+                                                if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
+                                            } else {
+                                                img.addEventListener('load', function () {
+                                                    if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
+                                                    if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
+                                                });
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md:w-1/2 w-full">
-                      <label for="Number" class="block mb-1">Puppy's ID</label>
-                      <input type="text" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100" />
+                </div>
+                <!-- # left column -->
+
+                <div class="w-full md:w-[48%] min-w-0">
+                    <div class="product-info puppy_listing_col">
+                        {% if product.metafields.custom.availability == 'Reserved' %}
+                            <div class="puppy-status">
+                                This puppy is not available:
+                                <span>I AM RESERVED</span>
+                            </div>
+                        {% endif %}
+                        {% if product.metafields.custom.availability == 'Sold, but Show' %}
+                            <div class="puppy-status">
+                                This puppy is not available:
+                                <span>I FOUND MY NEW HOME</span>
+                            </div>
+                        {% endif %}
+
+                        <p>Meet&hellip;</p>
+                        <h1 class="mt-0 text-8xl leading-[1.2]">{{ product.title }}</h1>
+                        <p style="line-height:1.6;">
+                            Take home {{ product.title }}, an adorable {{ product.collections.first.title }} puppy, or any of the other
+                            <a href="{{ product.collections.first.url }}" class="text-primary">{{ product.collections.first.title }}</a>
+                            puppies. Puppys R Us works closely with responsible dog breeders to offer healthy designer &amp; purebred puppies for sale to loving homes.
+                        </p>
+
+                        {% if product.metafields.custom.availability == 'Reserved' %}
+                        {% elsif product.metafields.custom.availability == 'Sold, but Show' %}
+
+                        {% else %}
+                            <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
+
+                            <!-- CTAs -->
+                            <div class="flex gap-4 mt-4 items-center">
+                                <button type="button" id="ask-about-btn" class="btn btn-secondary">Ask About {{ product.title }}</button>
+                                <!-- <button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button> -->
+                                <div class="product-form">
+                                    {% form 'product', product %}
+                                        {% assign current_variant = product.selected_or_first_available_variant %}
+
+                                        <!-- Hidden variant ID (always adds the first available variant) -->
+                                        <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+                                        <!-- Hidden quantity -->
+                                        <input type="hidden" name="quantity" value="1">
+
+                                        <!-- Add to Cart button -->
+                                        <input type="submit" id="take-me-home-btn" value="Take Me Home" class="btn btn-primary">
+                                    {% endform %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- Ask modal -->
+                        <div id="ask-modal" class="fixed inset-0 hidden items-center justify-center z-50" style="background-color:rgb(0 0 0 / 25%)" aria-hidden="true">
+                            <div class="bg-[var(--color-bg-light)] rounded-lg p-6 max-w-lg w-full overflow-y-auto max-h-[90vh]">
+                                <h3 class="text-3xl font-titles font-bold leading-tight mb-4">Ask About {{ product.title }}</h3>
+                                <p class="text leading-relaxed mb-4">
+                                    Interested in learning more about this adorable puppy?
+                                    <a href="/pages/contact" class="text-[var(--color-primary)] underline">Contact us</a>
+                                    , or fill out the form below and we'll get back to you as soon as possible.
+                                </p>
+                                <p class="text leading-relaxed mb-6">
+                                    Other questions? Check out our information about
+                                    <a href="/pages/financing" class="text-[var(--color-primary)] underline">financing</a>
+                                    ,
+                                    <a href="/pages/travel" class="text-[var(--color-primary)] underline">travel</a>
+                                    , and our
+                                    <a href="/pages/health-guarantee" class="text-[var(--color-primary)] underline">health guarantee</a>
+                                    .
+                                </p>
+
+                                <form action="https://forms.zohopublic.com/zohodocs3024/form/PuppyInquiry1/formperma/Go2Q3b87Xj8bkbCxFeyfUMb1YkGJdiHx0Qsehvip7lM/htmlRecords/submit" name="form" id="form" method="POST" accept-charset="UTF-8" enctype="multipart/form-data" class="space-y-4 text-[var(--color-body-copy)]">
+                                    <input type="hidden" name="zf_referrer_name" value="">
+                                    <input type="hidden" name="zf_redirect_url" value="">
+                                    <input type="hidden" name="zc_gad" value="">
+
+                                    <!-- Two-column (on md+) wrapper for Name & ID -->
+                                    <div class="md:flex md:gap-4">
+                                        <div class="md:w-1/2 w-full mb-4 md:mb-0">
+                                            <label for="SingleLine" class="block mb-1">Puppy's Name</label>
+                                            <input type="text" name="SingleLine" value="{{ product.title }}" fieldType="1" maxlength="55" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                        </div>
+                                        <div class="md:w-1/2 w-full">
+                                            <label for="Number" class="block mb-1">Puppy's ID</label>
+                                            <input type="text" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                        </div>
+                                    </div>
+
+                                    <label for="Name_First">Your First Name</label>
+                                    <input type="text" maxlength="255" name="Name_First" fieldType="7" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                    <label for="Name_Last">Your Last Name</label>
+                                    <input type="text" maxlength="255" name="Name_Last" fieldType="7" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+
+                                    <label for="Email">Email Address</label>
+                                    <input type="text" maxlength="255" name="Email" fieldType="9" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+
+                                    <label for="PhoneNumber_countrycode" class="sr-only">Phone Country Code</label>
+                                    <input type="text" compname="PhoneNumber" name="PhoneNumber_countrycode" maxlength="3" phoneFormat="2" size="3" fieldType="11" id="PhoneNumber_countrycode" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+
+                                    <label for="PhoneNumber_first" class="sr-only">Phone Area Code</label>
+                                    <input type="text" compname="PhoneNumber" name="PhoneNumber_first" maxlength="3" phoneFormat="2" size="3" value="" id="PhoneNumber_first" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+
+                                    <label for="PhoneNumber_second" class="sr-only">Phone Number</label>
+                                    <input type="text" compname="PhoneNumber" name="PhoneNumber_second" phoneFormat="2" maxlength="4" size="4" value="" id="PhoneNumber_second" placeholder="####" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+
+                                    <label for="MultiLine">Message</label>
+                                    <textarea name="MultiLine" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
+
+                                    <label for="MultiLine1">We would love to learn a little about your home and family life...</label>
+                                    <textarea name="MultiLine1" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
+
+                                    <input type="checkbox" checked="true" id="DecisionBox" name="DecisionBox" class="mr-2 h-4 w-4 accent-[var(--color-primary)] border border-[#dee2e6]">
+                                    <label for="DecisionBox">It is OK to text me</label>
+
+                                    <button type="submit" class="inline-block bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--color-white)] font-medium tracking-wide py-2 px-4 rounded transition-colors duration-150 w-full text-center"><em>Submit</em></button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="puppy_meta_grid">
+                            <p class="pl-2 pr-4 font-semibold">Date of Birth:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.dob.value | date: '%m/%d/%Y'
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Date Available:</p>
+
+                            {% assign dob_val = product.metafields.custom.dob.value %}
+                            {% if dob_val %}
+                                {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                                {% assign ready_ts = dob_ts | plus: 4838400 %}
+                                {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+
+                                <p>
+                                    {% if now_ts >= ready_ts %}
+                                        <span>I’m Ready!</span>
+                                    {% else %}
+                                        <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+
+                            <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
+                            <p>
+                                {% if dob_val %}
+                                    {% assign diff_seconds = now_ts | minus: dob_ts %}
+                                    {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+                                    {{ weeks_old | floor }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Sex:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.sex.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Color:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.color.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Food:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.food_brand.value
+                                %}
+                                {% liquid
+                                    echo product.metafields.custom.food_brand_formula.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Dad Weight:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.sire_weight.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Mom Weight:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.dam_weight.value
+                                %}
+                            </p>
+
+                            {% if product.metafields.custom.registry.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Registry:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.registry.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.generation.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Generation:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.generation.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.size.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Size:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.size.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.variety.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Variety:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.variety.value
+                                    %}
+                                </p>
+                            {% endif %}
+                        </div>
                     </div>
-                  </div>
-
-                  <label for="Name_First">Your First Name</label>
-                  <input type="text" maxlength="255" name="Name_First" fieldType=7 required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-                  <label for="Name_Last">Your Last Name</label>
-                  <input type="text" maxlength="255" name="Name_Last" fieldType=7 required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-
-                  <label for="Email">Email Address</label>
-                  <input type="text" maxlength="255" name="Email" fieldType=9 required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-
-                  <label for="PhoneNumber_countrycode" class="sr-only">Phone Country Code</label>
-                  <input type="text" compname="PhoneNumber" name="PhoneNumber_countrycode" maxlength="3" phoneFormat="2" size="3" fieldType=11 id="PhoneNumber_countrycode" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-                  
-                  <label for="PhoneNumber_first" class="sr-only">Phone Area Code</label>
-                  <input type="text" compname="PhoneNumber" name="PhoneNumber_first" maxlength="3" phoneFormat="2" size="3" value="" id="PhoneNumber_first" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-
-                  <label for="PhoneNumber_second" class="sr-only">Phone Number</label>
-                  <input type="text" compname="PhoneNumber" name="PhoneNumber_second" phoneFormat="2" maxlength="4" size="4" value="" id="PhoneNumber_second" placeholder="####" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
-
-                  <label for="MultiLine">Message</label>
-                  <textarea name="MultiLine" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
-
-                  <label for="MultiLine1">We would love to learn a little about your home and family life...</label>
-                  <textarea name="MultiLine1" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
-
-                  <input type="checkbox" checked=true id="DecisionBox" name="DecisionBox" class="mr-2 h-4 w-4 accent-[var(--color-primary)] border border-[#dee2e6]"/>
-                  <label for="DecisionBox">It is OK to text me</label>
-
-                  <button type="submit" class="inline-block bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-[var(--color-white)] font-medium tracking-wide py-2 px-4 rounded transition-colors duration-150 w-full text-center"><em>Submit</em></button>
-
-                </form>
-
-
-
-
-
-              </div>
+                </div>
+                <!-- # right column -->
             </div>
-
-
-            <div class="puppy_meta_grid">
-              <p class="pl-2 pr-4 font-semibold">Date of Birth:</p>
-              <p>{% liquid echo product.metafields.custom.dob.value | date: "%m/%d/%Y" %}</p>
-
-              <p class="pl-2 pr-4 font-semibold">Date Available:</p>
-
-              {% assign dob_val = product.metafields.custom.dob.value %}
-              {% if dob_val %}
-                {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
-                {% assign ready_ts = dob_ts | plus: 4838400 %}
-                {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
-
-                <p>
-                  {% if now_ts >= ready_ts %}
-                    <span>I’m Ready!</span>
-                  {% else %}
-                    <span>{{ ready_ts | date: "%m/%d/%Y" }}</span>
-                  {% endif %}
-                </p>
-              {% endif %}
-
-
-              <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
-              <p>
-                {% if dob_val %}
-                  {% assign diff_seconds = now_ts | minus: dob_ts %}
-                  {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                  {{ weeks_old | floor }}
-                {% else %}
-                  N/A
-                {% endif %}
-              </p>
-
-              <p class="pl-2 pr-4 font-semibold">Sex:</p>
-              <p>{% liquid echo product.metafields.custom.sex.value %}</p>
-
-              <p class="pl-2 pr-4 font-semibold">Color:</p>
-              <p>{% liquid echo product.metafields.custom.color.value %}</p>
-
-              <p class="pl-2 pr-4 font-semibold">Food:</p>
-              <p>{% liquid echo product.metafields.custom.food_brand.value %} {% liquid echo product.metafields.custom.food_brand_formula.value %}</p>
-
-              <p class="pl-2 pr-4 font-semibold">Dad Weight:</p>
-              <p>{% liquid echo product.metafields.custom.sire_weight.value %}</p>
-
-              <p class="pl-2 pr-4 font-semibold">Mom Weight:</p>
-              <p>{% liquid echo product.metafields.custom.dam_weight.value %}</p>
-
-              {% if product.metafields.custom.registry.value != blank %}
-              <p class="pl-2 pr-4 font-semibold">Registry:</p>
-              <p>{% liquid echo product.metafields.custom.registry.value %}</p>
-              {% endif %}
-
-              {% if product.metafields.custom.generation.value != blank %}
-              <p class="pl-2 pr-4 font-semibold">Generation:</p>
-              <p>{% liquid echo product.metafields.custom.generation.value %}</p>
-              {% endif %}
-
-              {% if product.metafields.custom.size.value != blank %}
-              <p class="pl-2 pr-4 font-semibold">Size:</p>
-              <p>{% liquid echo product.metafields.custom.size.value %}</p>
-              {% endif %}
-
-              {% if product.metafields.custom.variety.value != blank %}
-              <p class="pl-2 pr-4 font-semibold">Variety:</p>
-              <p>{% liquid echo product.metafields.custom.variety.value %}</p>
-              {% endif %}
-            </div>
-          </div>
-
-
-
-
-
- 
-        </div><!-- # right column -->
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
-
-
-
-
-
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const gallery = document.querySelector('[data-gallery]');
-  if (!gallery) return;
+    document.addEventListener('DOMContentLoaded', function () {
+        const gallery = document.querySelector('[data-gallery]');
+        if (!gallery) return;
 
-  const lightbox = document.querySelector('[data-lightbox]');
-  const slides = [...lightbox.querySelectorAll('.pg-slide')];
-  const thumbs = [...gallery.querySelectorAll('.pg-thumb')];
-  const openers = [...gallery.querySelectorAll('[data-open-lightbox]')];
-  const btnPrev = lightbox.querySelector('[data-prev]');
-  const btnNext = lightbox.querySelector('[data-next]');
-  const btnClose = lightbox.querySelector('[data-close]');
-  let i = 0;
-  let lastFocused = null;
+        const lightbox = document.querySelector('[data-lightbox]');
+        const slides = [...lightbox.querySelectorAll('.pg-slide')];
+        const thumbs = [...gallery.querySelectorAll('.pg-thumb')];
+        const openers = [...gallery.querySelectorAll('[data-open-lightbox]')];
+        const btnPrev = lightbox.querySelector('[data-prev]');
+        const btnNext = lightbox.querySelector('[data-next]');
+        const btnClose = lightbox.querySelector('[data-close]');
+        let i = 0;
+        let lastFocused = null;
 
-  function show(n) {
-    i = (n + slides.length) % slides.length;
-    slides.forEach((img, idx) => {
-      if (idx === i) { img.removeAttribute('hidden'); }
-      else { img.setAttribute('hidden', ''); }
+        function show(n) {
+            i = (n + slides.length) % slides.length;
+            slides.forEach((img, idx) => {
+                if (idx === i) {
+                    img.removeAttribute('hidden');
+                } else {
+                    img.setAttribute('hidden', '');
+                }
+            });
+            thumbs.forEach((t, idx) => t.classList.toggle('is-active', idx === i));
+        }
+
+        function open(n = 0) {
+            lastFocused = document.activeElement;
+            show(n);
+            lightbox.setAttribute('aria-hidden', 'false');
+            btnClose.focus();
+            document.body.style.overflow = 'hidden';
+        }
+        function close() {
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            if (lastFocused) lastFocused.focus();
+        }
+
+        openers.forEach((b) => {
+            b.addEventListener('click', () => open(parseInt(b.dataset.index, 10)));
+        });
+        btnPrev.addEventListener('click', () => show(i - 1));
+        btnNext.addEventListener('click', () => show(i + 1));
+        btnClose.addEventListener('click', close);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) close();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.getAttribute('aria-hidden') === 'true') return;
+            if (e.key === 'Escape') close();
+            if (e.key === 'ArrowLeft') show(i - 1);
+            if (e.key === 'ArrowRight') show(i + 1);
+        });
     });
-    thumbs.forEach((t, idx) => t.classList.toggle('is-active', idx === i));
-  }
-
-  function open(n=0) {
-    lastFocused = document.activeElement;
-    show(n);
-    lightbox.setAttribute('aria-hidden', 'false');
-    btnClose.focus();
-    document.body.style.overflow = 'hidden';
-  }
-  function close() {
-    lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if (lastFocused) lastFocused.focus();
-  }
-
-  openers.forEach(b => {
-    b.addEventListener('click', () => open(parseInt(b.dataset.index,10)));
-  });
-  btnPrev.addEventListener('click', () => show(i - 1));
-  btnNext.addEventListener('click', () => show(i + 1));
-  btnClose.addEventListener('click', close);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
-
-  document.addEventListener('keydown', (e) => {
-    if (lightbox.getAttribute('aria-hidden') === 'true') return;
-    if (e.key === 'Escape') close();
-    if (e.key === 'ArrowLeft') show(i - 1);
-    if (e.key === 'ArrowRight') show(i + 1);
-  });
-});
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const askBtn = document.getElementById('ask-about-btn');
-  const takeBtn = document.getElementById('take-me-home-btn');
-  const askModal = document.getElementById('ask-modal');
-  const askCancel = document.getElementById('ask-cancel');
-  const askForm = document.getElementById('ask-form');
+    document.addEventListener('DOMContentLoaded', function () {
+        const askBtn = document.getElementById('ask-about-btn');
+        const takeBtn = document.getElementById('take-me-home-btn');
+        const askModal = document.getElementById('ask-modal');
+        const askCancel = document.getElementById('ask-cancel');
+        const askForm = document.getElementById('ask-form');
 
-  if (askBtn && askModal) {
-    askBtn.addEventListener('click', () => { 
-      askModal.classList.remove('hidden');
-      askModal.classList.add('flex');
-      askModal.setAttribute('aria-hidden','false'); 
-    });
-  }
-  if (askCancel && askModal) {
-    askCancel.addEventListener('click', () => { 
-      askModal.classList.add('hidden'); 
-      askModal.classList.remove('flex');
-      askModal.setAttribute('aria-hidden','true'); 
-    });
-  }
-  if (askForm) {
-    askForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // placeholder: implement AJAX or email submission here
-      alert('Message sent — placeholder');
-      askModal.classList.add('hidden'); 
-      askModal.classList.remove('flex');
-      askModal.setAttribute('aria-hidden','true');
-    });
-  }
+        if (askBtn && askModal) {
+            askBtn.addEventListener('click', () => {
+                askModal.classList.remove('hidden');
+                askModal.classList.add('flex');
+                askModal.setAttribute('aria-hidden', 'false');
+            });
+        }
+        if (askCancel && askModal) {
+            askCancel.addEventListener('click', () => {
+                askModal.classList.add('hidden');
+                askModal.classList.remove('flex');
+                askModal.setAttribute('aria-hidden', 'true');
+            });
+        }
+        if (askForm) {
+            askForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // placeholder: implement AJAX or email submission here
+                alert('Message sent — placeholder');
+                askModal.classList.add('hidden');
+                askModal.classList.remove('flex');
+                askModal.setAttribute('aria-hidden', 'true');
+            });
+        }
 
-  if (takeBtn) {
-    takeBtn.addEventListener('click', () => {
-      // submit the product form on the page
-      const productForm = document.querySelector('form[action^="/cart/add"]') || document.querySelector('form[action*="/cart/add"]') || document.querySelector('form');
-      if (productForm) {
-        productForm.submit();
-      }
+        if (takeBtn) {
+            takeBtn.addEventListener('click', () => {
+                // submit the product form on the page
+                const productForm = document.querySelector('form[action^="/cart/add"]') || document.querySelector('form[action*="/cart/add"]') || document.querySelector('form');
+                if (productForm) {
+                    productForm.submit();
+                }
+            });
+        }
     });
-  }
-});
 </script>
-
 
 {% render 'wave-separator' %}
-
 
 {% assign current_collection = product.collections.first %}
 
 {% if current_collection and current_collection.products_count > 1 %}
-<div class="bg-bg-extralight py-12">
-  <div class="w-full px-4 mx-auto">
-    <div class="max-w-[var(--width-container-content)] mx-auto text-center">
-      <h2 class="fs-xl mb-6" style="font-size: 3rem;">
-        Other {{ current_collection.title }} Puppies for Sale
-      </h2>
+    <div class="bg-bg-extralight pb-[200px] mb-[-200px]">
+        <div class="w-full px-4 mx-auto">
+            <div class="max-w-[var(--width-container-content)] mx-auto text-center">
+                <h2 class="fs-xl mb-6" style="font-size: 3rem;">Other {{ current_collection.title }} Puppies for Sale</h2>
 
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
-      <!-- Splide Carousel Structure -->
-      <div id="related-carousel" class="splide">
-        <div class="splide__track">
-          <ul class="splide__list">
-            {% for related_product in current_collection.products %}
-              {% if related_product.id != product.id %}
-                <li class="splide__slide">
-                  {% render 'puppy-card', product: related_product %}
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+                <!-- Splide Carousel Structure -->
+                <div id="related-carousel" class="splide">
+                    <div class="splide__track">
+                        <ul class="splide__list">
+                            {% for related_product in current_collection.products %}
+                                {% if related_product.id != product.id %}
+                                    <li class="splide__slide">
+                                        {% render 'puppy-card', product: related_product %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Splide Carousel -->
+            </div>
         </div>
-      </div> <!-- End Splide Carousel -->
     </div>
-  </div>
-</div>
 {% endif %}
 
+<!-- Load Splide JavaScript -->
+<script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 
-  <!-- Load Splide JavaScript -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+<script>
+    // IIFE for scope isolation
+    (function () {
+        // Function to initialize the Splide carousel
+        function initializeSplide() {
+            try {
+                new Splide('#related-carousel', {
+                    // Core Options
+                    type: 'loop',
+                    perMove: 1,
+                    autoplay: false,
+                    autoHeight: true,
+                    gap: '1rem',
 
-  <script>
-      // IIFE for scope isolation
-      (function() {
-          // Function to initialize the Splide carousel
-          function initializeSplide() {
-              try {
-                  new Splide('#related-carousel', {
-                      // Core Options
-                      type: 'loop',
-                      perMove: 1,
-                      autoplay: false,
-                      autoHeight: true,
-                      gap: '1rem',
+                    perPage: 4,
+                    breakpoints: {
+                        1023: {
+                            perPage: 3,
+                        },
+                        767: {
+                            perPage: 1,
+                            arrows: true,
+                            drag: true,
+                            padding: {
+                                right: '15%',
+                                left: '15%',
+                            },
+                            focus: 'center',
+                        },
+                    },
+                }).mount();
+                console.log('Splide carousel initialized successfully.');
+            } catch (error) {
+                console.error('Error initializing Splide:', error);
+            }
+        }
 
-                      perPage: 4, 
-                      breakpoints: {
-                          1023: {
-                              perPage: 3,
-                          },
-                          767: {
-                              perPage: 1,
-                              arrows: true,
-                              drag: true,
-                              padding: { 
-                                  right: '15%',
-                                  left: '15%',
-                              },
-                              focus: 'center', 
-                          },
-                      },
-                  }).mount();
-                  console.log("Splide carousel initialized successfully.");
-              } catch (error) {
-                  console.error("Error initializing Splide:", error);
-              }
-          }
-
-          document.addEventListener('DOMContentLoaded', initializeSplide);
-      })();
-  </script>
+        document.addEventListener('DOMContentLoaded', initializeSplide);
+    })();
+</script>
 
 {% schema %}
 {
-  "name": "t:general.product",
-  "settings": [],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+    "name": "t:general.product",
+    "settings": [],
+    "disabled_on": {
+        "groups": ["header", "footer"]
+    }
 }
 {% endschema %}

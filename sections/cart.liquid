@@ -10,46 +10,43 @@
     background-color: var(--color-bg-card);
     border-radius: 30px;
   }
-  
-  
+
   .order-summary-box {
     background-color: var(--color-bg-card);
     border-radius: 30px;
   }
-  
+
   .order-summary-box ul li {
     border-bottom: 1px solid #b1b1b1;
   }
-  
+
   .checkout-agreement {
     background-color: var(--color-white);
     border-radius: 20px;
   }
-  
+
   .form-check-input:checked {
     background-color: var(--color-black);
     border-color: var(--color-black);
   }
-  
+
   .checkout-btn {
     border-radius: 10rem;
     font-size: 1.125rem;
     font-weight: 500;
     transition: all 0.2s;
   }
-  
+
   .checkout-btn:disabled {
-    background-color: #D7D5CE;
-    border-color: #D7D5CE;
+    background-color: #d7d5ce;
+    border-color: #d7d5ce;
     color: var(--color-white);
   }
-  
+
   .checkout-btn:not(:disabled):hover {
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
   }
-  
-  
 {% endstylesheet %}
 
 <div class="text-center mb-8">
@@ -59,186 +56,268 @@
 <section class="bg-bg-extralight py-20" data-cart-section>
   <div class="w-full px-4 mx-auto">
     <div class="max-w-[var(--width-container-content)] mx-auto">
+      {% comment %} Fetch the Puppy Delivery Option product {% endcomment %}
+      {% assign delivery_product = all_products['puppy-delivery-option'] %}
+
+      {% comment %} Check if there's a puppy in the cart {% endcomment %}
+      {% assign has_puppy = false %}
+      {% for item in cart.items %}
+        {% unless item.product.title contains 'Puppy Delivery Option' %}
+          {% assign has_puppy = true %}
+          {% break %}
+        {% endunless %}
+      {% endfor %}
+
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
         <div class="flex flex-wrap -mx-4">
           <div class="w-full lg:w-9/12 px-4">
             {% if cart.item_count == 0 %}
               <p class="text-lg">Your cart is empty.</p>
             {% else %}
-
-              {% for item in cart.items %} 
+              {% for item in cart.items %}
                 {% unless item.product.title contains 'Puppy Delivery Option' %}
-                {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
+                  {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
 
-                <div class="cart-item-pod mb-3 p-4" data-line="{{ item.key }}">
-                  <div class="flex flex-wrap -mx-4">
-                    <div class="w-full md:w-3/12 px-4">
-                      <div class="w-full h-full">
-                        <figure class="m-0 relative">
-                          <a href="{{ item.url }}">
-                            {% if item.image %}
-                              <img src="{{ item.image | image_url: width: 360 }}" alt="{{ item.title | escape }}" loading="lazy" width="360" height="360" class="w-full h-full max-h-[290px] object-cover rounded-t-[30px] rounded-bl-none border-r-0 md:rounded-l-[30px] md:rounded-tr-none md:border-r-[7px] md:border-primary">
-                            {% else %}
-                              {{ 'product-apparel-1' | placeholder_svg_tag }}
-                            {% endif %}
-                          </a>
-                        </figure>
-                      </div>
-                    </div>
-
-                    <div class="w-full md:w-9/12 px-4">
-                      <div class="flex justify-between items-start p-4">
-                        <div class="flex-1"> 
-                          <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl mb-2">
-                            <a href="{{ item.url }}" class="text-[#646665] no-underline hover:text-primary">{{ item.product.title }}</a>
-                          </h2>
-                        
-                          {% assign dob_val = item.product.metafields.custom.dob.value %}
-                          {% assign dob_ts = dob_val | date: "%s" | plus: 0 %}
-                          {% assign now_ts = 'now' | date: "%s" | plus: 0 %}
-                          {% assign diff_seconds = now_ts | minus: dob_ts %}
-                          {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                          
-                          <div class="text-2xl font-medium mb-2 text-[#646665]">{{ item.product.collections.first.title }}</div>
-                          <div class="mb-2">
-                            <span class="text-[#646665] text-xl">{{ item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span>
-                          </div>
-                         
-                          {% if item.properties and item.properties.size > 0 %}
-                            <details class="mt-2">
-                              <summary class="cursor-pointer">Details</summary>
-                              <ul class="mt-2 ml-0 list-none">
-                                {% for p in item.properties %}
-                                  {% unless p.last == blank %}
-                                    <li><strong>{{ p.first }}:</strong> {{ p.last }}</li>
-                                  {% endunless %}
-                                {% endfor %}
-                              </ul>
-                            </details>
-                          {% endif %}
-                          
-                          <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" class="inline-block mt-5 text-[#646665] no-underline text-base hover:text-primary">Remove</a>
+                  <div class="cart-item-pod mb-8" data-line="{{ item.key }}">
+                    <div class="flex flex-wrap -mx-4">
+                      <div class="w-full md:w-3/12 px-4">
+                        <div class="w-full h-full">
+                          <figure class="m-0 relative">
+                            <a href="{{ item.url }}">
+                              {% if item.image %}
+                                <img
+                                  src="{{ item.image | image_url: width: 360 }}"
+                                  alt="{{ item.title | escape }}"
+                                  loading="lazy"
+                                  width="360"
+                                  height="360"
+                                  class="w-full h-full max-h-[290px] object-cover rounded-t-[30px] rounded-bl-none border-r-0 md:rounded-l-[30px] md:rounded-tr-none md:border-r-[7px] md:border-primary"
+                                >
+                              {% else %}
+                                {{ 'product-apparel-1' | placeholder_svg_tag }}
+                              {% endif %}
+                            </a>
+                          </figure>
                         </div>
-                        
-                        <div class="text-[#646665] text-3xl font-body-copy ml-4">{{ unit_price | money }}</div>
+                      </div>
+
+                      <div class="w-full md:w-9/12 px-4">
+                        <div class="flex justify-between items-start p-4">
+                          <div class="flex-1">
+                            <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl mb-2">
+                              <a href="{{ item.url }}" class="text-[#646665] no-underline hover:text-primary">
+                                {{- item.product.title -}}
+                              </a>
+                            </h2>
+
+                            {% assign dob_val = item.product.metafields.custom.dob.value %}
+                            {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                            {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+                            {% assign diff_seconds = now_ts | minus: dob_ts %}
+                            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+
+                            <div class="text-2xl font-medium mb-2 text-[#646665]">
+                              {{ item.product.collections.first.title }}
+                            </div>
+                            <div class="mb-2">
+                              <span class="text-[#646665] text-xl">
+                                {{- item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span
+                              >
+                            </div>
+
+                            {% if item.properties and item.properties.size > 0 %}
+                              <details class="mt-2">
+                                <summary class="cursor-pointer">Details</summary>
+                                <ul class="mt-2 ml-0 list-none">
+                                  {% for p in item.properties %}
+                                    {% unless p.last == blank %}
+                                      <li>
+                                        <strong>{{ p.first }}:</strong> {{ p.last }}
+                                      </li>
+                                    {% endunless %}
+                                  {% endfor %}
+                                </ul>
+                              </details>
+                            {% endif %}
+
+                            <a
+                              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                              class="inline-block mt-5 text-[#646665] no-underline text-base hover:text-primary"
+                              >Remove</a
+                            >
+                          </div>
+
+                          <div class="text-[#646665] text-3xl font-body-copy ml-4">{{ unit_price | money }}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
                 {% endunless %}
               {% endfor %}
- 
+            {% endif %}
+
+            {% comment %} Only show delivery options if there's a puppy in the cart {% endcomment %}
+            {% if has_puppy and delivery_product %}
+              <div class="cart-item-pod p-8 mt-3">
+                <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">
+                  Choose Delivery Option
+                </h2>
+
+                {% comment %} Hidden container for variant descriptions {% endcomment %}
+                <div id="variant-descriptions" style="display: none;">
+                  {{ delivery_product.description }}
+                </div>
+
+                <div id="delivery-options" class="space-y-3">
+                  {% for variant in delivery_product.variants %}
+                    {% comment %} Map variant title to description div ID {% endcomment %}
+                    {% assign description_id = '' %}
+                    {% if variant.title contains 'Home' or variant.title contains 'Your Home' %}
+                      {% assign description_id = 'home-delivery' %}
+                    {% elsif variant.title contains 'Nearby' or variant.title contains 'Near' %}
+                      {% assign description_id = 'near-home' %}
+                    {% elsif variant.title contains 'Pick Up' or variant.title contains 'Breeder' %}
+                      {% assign description_id = 'local-pickup' %}
+                    {% elsif variant.title contains 'Later' or variant.title contains 'Decide' %}
+                      {% assign description_id = 'decide-later' %}
+                    {% endif %}
+
+                    <div class="checkout-agreement p-8">
+                      <div class="flex items-start gap-4">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="{{ variant.id }}"
+                          class="mt-1"
+                          data-description-id="{{ description_id }}"
+                        >
+                        <div class="flex-1">
+                          <label class="text-lg font-medium cursor-pointer select-none block">
+                            {{ variant.title }}
+                            {% if variant.price > 0 %}
+                              ({{ variant.price | money }})
+                            {% else %}
+                              (Free)
+                            {% endif %}
+                          </label>
+                          {% if description_id != '' %}
+                            <div
+                              class="variant-description text-sm text-[#646665] mt-2"
+                              data-for="{{ description_id }}"
+                            ></div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <script>
+                // Move descriptions from hidden container to variant options
+                document.addEventListener('DOMContentLoaded', () => {
+                  const descriptionsContainer = document.getElementById('variant-descriptions');
+                  if (!descriptionsContainer) return;
+
+                  document.querySelectorAll('.variant-description').forEach((targetDiv) => {
+                    const descId = targetDiv.getAttribute('data-for');
+                    const sourceDiv = descriptionsContainer.querySelector(`#${descId}`);
+
+                    if (sourceDiv) {
+                      targetDiv.innerHTML = sourceDiv.innerHTML;
+                    }
+                  });
+                });
+              </script>
             {% endif %}
 
             <div class="cart-item-pod p-8 mt-3">
-              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">Choose Delivery Option</h2>
-              
-              <div id="delivery-options" class="space-y-3">
-                <div class="checkout-agreement p-8 flex items-baseline gap-4">
-                  <input type="radio" name="delivery" value="41869989871701" class="mt-1"> 
-                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
-                    Delivered to Your Home ($500)  
-                  </label>
-                </div>
+              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">
+                Required Agreements
+              </h2>
 
-                <div class="checkout-agreement p-8 flex items-baseline gap-4">
-                  <input type="radio" name="delivery" value="41869989904469" class="mt-1">
-                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
-                    Delivered to Nearby Location ($400)
-                  </label>
-                </div>
+              {% if cart.item_count > 0 %}
+                <div class="space-y-3" data-terms>
+                  <div class="checkout-agreement p-8">
+                    <div class="flex items-start gap-4">
+                      <input class="form-check-input mt-1" type="checkbox" id="certifyAge">
+                      <div class="flex-1">
+                        <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
+                          Health Guarantee Agreement
+                        </label>
+                        <div class="text-sm mt-1">
+                          I have read and agree to the Puppys R Us
+                          <a
+                            href="https://puppysrusdev.myshopify.com/pages/health-guarantee"
+                            class="text-primary no-underline hover:underline"
+                            >Health Guarantee</a
+                          >.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <div class="checkout-agreement p-8 flex items-baseline gap-4">
-                  <input type="radio" name="delivery" value="41869989937237" class="mt-1">
-                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
-                    Pick Up From Breeder (Free)
-                  </label>
-                </div>
+                  <div class="checkout-agreement p-8">
+                    <div class="flex items-start gap-4">
+                      <input class="form-check-input mt-1" type="checkbox" id="understandTerms">
+                      <div class="flex-1">
+                        <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
+                          Terms & Conditions / Purchase Agreement
+                        </label>
+                        <div class="text-sm mt-1">
+                          I confirm I am 18+ and agree to the Puppys R Us
+                          <a
+                            href="https://puppysrusdev.myshopify.com/pages/terms-of-service"
+                            class="text-primary no-underline hover:underline"
+                            >Terms & Conditions</a
+                          >.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <div class="checkout-agreement p-8 flex items-baseline gap-4">
-                  <input type="radio" name="delivery" value="41869989970005" class="mt-1">
-                  <label class="text-lg font-medium cursor-pointer select-none flex-1">
-                    I Will Decide Later ($0)
-                  </label>
-                </div>
-              </div>
-            </div>
- 
-            <div class="cart-item-pod p-8 mt-3">
-              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">Required Agreements</h2>
-              
-              {% if cart.item_count > 0 %}       
-              <div class="space-y-3" data-terms>
-                <div class="checkout-agreement p-8">
-                  <div class="flex items-start gap-4">
-                    <input class="form-check-input mt-1" type="checkbox" id="certifyAge">
-                    <div class="flex-1">
-                      <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
-                        Health Guarantee Agreement 
-                      </label>
-                      <div class="text-sm mt-1">
-                        I have read and agree to the Puppys R Us <a href="https://puppysrusdev.myshopify.com/pages/health-guarantee" class="text-primary no-underline hover:underline">Health Guarantee</a>.
+                  <div class="checkout-agreement p-8">
+                    <div class="flex items-start gap-4">
+                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement">
+                      <div class="flex-1">
+                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
+                          Veterinary Care Acknowledgment
+                        </label>
+                        <div class="text-sm mt-1">
+                          I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving
+                          him/her.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="checkout-agreement p-8">
+                    <div class="flex items-start gap-4">
+                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement1">
+                      <div class="flex-1">
+                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
+                          Transportation Agreement
+                        </label>
+                        <div class="text-sm mt-1">
+                          I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I
+                          will be contacted to confirm details.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="checkout-agreement p-8">
+                    <div class="flex items-start gap-4">
+                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement2">
+                      <div class="flex-1">
+                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
+                          Puppy Confirmation
+                        </label>
+                        <div class="text-sm mt-1">I confirm I am purchasing the puppy listed in my order summary.</div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div class="checkout-agreement p-8">
-                  <div class="flex items-start gap-4">
-                    <input class="form-check-input mt-1" type="checkbox" id="understandTerms">
-                    <div class="flex-1">
-                      <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
-                        Terms & Conditions / Purchase Agreement
-                      </label>
-                      <div class="text-sm mt-1">
-                        I confirm I am 18+ and agree to the Puppys R Us <a href="https://puppysrusdev.myshopify.com/pages/terms-of-service" class="text-primary no-underline hover:underline">Terms & Conditions</a>.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="checkout-agreement p-8">
-                  <div class="flex items-start gap-4">
-                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement">
-                    <div class="flex-1">
-                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
-                        Veterinary Care Acknowledgment
-                      </label>
-                      <div class="text-sm mt-1">
-                        I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving him/her.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="checkout-agreement p-8">
-                  <div class="flex items-start gap-4">
-                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement1">
-                    <div class="flex-1">
-                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
-                        Transportation Agreement
-                      </label>
-                      <div class="text-sm mt-1">
-                        I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I will be contacted to confirm details.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="checkout-agreement p-8">
-                  <div class="flex items-start gap-4">
-                    <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement2">
-                    <div class="flex-1">
-                      <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
-                        Puppy Confirmation
-                      </label>
-                      <div class="text-sm mt-1">
-                        I confirm I am purchasing the puppy listed in my order summary.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               {% endif %}
             </div>
           </div>
@@ -257,29 +336,38 @@
                 {% else %}
                   <li class="text-sm italic border-b-0">Taxes and shipping calculated at checkout.</li>
                 {% endif %}
-                
+
                 <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
                   <strong class="text-[#646665] font-titles">Total</strong>
                   <span>{{ cart.items_subtotal_price | money }}</span>
-                </li> 
+                </li>
               </ul>
 
               {% if cart.item_count > 0 %}
-              <input 
-                id="checkoutBtn" 
-                type="submit" 
-                name="checkout" 
-                class="checkout-btn w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-[var(--color-primary)] border-[var(--color-primary)]" 
-                disabled 
-                aria-disabled="true" 
-                value="{{ 'cart.checkout' | t }}"
-              >
-              <div id="checkout-text1" class="text-center text-sm py-2 px-4 bg-white rounded-lg text-[var(--color-primary)] mb-4">
-                Please accept all terms and select a shipping method
-              </div>
+                <input
+                  id="checkoutBtn"
+                  type="submit"
+                  name="checkout"
+                  class="checkout-btn w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-[var(--color-primary)] border-[var(--color-primary)]"
+                  disabled
+                  aria-disabled="true"
+                  value="{{ 'cart.checkout' | t }}"
+                >
+                <div
+                  id="checkout-text1"
+                  class="text-center text-sm py-2 px-4 bg-white rounded-lg text-[var(--color-primary)] mb-4"
+                >
+                  Please accept all terms and select a shipping method
+                </div>
               {% endif %}
             </div>
-            <img class="w-full mt-5 ml-5" src="{{ 'puppies Images.png' | asset_url }}" alt="Payment methods" width="300" height="100">
+            <img
+              class="w-full mt-5 ml-5"
+              src="{{ 'puppies Images.png' | asset_url }}"
+              alt="Payment methods"
+              width="300"
+              height="100"
+            >
           </div>
         </div>
       </form>
@@ -288,126 +376,133 @@
 </section>
 
 <script>
-// Auto-check the correct radio on page load
-document.addEventListener("DOMContentLoaded", async () => {
-  const radios = document.querySelectorAll('input[name="delivery"]');
+  // Auto-check the correct radio on page load
+  document.addEventListener('DOMContentLoaded', async () => {
+    const radios = document.querySelectorAll('input[name="delivery"]');
 
-  const cart = await fetch('/cart.js').then(res => res.json());
+    const cart = await fetch('/cart.js').then((res) => res.json());
 
-  const deliveryItem = cart.items.find(
-    item => item.product_title === "Puppy Delivery Option"
-  );
+    const deliveryItem = cart.items.find((item) => item.product_title === 'Puppy Delivery Option');
 
-  if (deliveryItem) {
-    const selectedId = deliveryItem.variant_id;
+    if (deliveryItem) {
+      const selectedId = deliveryItem.variant_id;
 
-    radios.forEach(radio => {
-      radio.checked = (Number(radio.value) === selectedId);
-    });
-  }
-});
+      radios.forEach((radio) => {
+        radio.checked = Number(radio.value) === selectedId;
+      });
+    }
+  });
 
-// Add / remove delivery options on change
-document.querySelectorAll('input[name="delivery"]').forEach(radio => {
-  radio.addEventListener('change', async (e) => {
-    const selectedVariant = Number(e.target.value);
+  // Add / remove delivery options on change
+  document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
+    radio.addEventListener('change', async (e) => {
+      const selectedVariant = Number(e.target.value);
 
-    // Fetch current cart
-    const cart = await fetch('/cart.js').then(res => res.json());
+      // Fetch current cart
+      const cart = await fetch('/cart.js').then((res) => res.json());
 
-    // Remove ALL delivery variants
-    const deliveryItems = cart.items.filter(
-      item => item.product_title === "Puppy Delivery Option"
-    );
+      // Remove ALL delivery variants
+      const deliveryItems = cart.items.filter((item) => item.product_title === 'Puppy Delivery Option');
 
-    for (const item of deliveryItems) {
-      await fetch('/cart/change.js', {
+      for (const item of deliveryItems) {
+        await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: item.key,
+            quantity: 0,
+          }),
+        });
+      }
+
+      // Add selected variant
+      await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: item.key,
-          quantity: 0
-        })
+          id: selectedVariant,
+          quantity: 1,
+        }),
       });
-    }
 
-    // Add selected variant
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: selectedVariant,
-        quantity: 1
-      })
+      // Refresh
+      location.reload();
     });
-
-    // Refresh
-    location.reload();
   });
-});
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-  // Quantity +/- and auto-submit
-  const form = document.querySelector('.cart-form');
-  const debouncedSubmit = (() => {
-    let t;
-    return () => { clearTimeout(t); t = setTimeout(()=>form.requestSubmit(), 350); }
-  })();
+  document.addEventListener('DOMContentLoaded', function () {
+    // Quantity +/- and auto-submit
+    const form = document.querySelector('.cart-form');
+    const debouncedSubmit = (() => {
+      let t;
+      return () => {
+        clearTimeout(t);
+        t = setTimeout(() => form.requestSubmit(), 350);
+      };
+    })();
 
-  document.querySelectorAll('.cart-quantity').forEach((wrap)=>{
-    const minus = wrap.querySelector('.btn-minus');
-    const plus  = wrap.querySelector('.btn-plus');
-    const input = wrap.querySelector('.qty-input');
+    document.querySelectorAll('.cart-quantity').forEach((wrap) => {
+      const minus = wrap.querySelector('.btn-minus');
+      const plus = wrap.querySelector('.btn-plus');
+      const input = wrap.querySelector('.qty-input');
 
-    plus.addEventListener('click', ()=>{
-      const v = parseInt(input.value || '0', 10) + 1;
-      input.value = Math.max(0, v);
-      debouncedSubmit();
+      plus.addEventListener('click', () => {
+        const v = parseInt(input.value || '0', 10) + 1;
+        input.value = Math.max(0, v);
+        debouncedSubmit();
+      });
+
+      minus.addEventListener('click', () => {
+        const v = parseInt(input.value || '0', 10) - 1;
+        input.value = Math.max(0, v);
+        debouncedSubmit();
+      });
+
+      input.addEventListener('input', () => {
+        const cleansed = input.value.replace(/\D+/g, '');
+        input.value = cleansed === '' ? '0' : cleansed;
+        debouncedSubmit();
+      });
     });
 
-    minus.addEventListener('click', ()=>{
-      const v = parseInt(input.value || '0', 10) - 1;
-      input.value = Math.max(0, v);
-      debouncedSubmit();
-    });
+    // Gate checkout until all checkboxes are ticked and delivery method selected (if applicable)
+    const checks = [
+      document.getElementById('certifyAge'),
+      document.getElementById('understandTerms'),
+      document.getElementById('acknowledgeAgreement'),
+      document.getElementById('acknowledgeAgreement1'),
+      document.getElementById('acknowledgeAgreement2'),
+    ].filter(Boolean);
 
-    input.addEventListener('input', ()=>{
-      const cleansed = input.value.replace(/\D+/g,'');
-      input.value = cleansed === '' ? '0' : cleansed;
-      debouncedSubmit();
-    });
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+
+    function syncCheckoutState() {
+      const allCheckboxesChecked = checks.length === 0 || checks.every((cb) => cb.checked);
+
+      // Check if delivery option is selected (only if delivery options exist)
+      const deliverySelected =
+        deliveryOptions.length === 0 || Array.from(deliveryOptions).some((radio) => radio.checked);
+
+      if (allCheckboxesChecked && deliverySelected) {
+        checkoutBtn?.classList.remove('is-disabled');
+        checkoutBtn?.removeAttribute('disabled');
+        checkoutBtn?.setAttribute('aria-disabled', 'false');
+        document.getElementById('checkout-text1').style.display = 'none';
+      } else {
+        checkoutBtn?.classList.add('is-disabled');
+        checkoutBtn?.setAttribute('disabled', 'disabled');
+        checkoutBtn?.setAttribute('aria-disabled', 'true');
+        document.getElementById('checkout-text1').style.display = 'inline-block';
+      }
+    }
+
+    checks.forEach((cb) => cb.addEventListener('change', syncCheckoutState));
+    deliveryOptions.forEach((radio) => radio.addEventListener('change', syncCheckoutState));
+    syncCheckoutState();
   });
-
-  // Gate checkout until all checkboxes are ticked
-  const checks = [
-    document.getElementById('certifyAge'),
-    document.getElementById('understandTerms'),
-    document.getElementById('acknowledgeAgreement'),
-    document.getElementById('acknowledgeAgreement1'),
-    document.getElementById('acknowledgeAgreement2')
-  ].filter(Boolean);
-
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  
-  function syncCheckoutState(){
-    if(checks.length === 0 || checks.every(cb => cb.checked)){
-      checkoutBtn?.classList.remove('is-disabled');
-      checkoutBtn?.removeAttribute('disabled');
-      checkoutBtn?.setAttribute('aria-disabled','false');
-      document.getElementById('checkout-text1').style.display='none';
-    } else {
-      checkoutBtn?.classList.add('is-disabled');
-      checkoutBtn?.setAttribute('disabled','disabled');
-      checkoutBtn?.setAttribute('aria-disabled','true');
-      document.getElementById('checkout-text1').style.display='inline-block';
-    } 
-  }
-  
-  checks.forEach(cb => cb.addEventListener('change', syncCheckoutState));
-  syncCheckoutState();
-});
 </script>
 
 {% schema %}

@@ -1,293 +1,274 @@
 {% comment %}
-  Share Your Puppies R Us Experience Page
-  Custom page for customers to share their experiences with their puppies
+    Share Your Puppies R Us Experience Page
+    Custom page for customers to share their experiences with their puppies
 {% endcomment %}
 
-<section class="share-experience-page py-16 bg-[var(--color-bg-extralight)]">
-  <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+<section class="share-experience-page pt-16 bg-[var(--color-bg-extralight)] pb-[200px] mb-[-200px]">
+    <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+        {%- comment -%} Hero Section - Two Column Layout {%- endcomment -%}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            {%- comment -%} Left Column: Content {%- endcomment -%}
+            <div class="flex flex-col justify-start space-y-6">
+                <h1 class="font-titles text-4xl md:text-6xl text-gray-900 leading-tight font-normal">Share your Puppys R Us Experience!</h1>
 
-    {%- comment -%} Hero Section - Two Column Layout {%- endcomment -%}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-      
-      {%- comment -%} Left Column: Content {%- endcomment -%}
-      <div class="flex flex-col justify-start space-y-6">
-        <h1 class="font-titles text-4xl md:text-6xl text-gray-900 leading-tight font-normal">
-          Share your Puppys R Us Experience!
-        </h1>
-        
-        <div class="space-y-4 text-lg text-[var(--color-body-copy)] leading-relaxed">
-          <p>
-            Puppys R Us has been matching adorable puppies with owners since 2014. Our entire team, from the loving breeders to the attentive office staff to the folks handling deliveries, works hard to make sure your new family member is happy, healthy, and ready for love.
-          </p>
-          
-          <p class="text-xl font-semibold text-[var(--color-primary)]">
-            How was your experience with Puppys R Us?
-          </p>
-        </div>
-      </div>
+                <div class="space-y-4 text-lg text-[var(--color-body-copy)] leading-relaxed">
+                    <p>Puppys R Us has been matching adorable puppies with owners since 2014. Our entire team, from the loving breeders to the attentive office staff to the folks handling deliveries, works hard to make sure your new family member is happy, healthy, and ready for love.</p>
 
-      {%- comment -%} Right Column: Image {%- endcomment -%}
-      <div class="flex items-center justify-center md:justify-end">
-        <div class="relative w-full max-w-md mx-auto">
-          <img 
-            src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/pup-testimonial.webp?v=1763388446" 
-            alt="Adorable Puppy at Home" 
-            width="800" 
-            height="784" 
-            class="w-full h-auto rounded-4xl shadow-xl" 
-            loading="eager"
-          />
-          
-          {%- comment -%} Optional decorative element {%- endcomment -%}
-          <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-[var(--color-primary)] rounded-2xl opacity-20 -z-10"></div>
-          <div class="absolute -top-4 -left-4 w-16 h-16 bg-yellow-400 rounded-2xl opacity-30 -z-10"></div>
-        </div>
-      </div>
-    </div>
-
-
-
-
-    {%- comment -%} Form Section - Two Column Layout {%- endcomment -%}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-      
-      {%- comment -%} Left Column: Birthday Puppy Image {%- endcomment -%}
-      <div class="order-2 lg:order-1">
-        <div class="relative group">
-          <img 
-            src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/birthday-pup.jpg?v=1763389024" 
-            width="778" 
-            height="1123" 
-            alt="Birthday Puppy" 
-            class="w-full h-auto rounded-4xl shadow-2xl"
-            loading="lazy"
-          />
-          
-          {%- comment -%} Decorative Elements {%- endcomment -%}
-          <div class="absolute -top-6 -left-6 w-20 h-20 bg-pink-400 rounded-full opacity-40 blur-xl"></div>
-          <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-blue-400 rounded-full opacity-30 blur-2xl"></div>
-        </div>
-      </div>
-
-      {%- comment -%} Right Column: Zoho Form {%- endcomment -%}
-      <div class="order-1 lg:order-2">
-        <div class="">
-          <div class="mb-8">
-            <h2 class="font-titles text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
-              Share Your Story
-            </h2>
-            <p class="text-[var(--color-body-copy)] leading-relaxed">
-              Tell us about your wonderful experience and help other families discover the joy of a Puppies R Us puppy.
-            </p>
-          </div>
-
-          <form 
-            action='https://forms.zohopublic.com/zohodocs3024/form/ShareYourPuppysRUsExperience/formperma/ZQB-Zz4CveLj2nqpvYz322JfawE_0cJeAxzyaVTPBEw/htmlRecords/submit' 
-            name='form' 
-            id='share-testimonial-form' 
-            method='POST' 
-            accept-charset='UTF-8' 
-            enctype='multipart/form-data'
-            class="space-y-6"
-          >
-            <input type="hidden" name="zf_referrer_name" value="">
-            <input type="hidden" name="zf_redirect_url" value="">
-            <input type="hidden" name="zc_gad" value="">
-
-            {%- comment -%} Title Field {%- endcomment -%}
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                Title <span class="text-red-500 ml-1">*</span>
-              </label>
-              <input 
-                type="text" 
-                name="SingleLine" 
-                value="" 
-                fieldType="1" 
-                maxlength="255" 
-                placeholder="e.g., Best Decision Ever!" 
-                required
-                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
-                style="border: 1px solid #dee2e6; border-radius: 0;"
-              />
-              <p class="text-xs text-[var(--color-body-copy)] mt-1">Please give your testimonial a catchy title.</p>
-            </div>
-
-            {%- comment -%} Name Field {%- endcomment -%}
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                Name <span class="text-red-500 ml-1">*</span>
-              </label>
-              <input 
-                type="text" 
-                name="SingleLine1" 
-                value="" 
-                fieldType="1" 
-                maxlength="255" 
-                placeholder="e.g., Samantha or The Jones Family" 
-                required
-                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
-                style="border: 1px solid #dee2e6; border-radius: 0;"
-              />
-              <p class="text-xs text-[var(--color-body-copy)] mt-1">
-                Please give the name to be displayed. Examples: "Samantha" or "Dave & Charlotte" or "The Jones Family".
-              </p>
-            </div>
-
-            {%- comment -%} Email Field {%- endcomment -%}
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                Email Address <span class="text-red-500 ml-1">*</span>
-              </label>
-              <input 
-                type="email" 
-                maxlength="255" 
-                name="Email" 
-                value="" 
-                fieldType="9" 
-                placeholder="your@email.com" 
-                required
-                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
-                style="border: 1px solid #dee2e6; border-radius: 0;"
-              />
-              <p class="text-xs text-green-600 mt-1 flex items-center">
-                <svg class="w-3 h-3 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                This information will <strong>not</strong> be publicly displayed.
-              </p>
-            </div>
-
-            {%- comment -%} Puppy Info Fields {%- endcomment -%}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                  Name of Puppy <span class="text-red-500 ml-1">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  name="SingleLine2" 
-                  value="" 
-                  fieldType="1" 
-                  maxlength="255" 
-                  placeholder="e.g., Buddy"
-                  required
-                  class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
-                  style="border: 1px solid #dee2e6; border-radius: 0;"
-                />
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                  Breed of Puppy
-                </label>
-                <input 
-                  type="text" 
-                  name="SingleLine3" 
-                  value="" 
-                  fieldType="1" 
-                  maxlength="255" 
-                  placeholder="e.g., Golden Retriever"
-                  class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
-                  style="border: 1px solid #dee2e6; border-radius: 0;"
-                />
-              </div>
-            </div>
-
-            {%- comment -%} Testimonial Textarea {%- endcomment -%}
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                Your Testimonial <span class="text-red-500 ml-1">*</span>
-              </label>
-              <textarea 
-                name="MultiLine" 
-                maxlength="65535" 
-                placeholder="Tell us about your experience with Puppies R Us. How has your new family member brought joy to your home? What made the process special?"
-                rows="6"
-                required
-                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400 resize-y"
-                style="border: 1px solid #dee2e6; border-radius: 0;"
-              ></textarea>
-            </div>
-
-            {%- comment -%} Image Upload Field {%- endcomment -%}
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
-                Image Upload
-              </label>
-              <div class="relative">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  name="ImageUpload" 
-                  checktype="c1"
-                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  id="testimonial-image-upload"
-                />
-                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[var(--color-primary)] hover:bg-gray-50 transition-all duration-200">
-                  <div class="space-y-3">
-                    <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    <div>
-                      <p class="text-sm font-medium text-gray-700">Click to upload an image</p>
-                      <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
-                    </div>
-                  </div>
+                    <p class="text-xl font-semibold text-[var(--color-primary)]">How was your experience with Puppys R Us?</p>
                 </div>
-              </div>
-              <p class="text-xs text-[var(--color-body-copy)]">
-                <span class="inline-flex items-center">
-                  <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                  </svg>
-                  You can select and upload 1 image along with your testimonial. Depending on the website's settings, this image may be cropped or resized.
-                </span>
-              </p>
             </div>
 
-            {%- comment -%} Disclosure Agreement {%- endcomment -%}
-            <div class="bg-white border-2 border-gray-200 rounded-xl p-6">
-              <p class="text-sm text-[var(--color-body-copy)] leading-relaxed">
-                <span class="font-semibold text-gray-900">Agreement:</span> By submitting this form, I certify that the information provided is accurate, truthful, and current. I agree to Puppys R Us displaying this information on their website and/or any social media platforms for the purpose of communication and promotion related to the services provided. I understand that the information submitted may be subject to review and verification.
-              </p>
-            </div>
+            {%- comment -%} Right Column: Image {%- endcomment -%}
+            <div class="flex items-center justify-center md:justify-end">
+                <div class="relative w-full max-w-md mx-auto">
+                    <img
+                        src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/pup-testimonial.webp?v=1763388446"
+                        alt="Adorable Puppy at Home"
+                        width="800"
+                        height="784"
+                        class="w-full h-auto rounded-4xl shadow-xl"
+                        loading="eager"
+                    >
 
-            {%- comment -%} Submit Button {%- endcomment -%}
-            <div class="pt-4">
-              <button 
-                type="submit"
-                class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[var(--color-primary)]/30"
-              >
-                Submit
-              </button>
+                    {%- comment -%} Optional decorative element {%- endcomment -%}
+                    <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-[var(--color-primary)] rounded-2xl opacity-20 -z-10"></div>
+                    <div class="absolute -top-4 -left-4 w-16 h-16 bg-yellow-400 rounded-2xl opacity-30 -z-10"></div>
+                </div>
             </div>
-          </form>
         </div>
-      </div>
+
+        {%- comment -%} Form Section - Two Column Layout {%- endcomment -%}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            {%- comment -%} Left Column: Birthday Puppy Image {%- endcomment -%}
+            <div class="order-2 lg:order-1">
+                <div class="relative group">
+                    <img
+                        src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/birthday-pup.jpg?v=1763389024"
+                        width="778"
+                        height="1123"
+                        alt="Birthday Puppy"
+                        class="w-full h-auto rounded-4xl shadow-2xl"
+                        loading="lazy"
+                    >
+
+                    {%- comment -%} Decorative Elements {%- endcomment -%}
+                    <div class="absolute -top-6 -left-6 w-20 h-20 bg-pink-400 rounded-full opacity-40 blur-xl"></div>
+                    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-blue-400 rounded-full opacity-30 blur-2xl"></div>
+                </div>
+            </div>
+
+            {%- comment -%} Right Column: Zoho Form {%- endcomment -%}
+            <div class="order-1 lg:order-2">
+                <div class="">
+                    <div class="mb-8">
+                        <h2 class="font-titles text-2xl lg:text-3xl font-bold text-gray-900 mb-3">Share Your Story</h2>
+                        <p class="text-[var(--color-body-copy)] leading-relaxed">Tell us about your wonderful experience and help other families discover the joy of a Puppies R Us puppy.</p>
+                    </div>
+
+                    <form
+                        action="https://forms.zohopublic.com/zohodocs3024/form/ShareYourPuppysRUsExperience/formperma/ZQB-Zz4CveLj2nqpvYz322JfawE_0cJeAxzyaVTPBEw/htmlRecords/submit"
+                        name="form"
+                        id="share-testimonial-form"
+                        method="POST"
+                        accept-charset="UTF-8"
+                        enctype="multipart/form-data"
+                        class="space-y-6"
+                    >
+                        <input type="hidden" name="zf_referrer_name" value="">
+                        <input type="hidden" name="zf_redirect_url" value="">
+                        <input type="hidden" name="zc_gad" value="">
+
+                        {%- comment -%} Title Field {%- endcomment -%}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
+                                Title
+                                <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="SingleLine"
+                                value=""
+                                fieldType="1"
+                                maxlength="255"
+                                placeholder="e.g., Best Decision Ever!"
+                                required
+                                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
+                                style="border: 1px solid #dee2e6; border-radius: 0;"
+                            >
+                            <p class="text-xs text-[var(--color-body-copy)] mt-1">Please give your testimonial a catchy title.</p>
+                        </div>
+
+                        {%- comment -%} Name Field {%- endcomment -%}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
+                                Name
+                                <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="SingleLine1"
+                                value=""
+                                fieldType="1"
+                                maxlength="255"
+                                placeholder="e.g., Samantha or The Jones Family"
+                                required
+                                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
+                                style="border: 1px solid #dee2e6; border-radius: 0;"
+                            >
+                            <p class="text-xs text-[var(--color-body-copy)] mt-1">Please give the name to be displayed. Examples: "Samantha" or "Dave & Charlotte" or "The Jones Family".</p>
+                        </div>
+
+                        {%- comment -%} Email Field {%- endcomment -%}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
+                                Email Address
+                                <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                maxlength="255"
+                                name="Email"
+                                value=""
+                                fieldType="9"
+                                placeholder="your@email.com"
+                                required
+                                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
+                                style="border: 1px solid #dee2e6; border-radius: 0;"
+                            >
+                            <p class="text-xs text-green-600 mt-1 flex items-center">
+                                <svg class="w-3 h-3 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                This information will
+                                <strong>not</strong>
+                                be publicly displayed.
+                            </p>
+                        </div>
+
+                        {%- comment -%} Puppy Info Fields {%- endcomment -%}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
+                                    Name of Puppy
+                                    <span class="text-red-500 ml-1">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="SingleLine2"
+                                    value=""
+                                    fieldType="1"
+                                    maxlength="255"
+                                    placeholder="e.g., Buddy"
+                                    required
+                                    class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
+                                    style="border: 1px solid #dee2e6; border-radius: 0;"
+                                >
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-[var(--color-body-copy)]">Breed of Puppy</label>
+                                <input
+                                    type="text"
+                                    name="SingleLine3"
+                                    value=""
+                                    fieldType="1"
+                                    maxlength="255"
+                                    placeholder="e.g., Golden Retriever"
+                                    class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400"
+                                    style="border: 1px solid #dee2e6; border-radius: 0;"
+                                >
+                            </div>
+                        </div>
+
+                        {%- comment -%} Testimonial Textarea {%- endcomment -%}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[var(--color-body-copy)]">
+                                Your Testimonial
+                                <span class="text-red-500 ml-1">*</span>
+                            </label>
+                            <textarea
+                                name="MultiLine"
+                                maxlength="65535"
+                                placeholder="Tell us about your experience with Puppies R Us. How has your new family member brought joy to your home? What made the process special?"
+                                rows="6"
+                                required
+                                class="w-full px-4 py-3 focus:border-[var(--color-primary)] focus:ring-0 transition-colors duration-200 placeholder-gray-400 resize-y"
+                                style="border: 1px solid #dee2e6; border-radius: 0;"
+                            ></textarea>
+                        </div>
+
+                        {%- comment -%} Image Upload Field {%- endcomment -%}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-semibold text-[var(--color-body-copy)]">Image Upload</label>
+                            <div class="relative">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    name="ImageUpload"
+                                    checktype="c1"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                    id="testimonial-image-upload"
+                                >
+                                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[var(--color-primary)] hover:bg-gray-50 transition-all duration-200">
+                                    <div class="space-y-3">
+                                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-700">Click to upload an image</p>
+                                            <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-[var(--color-body-copy)]">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    You can select and upload 1 image along with your testimonial. Depending on the website's settings, this image may be cropped or resized.
+                                </span>
+                            </p>
+                        </div>
+
+                        {%- comment -%} Disclosure Agreement {%- endcomment -%}
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6">
+                            <p class="text-sm text-[var(--color-body-copy)] leading-relaxed">
+                                <span class="font-semibold text-gray-900">Agreement:</span>
+                                By submitting this form, I certify that the information provided is accurate, truthful, and current. I agree to Puppys R Us displaying this information on their website and/or any social media platforms for the purpose of communication and promotion related to the services provided. I understand that the information submitted may be subject to review and verification.
+                            </p>
+                        </div>
+
+                        {%- comment -%} Submit Button {%- endcomment -%}
+                        <div class="pt-4">
+                            <button
+                                type="submit"
+                                class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[var(--color-primary)]/30"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-
-
-   
-  </div>
 </section>
 
 {% javascript %}
-  document.addEventListener('DOMContentLoaded', function() {
-    // Handle testimonial form submission
-    const form = document.getElementById('share-testimonial-form');
-    
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        // Let the form submit normally to Zoho
-        // You can add additional validation or tracking here if needed
-        
-        // Optional: Add loading state to submit button
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-          submitBtn.innerHTML = `
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle testimonial form submission
+        const form = document.getElementById('share-testimonial-form');
+
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                // Let the form submit normally to Zoho
+                // You can add additional validation or tracking here if needed
+
+                // Optional: Add loading state to submit button
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.innerHTML = `
             <span class="flex items-center justify-center space-x-2">
               <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -296,28 +277,28 @@
               <span>Submitting...</span>
             </span>
           `;
-          submitBtn.disabled = true;
+                    submitBtn.disabled = true;
+                }
+            });
         }
-      });
-    }
 
-    // Enhanced file upload preview
-    const fileInput = document.getElementById('testimonial-image-upload');
-    if (fileInput) {
-      fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const uploadArea = fileInput.nextElementSibling;
-        
-        if (file) {
-          // Validate file size (10MB limit)
-          if (file.size > 10 * 1024 * 1024) {
-            alert('File size must be less than 10MB');
-            fileInput.value = '';
-            return;
-          }
-          
-          // Update upload area to show selected file
-          uploadArea.innerHTML = `
+        // Enhanced file upload preview
+        const fileInput = document.getElementById('testimonial-image-upload');
+        if (fileInput) {
+            fileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                const uploadArea = fileInput.nextElementSibling;
+
+                if (file) {
+                    // Validate file size (10MB limit)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert('File size must be less than 10MB');
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    // Update upload area to show selected file
+                    uploadArea.innerHTML = `
             <div class="space-y-3">
               <svg class="w-12 h-12 mx-auto text-green-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -328,11 +309,11 @@
               </div>
             </div>
           `;
-          uploadArea.classList.remove('border-gray-300');
-          uploadArea.classList.add('border-green-300', 'bg-green-50');
-        } else {
-          // Reset to original state
-          uploadArea.innerHTML = `
+                    uploadArea.classList.remove('border-gray-300');
+                    uploadArea.classList.add('border-green-300', 'bg-green-50');
+                } else {
+                    // Reset to original state
+                    uploadArea.innerHTML = `
             <div class="space-y-3">
               <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -343,39 +324,39 @@
               </div>
             </div>
           `;
-          uploadArea.classList.remove('border-green-300', 'bg-green-50');
-          uploadArea.classList.add('border-gray-300');
+                    uploadArea.classList.remove('border-green-300', 'bg-green-50');
+                    uploadArea.classList.add('border-gray-300');
+                }
+            });
         }
-      });
-    }
-  });
+    });
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "Share Experience Page",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Page Content"
-    },
-    {
-      "type": "text",
-      "id": "page_title",
-      "label": "Page Title",
-      "default": "Share Your Puppies R Us Experience"
-    },
-    {
-      "type": "textarea",
-      "id": "page_description",
-      "label": "Page Description",
-      "default": "We love hearing from our puppy families! Share your story, photos, and experience with your new furry family member."
-    }
-  ],
-  "presets": [
-    {
-      "name": "Share Experience Page"
-    }
-  ]
+    "name": "Share Experience Page",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Page Content"
+        },
+        {
+            "type": "text",
+            "id": "page_title",
+            "label": "Page Title",
+            "default": "Share Your Puppies R Us Experience"
+        },
+        {
+            "type": "textarea",
+            "id": "page_description",
+            "label": "Page Description",
+            "default": "We love hearing from our puppy families! Share your story, photos, and experience with your new furry family member."
+        }
+    ],
+    "presets": [
+        {
+            "name": "Share Experience Page"
+        }
+    ]
 }
 {% endschema %}
