@@ -1,285 +1,356 @@
 {% comment %}
-  Breed Landing Page Section
-  Pulls all content from the selected collection
+    Breed Landing Page Section
+    Pulls all content from the selected collection
 {% endcomment %}
 
 {% liquid
-  assign collection = nil
+    assign collection = null
 
-  if page and page.metafields and page.metafields.custom and page.metafields.custom.landing_page_breed
-    assign breed_meta = page.metafields.custom.landing_page_breed
-    if breed_meta.value
-      assign collection = breed_meta.value
-    else
-      assign handle = breed_meta | downcase
-      assign collection = collections[handle]
+    if page and page.metafields and page.metafields.custom and page.metafields.custom.landing_page_breed
+        assign breed_meta = page.metafields.custom.landing_page_breed
+        if breed_meta.value
+            assign collection = breed_meta.value
+        else
+            assign handle = breed_meta | downcase
+            assign collection = collections[handle]
+        endif
     endif
-  endif
 
-  if collection == blank and section.settings.collection != blank
-    assign collection = collections[section.settings.collection]
-  endif
+    if collection == blank and section.settings.collection != blank
+        assign collection = collections[section.settings.collection]
+    endif
 %}
-
+<style>
+    #hero_banner:before {
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 60%);
+        content: '';
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+    }
+    @media (width < 768px) {
+        #hero_banner:before {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 95%);
+        }
+    }
+</style>
 {%- comment -%} Hero Banner with Collection Image Background {%- endcomment -%}
-<section class="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden p-8">
-  {%- comment -%} Background Image {%- endcomment -%}
-  {%- if collection.image -%}
-    <div class="absolute inset-0 z-0">
-      {{ collection.image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-full object-cover' }}
-      <div class="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent"></div>
-    </div>
-  {%- else -%}
-    <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-700 to-gray-900"></div>
-  {%- endif -%}
+<section id="hero_banner" class="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden py-16">
+    {%- comment -%} Background Image {%- endcomment -%}
+    {%- if collection.image -%}
+        <div class="absolute inset-0 z-0">
+            {{ collection.image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-full object-cover' }}
+        </div>
+    {%- else -%}
+        <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-700 to-gray-900"></div>
+    {%- endif -%}
 
-  {%- comment -%} Hero Content {%- endcomment -%}
-  <div class="max-w-[var(--width-container-content)] w-full mx-auto relative z-10">
-    <div class="max-w-lg">
-      <h1 class="text-5xl md:text-6xl text-white mb-6 font-titles">Purebred {{ collection.title }} Puppies for Sale</h1>
-      
-      {%- comment -%} Feature Bullets {%- endcomment -%}
-      <div class="flex flex-col gap-4 text-base md:text-lg">
-        <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="w-8 h-8 flex-shrink-0"><path fill="#FFF" d="M256 0c-35 0-64 59.5-64 93.7v84.6L8.1 283.4c-5 2.8-8.1 8.2-8.1 13.9v65.5c0 10.6 10.2 18.3 20.4 15.4l171.6-49 0 70.9-57.6 43.2c-4 3-6.4 7.8-6.4 12.8v42c0 7.8 6.3 14 14 14c1.3 0 2.6-.2 3.9-.5L256 480l110.1 31.5c1.3 .4 2.6 .5 3.9 .5c6 0 11.1-3.7 13.1-9C344.5 470.7 320 422.2 320 368c0-60.6 30.6-114 77.1-145.6L320 178.3V93.7C320 59.5 292 0 256 0zM640 368c0-79.5-64.5-144-144-144s-144 64.5-144 144s64.5 144 144 144s144-64.5 144-144zm-76.7-43.3c6.2 6.2 6.2 16.4 0 22.6l-72 72c-6.2 6.2-16.4 6.2-22.6 0l-40-40c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L480 385.4l60.7-60.7c6.2-6.2 16.4-6.2 22.6 0z"></path></svg>
-          <span>Safe, Convenient, Affordable Puppy Travel</span>
+    {%- comment -%} Hero Content {%- endcomment -%}
+    <div class="max-w-[var(--width-container-content)] w-full mx-auto relative z-10 px-4">
+        <div class="max-w-lg">
+            <h1 class="text-6xl md:text-7xl text-white mb-6 font-titles">Purebred {{ collection.title }} Puppies for Sale</h1>
+
+            {%- comment -%} Feature Bullets {%- endcomment -%}
+            <div class="flex flex-col gap-4 text-base md:text-lg">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="w-8 h-8 flex-shrink-0">
+                        <path fill="#FFF" d="M256 0c-35 0-64 59.5-64 93.7v84.6L8.1 283.4c-5 2.8-8.1 8.2-8.1 13.9v65.5c0 10.6 10.2 18.3 20.4 15.4l171.6-49 0 70.9-57.6 43.2c-4 3-6.4 7.8-6.4 12.8v42c0 7.8 6.3 14 14 14c1.3 0 2.6-.2 3.9-.5L256 480l110.1 31.5c1.3 .4 2.6 .5 3.9 .5c6 0 11.1-3.7 13.1-9C344.5 470.7 320 422.2 320 368c0-60.6 30.6-114 77.1-145.6L320 178.3V93.7C320 59.5 292 0 256 0zM640 368c0-79.5-64.5-144-144-144s-144 64.5-144 144s64.5 144 144 144s144-64.5 144-144zm-76.7-43.3c6.2 6.2 6.2 16.4 0 22.6l-72 72c-6.2 6.2-16.4 6.2-22.6 0l-40-40c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L480 385.4l60.7-60.7c6.2-6.2 16.4-6.2 22.6 0z"></path>
+                    </svg>
+                    <span>Safe, Convenient, Affordable Puppy Travel</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="w-8 h-8 flex-shrink-0">
+                        <path fill="#FFF" d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zM272 192H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16s7.2-16 16-16zM256 304c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16zM164.1 160v6.3c6.6 1.2 16.6 3.2 21 4.4c10.7 2.8 17 13.8 14.2 24.5s-13.8 17-24.5 14.2c-3.8-1-17.4-3.7-21.7-4.3c-12.2-1.9-22.2-.3-28.6 2.6c-6.3 2.9-7.9 6.2-8.2 8.1c-.6 3.4 0 4.7 .1 5c.3 .5 1 1.8 3.6 3.5c6.1 4.2 15.7 7.2 29.9 11.4l.8 .2c12.1 3.7 28.3 8.5 40.4 17.4c6.7 4.9 13 11.4 16.9 20.5c4 9.1 4.8 19.1 3 29.4c-3.3 19-15.9 32-31.6 38.7c-4.9 2.1-10 3.6-15.4 4.6V352c0 11.1-9 20.1-20.1 20.1s-20.1-9-20.1-20.1v-6.4c-9.5-2.2-21.9-6.4-29.8-9.1c-1.7-.6-3.2-1.1-4.4-1.5c-10.5-3.5-16.1-14.8-12.7-25.3s14.8-16.1 25.3-12.7c2 .7 4.1 1.4 6.4 2.1l0 0 0 0c9.5 3.2 20.2 6.9 26.2 7.9c12.8 2 22.7 .7 28.8-1.9c5.5-2.3 7.4-5.3 8-8.8c.7-4 .1-5.9-.2-6.7c-.4-.9-1.3-2.2-3.7-4c-5.9-4.3-15.3-7.5-29.3-11.7l-2.2-.7c-11.7-3.5-27-8.1-38.6-16c-6.6-4.5-13.2-10.7-17.3-19.5c-4.2-9-5.2-18.8-3.4-29c3.2-18.3 16.2-30.9 31.1-37.7c5-2.3 10.3-4 15.9-5.1v-6c0-11.1 9-20.1 20.1-20.1s20.1 9 20.1 20.1z"></path>
+                    </svg>
+                    <span>Easy Financing Available with Pre-Qualify</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-7 h-7 flex-shrink-0">
+                        <path fill="#FFF" d="M269.4 2.9C265.2 1 260.7 0 256 0s-9.2 1-13.4 2.9L54.3 82.8c-22 9.3-38.4 31-38.3 57.2c.5 99.2 41.3 280.7 213.6 363.2c16.7 8 36.1 8 52.8 0C454.7 420.7 495.5 239.2 496 140c.1-26.2-16.3-47.9-38.3-57.2L269.4 2.9zM160.9 286.2c4.8 1.2 9.9 1.8 15.1 1.8c35.3 0 64-28.7 64-64V160h44.2c12.1 0 23.2 6.8 28.6 17.7L320 192h64c8.8 0 16 7.2 16 16v32c0 44.2-35.8 80-80 80H272v50.7c0 7.3-5.9 13.3-13.3 13.3c-1.8 0-3.6-.4-5.2-1.1l-98.7-42.3c-6.6-2.8-10.8-9.3-10.8-16.4c0-2.8 .6-5.5 1.9-8l15-30zM160 160h40 8v32 32c0 17.7-14.3 32-32 32s-32-14.3-32-32V176c0-8.8 7.2-16 16-16zm128 48c0-8.8-7.2-16-16-16s-16 7.2-16 16s7.2 16 16 16s16-7.2 16-16z"></path>
+                    </svg>
+                    <span>10-Year Health Guarantee</span>
+                </div>
+            </div>
         </div>
-        <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="w-8 h-8 flex-shrink-0"><path fill="#FFF" d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zM272 192H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16s7.2-16 16-16zM256 304c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H272c-8.8 0-16-7.2-16-16zM164.1 160v6.3c6.6 1.2 16.6 3.2 21 4.4c10.7 2.8 17 13.8 14.2 24.5s-13.8 17-24.5 14.2c-3.8-1-17.4-3.7-21.7-4.3c-12.2-1.9-22.2-.3-28.6 2.6c-6.3 2.9-7.9 6.2-8.2 8.1c-.6 3.4 0 4.7 .1 5c.3 .5 1 1.8 3.6 3.5c6.1 4.2 15.7 7.2 29.9 11.4l.8 .2c12.1 3.7 28.3 8.5 40.4 17.4c6.7 4.9 13 11.4 16.9 20.5c4 9.1 4.8 19.1 3 29.4c-3.3 19-15.9 32-31.6 38.7c-4.9 2.1-10 3.6-15.4 4.6V352c0 11.1-9 20.1-20.1 20.1s-20.1-9-20.1-20.1v-6.4c-9.5-2.2-21.9-6.4-29.8-9.1c-1.7-.6-3.2-1.1-4.4-1.5c-10.5-3.5-16.1-14.8-12.7-25.3s14.8-16.1 25.3-12.7c2 .7 4.1 1.4 6.4 2.1l0 0 0 0c9.5 3.2 20.2 6.9 26.2 7.9c12.8 2 22.7 .7 28.8-1.9c5.5-2.3 7.4-5.3 8-8.8c.7-4 .1-5.9-.2-6.7c-.4-.9-1.3-2.2-3.7-4c-5.9-4.3-15.3-7.5-29.3-11.7l-2.2-.7c-11.7-3.5-27-8.1-38.6-16c-6.6-4.5-13.2-10.7-17.3-19.5c-4.2-9-5.2-18.8-3.4-29c3.2-18.3 16.2-30.9 31.1-37.7c5-2.3 10.3-4 15.9-5.1v-6c0-11.1 9-20.1 20.1-20.1s20.1 9 20.1 20.1z"></path></svg>
-          <span>Easy Financing Available with Pre-Qualify</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-7 h-7 flex-shrink-0"><path fill="#FFF" d="M269.4 2.9C265.2 1 260.7 0 256 0s-9.2 1-13.4 2.9L54.3 82.8c-22 9.3-38.4 31-38.3 57.2c.5 99.2 41.3 280.7 213.6 363.2c16.7 8 36.1 8 52.8 0C454.7 420.7 495.5 239.2 496 140c.1-26.2-16.3-47.9-38.3-57.2L269.4 2.9zM160.9 286.2c4.8 1.2 9.9 1.8 15.1 1.8c35.3 0 64-28.7 64-64V160h44.2c12.1 0 23.2 6.8 28.6 17.7L320 192h64c8.8 0 16 7.2 16 16v32c0 44.2-35.8 80-80 80H272v50.7c0 7.3-5.9 13.3-13.3 13.3c-1.8 0-3.6-.4-5.2-1.1l-98.7-42.3c-6.6-2.8-10.8-9.3-10.8-16.4c0-2.8 .6-5.5 1.9-8l15-30zM160 160h40 8v32 32c0 17.7-14.3 32-32 32s-32-14.3-32-32V176c0-8.8 7.2-16 16-16zm128 48c0-8.8-7.2-16-16-16s-16 7.2-16 16s7.2 16 16 16s16-7.2 16-16z"></path></svg>
-          <span>10-Year Health Guarantee</span>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 
 {%- comment -%} Main Content {%- endcomment -%}
-<section class="py-16">
+<section class="pt-16">
     <div class="w-full px-4 mx-auto">
-      <div class="max-w-[var(--width-container-content)] mx-auto py-12">
-        
+        <div class="max-w-[var(--width-container-content)] mx-auto ">
+            {%- comment -%} Two Column Section: Recent Puppies + Form {%- endcomment -%}
+            <div class="mb-16">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    {%- comment -%} Left Column: Recent Puppies {%- endcomment -%}
+                    <div class="w-full lg:w-1/2">
+                        {%- if collection.products.size > 0 -%}
+                            <!-- Splide CSS -->
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
-        {%- comment -%} Two Column Section: Recent Puppies + Form {%- endcomment -%}
-        <div class="mb-16">
-          <div class="flex flex-col lg:flex-row gap-8">
-            
-            {%- comment -%} Left Column: Recent Puppies {%- endcomment -%}
-            <div class="w-full lg:w-1/2">
-              
-              {%- if collection.products.size > 0 -%}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  {%- for product in collection.products limit: 8 -%}
-                    {% render 'puppy-card', product: product %}
-                  {%- endfor -%}
+                            <div class="relative px-4 mb-6">
+                                <div id="breed-puppies-carousel" class="splide" aria-label="Puppies Carousel">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            {%- for product in collection.products limit: 8 -%}
+                                                <li class="splide__slide">
+                                                    {% render 'puppy-card', product: product %}
+                                                </li>
+                                            {%- endfor -%}
+                                        </ul>
+                                    </div>
+
+                                    <!-- Custom Arrows -->
+                                    <div class="splide__arrows">
+                                        <button class="splide__arrow splide__arrow--prev !bg-[rgba(238,106,91,0.6)] hover:!bg-[rgba(238,106,91,0.85)] !w-12 !h-12 !rounded-full !opacity-100 disabled:!opacity-50 transition-colors !-left-4 sm:!-left-6" aria-label="Previous slide">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                            </svg>
+                                        </button>
+                                        <button class="splide__arrow splide__arrow--next !bg-[rgba(238,106,91,0.6)] hover:!bg-[rgba(238,106,91,0.85)] !w-12 !h-12 !rounded-full !opacity-100 disabled:!opacity-50 transition-colors !-right-4 sm:!-right-6" aria-label="Next slide">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Splide JS -->
+                            <script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    // Initialize Splide
+                                    function initBreedCarousel() {
+                                        if (document.querySelector('#breed-puppies-carousel')) {
+                                            new Splide('#breed-puppies-carousel', {
+                                                type: 'loop',
+                                                perPage: 2,
+                                                perMove: 1,
+                                                gap: '1rem',
+                                                autoplay: true,
+                                                interval: 5000,
+                                                pagination: false,
+                                                arrows: true, // Use default arrow logic but with custom HTML structure
+                                                breakpoints: {
+                                                    640: {
+                                                        perPage: 1,
+                                                    },
+                                                },
+                                            }).mount();
+                                        }
+                                    }
+
+                                    if (window.Splide) {
+                                        initBreedCarousel();
+                                    } else {
+                                        /* If Splide script is deferred, wait for load */
+                                        const script = document.querySelector('script[src*="splide.min.js"]');
+                                        if (script) {
+                                            script.addEventListener('load', initBreedCarousel);
+                                        } else {
+                                            // Fallback if script is already loaded but window.Splide not yet available (unlikely with defer)
+                                            window.addEventListener('load', initBreedCarousel);
+                                        }
+                                    }
+                                });
+                            </script>
+
+                            {%- if collection.products.size > 8 -%}
+                                <div class="text-center">
+                                    <a href="{{ collection.url }}" class="inline-block px-8 py-3 bg-[var(--color-primary)] text-white font-semibold rounded-full hover:opacity-90 transition-opacity">View All {{ collection.title }}s</a>
+                                </div>
+                            {%- endif -%}
+                        {%- else -%}
+                            <div class="py-8 bg-white rounded-lg text-center">
+                                <p class="text-[var(--color-body-copy)]/70">No {{ collection.title }} available at the moment.</p>
+                            </div>
+                        {%- endif -%}
+                    </div>
+
+                    {%- comment -%} Right Column: Contact Form {%- endcomment -%}
+                    <div class="w-full lg:w-1/2">
+                        <h2 class="font-titles font-bold text-4xl md:text-5xl sm:text-3xl mb-6 text-center">Looking for a {{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}?</h2>
+
+                        <!-- button to "Call Now" - primary button style, center aligned -->
+                        <div class="text-center mb-4">
+                            <a href="tel:+18447337877" id="call_now_btn" class="inline-block px-8 py-3 bg-[var(--color-primary)] text-white font-semibold rounded-full hover:opacity-90 transition-opacity">
+                                <button type="button">Call Now</button>
+                            </a>
+                        </div>
+
+                        <div class="">
+                            {%- comment -%} Success Message {%- endcomment -%}
+                            <div id="form-success-message" class="hidden mb-6 p-6 bg-green-50 border-2 border-green-500 rounded-lg">
+                                <p class="text-center text-green-800 font-semibold text-lg">Got it! Someone from our team will be in touch ASAP.</p>
+                            </div>
+
+                            <div id="form-wrapper">
+                                <p class="text-center mb-6 text-[var(--color-body-copy)]">Drop us a line and we'll help match you with the perfect {{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }} puppy!</p>
+
+                                <form action="https://forms.zohopublic.com/zohodocs3024/form/LandingPage/formperma/sVNObDJltzBpGmY19j1YPWThXZA_X_Xmdv47fGk5Fqg/htmlRecords/submit" name="form" id="breed-contact-form" method="POST" accept-charset="UTF-8" enctype="multipart/form-data" class="space-y-4">
+                                    <input type="hidden" name="zf_referrer_name" value="">
+                                    <input type="hidden" name="zf_redirect_url" value="">
+                                    <input type="hidden" name="zc_gad" value="">
+                                    <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}">
+                                    <input type="hidden" name="SingleLine1" value="for-sale">
+                                    <input type="hidden" name="SingleLine2" id="gclid" value="">
+
+                                    {%- comment -%} Name Field {%- endcomment -%}
+                                    <div>
+                                        <label for="Name_First" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
+                                            Your Name
+                                            <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    id="Name_First"
+                                                    name="Name_First"
+                                                    maxlength="255"
+                                                    required
+                                                    placeholder="First"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
+                                                >
+                                                <span class="text-xs text-gray-500 mt-1 block">First</span>
+                                            </div>
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    id="Name_Last"
+                                                    name="Name_Last"
+                                                    maxlength="255"
+                                                    required
+                                                    placeholder="Last"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
+                                                >
+                                                <span class="text-xs text-gray-500 mt-1 block">Last</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {%- comment -%} Email & Phone Row {%- endcomment -%}
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="Email" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
+                                                Email address
+                                                <span class="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="email"
+                                                id="Email"
+                                                name="Email"
+                                                maxlength="255"
+                                                required
+                                                placeholder="you@example.com"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
+                                            >
+                                        </div>
+
+                                        <div>
+                                            <label for="PhoneNumber_countrycode" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
+                                                Phone
+                                                <span class="text-red-500">*</span>
+                                            </label>
+                                            <div class="flex gap-2 items-center">
+                                                <input
+                                                    type="text"
+                                                    id="PhoneNumber_countrycode"
+                                                    name="PhoneNumber_countrycode"
+                                                    maxlength="3"
+                                                    size="3"
+                                                    required
+                                                    placeholder="555"
+                                                    class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
+                                                >
+                                                <span class="text-gray-500">-</span>
+                                                <input
+                                                    type="text"
+                                                    id="PhoneNumber_first"
+                                                    name="PhoneNumber_first"
+                                                    maxlength="3"
+                                                    size="3"
+                                                    required
+                                                    placeholder="123"
+                                                    class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
+                                                >
+                                                <span class="text-gray-500">-</span>
+                                                <input
+                                                    type="text"
+                                                    id="PhoneNumber_second"
+                                                    name="PhoneNumber_second"
+                                                    maxlength="4"
+                                                    size="4"
+                                                    required
+                                                    placeholder="4567"
+                                                    class="w-20 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {%- comment -%} Timeframe Dropdown {%- endcomment -%}
+                                    <div>
+                                        <label for="Dropdown" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
+                                            How Soon Are you Looking to Buy a Puppy?
+                                            <span class="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            id="Dropdown"
+                                            name="Dropdown"
+                                            required
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent bg-white"
+                                        >
+                                            <option value="">-Select-</option>
+                                            <option value="Like, yesterday">Like, yesterday</option>
+                                            <option value="Soon...">Soon...</option>
+                                            <option value="Within the next 6 months">Within the next 6 months</option>
+                                        </select>
+                                    </div>
+
+                                    {%- comment -%} Message Textarea {%- endcomment -%}
+                                    <div>
+                                        <label for="MultiLine" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">We would love to learn a little about your home and family life…</label>
+                                        <textarea
+                                            id="MultiLine"
+                                            name="MultiLine"
+                                            maxlength="65535"
+                                            rows="4"
+                                            placeholder="Tell us about yourself..."
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent resize-y"
+                                        ></textarea>
+                                    </div>
+
+                                    {%- comment -%} Text Permission Checkbox {%- endcomment -%}
+                                    <div class="flex items-start gap-2">
+                                        <input
+                                            type="checkbox"
+                                            id="DecisionBox"
+                                            name="DecisionBox"
+                                            checked
+                                            class="mt-1 w-4 h-4 text-[var(--color-primary)] border-gray-300 rounded focus:ring-2 focus:ring-[var(--color-primary)]"
+                                        >
+                                        <label for="DecisionBox" class="text-sm text-[var(--color-body-copy)] cursor-pointer">It is OK to text me</label>
+                                    </div>
+
+                                    {%- comment -%} Submit Button {%- endcomment -%}
+                                    <button
+                                        type="submit"
+                                        class="px-8 py-3 bg-[var(--color-primary)] text-white font-bold rounded-full hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary)]"
+                                    >
+                                        Submit
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                {%- if collection.products.size > 8 -%}
-                  <div class="text-center">
-                    <a href="{{ collection.url }}" class="inline-block px-8 py-3 bg-[var(--color-primary)] text-white font-semibold rounded-full hover:opacity-90 transition-opacity">
-                      View All {{ collection.title }}s
-                    </a>
-                  </div>
-                {%- endif -%}
-              {%- else -%}
-                <div class="py-8 bg-white rounded-lg text-center">
-                  <p class="text-[var(--color-body-copy)]/70">
-                    No {{ collection.title }} available at the moment.
-                  </p>
-                </div>
-              {%- endif -%}
             </div>
-
-            {%- comment -%} Right Column: Contact Form {%- endcomment -%}
-            <div class="w-full lg:w-1/2">
-              <h2 class="font-titles font-bold text-2xl sm:text-3xl mb-6">
-                Looking for a {{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}?
-              </h2>
-
-              <!-- button to "Call Now" - primary button style, center aligned -->
-              <a href="tel:+18447337877" id="call_now_btn">
-                <button type="button" class="">Call Now</button>
-            </a>
-              
-              <div class="">
-                {%- comment -%} Success Message {%- endcomment -%}
-                <div id="form-success-message" class="hidden mb-6 p-6 bg-green-50 border-2 border-green-500 rounded-lg">
-                  <p class="text-center text-green-800 font-semibold text-lg">
-                    Got it! Someone from our team will be in touch ASAP.
-                  </p>
-                </div>
-
-                <div id="form-wrapper">
-                  <p class="text-center mb-6 text-[var(--color-body-copy)]">
-                    Drop us a line and we'll help match you with the perfect {{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }} puppy!
-                  </p>
-
-                  <form action='https://forms.zohopublic.com/zohodocs3024/form/LandingPage/formperma/sVNObDJltzBpGmY19j1YPWThXZA_X_Xmdv47fGk5Fqg/htmlRecords/submit' name='form' id='breed-contact-form' method='POST' accept-charset='UTF-8' enctype='multipart/form-data' class="space-y-4">
-                  <input type="hidden" name="zf_referrer_name" value="">
-                  <input type="hidden" name="zf_redirect_url" value="">
-                  <input type="hidden" name="zc_gad" value="">
-                  <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}">
-                  <input type="hidden" name="SingleLine1" value="for-sale"> 
-                  <input type="hidden" name="SingleLine2" id="gclid" value="">
-                  
-                  {%- comment -%} Name Field {%- endcomment -%}
-                  <div>
-                    <label for="Name_First" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
-                      Your Name <span class="text-red-500">*</span>
-                    </label>
-                    <div class="grid grid-cols-2 gap-3">
-                      <div>
-                        <input 
-                          type="text" 
-                          id="Name_First"
-                          name="Name_First" 
-                          maxlength="255" 
-                          required
-                          placeholder="First"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
-                        />
-                        <span class="text-xs text-gray-500 mt-1 block">First</span>
-                      </div>
-                      <div>
-                        <input 
-                          type="text" 
-                          id="Name_Last"
-                          name="Name_Last" 
-                          maxlength="255" 
-                          required
-                          placeholder="Last"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
-                        />
-                        <span class="text-xs text-gray-500 mt-1 block">Last</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {%- comment -%} Email & Phone Row {%- endcomment -%}
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label for="Email" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
-                        Email address <span class="text-red-500">*</span>
-                      </label>
-                      <input 
-                        type="email" 
-                        id="Email"
-                        name="Email" 
-                        maxlength="255" 
-                        required
-                        placeholder="you@example.com"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label for="PhoneNumber_countrycode" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
-                        Phone <span class="text-red-500">*</span>
-                      </label>
-                      <div class="flex gap-2 items-center">
-                        <input 
-                          type="text" 
-                          id="PhoneNumber_countrycode"
-                          name="PhoneNumber_countrycode" 
-                          maxlength="3" 
-                          size="3"
-                          required
-                          placeholder="555"
-                          class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
-                        />
-                        <span class="text-gray-500">-</span>
-                        <input 
-                          type="text" 
-                          id="PhoneNumber_first"
-                          name="PhoneNumber_first" 
-                          maxlength="3" 
-                          size="3"
-                          required
-                          placeholder="123"
-                          class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
-                        />
-                        <span class="text-gray-500">-</span>
-                        <input 
-                          type="text" 
-                          id="PhoneNumber_second"
-                          name="PhoneNumber_second" 
-                          maxlength="4" 
-                          size="4"
-                          required
-                          placeholder="4567"
-                          class="w-20 px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-center"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {%- comment -%} Timeframe Dropdown {%- endcomment -%}
-                  <div>
-                    <label for="Dropdown" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
-                      How Soon Are you Looking to Buy a Puppy? <span class="text-red-500">*</span>
-                    </label>
-                    <select 
-                      id="Dropdown"
-                      name="Dropdown"
-                      required
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent bg-white"
-                    >
-                      <option value="">-Select-</option>
-                      <option value="Like, yesterday">Like, yesterday</option>
-                      <option value="Soon...">Soon...</option>
-                      <option value="Within the next 6 months">Within the next 6 months</option>
-                    </select>
-                  </div>
-
-                  {%- comment -%} Message Textarea {%- endcomment -%}
-                  <div>
-                    <label for="MultiLine" class="block text-sm font-semibold text-[var(--color-body-copy)] mb-1">
-                      We would love to learn a little about your home and family life…
-                    </label>
-                    <textarea 
-                      id="MultiLine"
-                      name="MultiLine" 
-                      maxlength="65535" 
-                      rows="4"
-                      placeholder="Tell us about yourself..."
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent resize-y"
-                    ></textarea>
-                  </div>
-
-                  {%- comment -%} Text Permission Checkbox {%- endcomment -%}
-                  <div class="flex items-start gap-2">
-                    <input 
-                      type="checkbox" 
-                      id="DecisionBox" 
-                      name="DecisionBox"
-                      checked
-                      class="mt-1 w-4 h-4 text-[var(--color-primary)] border-gray-300 rounded focus:ring-2 focus:ring-[var(--color-primary)]"
-                    />
-                    <label for="DecisionBox" class="text-sm text-[var(--color-body-copy)] cursor-pointer">
-                      It is OK to text me
-                    </label>
-                  </div>
-
-                  {%- comment -%} Submit Button {%- endcomment -%}
-                  <button 
-                    type="submit"
-                    class="w-full px-8 py-3 bg-[var(--color-primary)] text-white font-bold rounded-full hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary)]"
-                  >
-                    Submit
-                  </button>
-                </form>
-                </div>
-              </div>
-            </div>
-
-          </div>
         </div>
-
-      
-      </div>
     </div>
 </section>
 
@@ -289,81 +360,93 @@
 {%- comment -%} Meet a Breeder Section {%- endcomment -%}
 {% render 'meet-a-breeder' %}
 
-{%- comment -%} Collection Description {%- endcomment -%}
-        {%- if collection.description != blank -%}
-          <div class="prose prose-lg max-w-none mb-16 text-center">
-            {{ collection.description }}
-          </div>
-        {%- endif -%}
+{%- comment -%} Is this breed right for you? {%- endcomment -%}
+{%- if page.content != blank -%}
+    <section class="pb-16">
+        <div class="max-w-[var(--width-container-content)] mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-4 md:gap-12 items-start">
+                {%- comment -%} Left Column: Title {%- endcomment -%}
+                <div class="w-full md:w-1/2">
+                    <h2 class="font-titles font-bold text-5xl md:text-7xl leading-tight">Is a {{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }} right for you?</h2>
+                </div>
 
+                {%- comment -%} Right Column: Content {%- endcomment -%}
+                <div class="w-full md:w-1/2 prose prose-lg text-[var(--color-body-copy)]">
+                    {{ page.content }}
+                </div>
+            </div>
+        </div>
+    </section>
+{%- endif -%}
 
+{% render 'about-us' %}
 
 {% javascript %}
-  document.addEventListener('DOMContentLoaded', function() {
-    // Capture GCLID from URL parameter for Google Ads tracking
-    const urlParams = new URLSearchParams(window.location.search);
-    const gclid = urlParams.get('gclid');
-    
-    if (gclid) {
-      const gclidInput = document.getElementById('gclid');
-      if (gclidInput) {
-        gclidInput.value = gclid;
-      }
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Capture GCLID from URL parameter for Google Ads tracking
+        const urlParams = new URLSearchParams(window.location.search);
+        const gclid = urlParams.get('gclid');
 
-    // Handle form submission and show success message
-    const form = document.getElementById('breed-contact-form');
-    const successMessage = document.getElementById('form-success-message');
-    const formWrapper = document.getElementById('form-wrapper');
+        if (gclid) {
+            const gclidInput = document.getElementById('gclid');
+            if (gclidInput) {
+                gclidInput.value = gclid;
+            }
+        }
 
-    if (form && successMessage && formWrapper) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Create form data
-        const formData = new FormData(form);
-        
-        // Submit the form via fetch
-        fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          mode: 'no-cors' // Zoho forms require no-cors mode
-        })
-        .then(function() {
-          // Hide form and show success message
-          formWrapper.style.display = 'none';
-          successMessage.classList.remove('hidden');
-          
-          // Scroll to success message
-          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        })
-        .catch(function(error) {
-          console.error('Form submission error:', error);
-          // Still show success message even on error due to no-cors mode
-          formWrapper.style.display = 'none';
-          successMessage.classList.remove('hidden');
-          successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-      });
-    }
-  });
+        // Handle form submission and show success message
+        const form = document.getElementById('breed-contact-form');
+        const successMessage = document.getElementById('form-success-message');
+        const formWrapper = document.getElementById('form-wrapper');
+
+        if (form && successMessage && formWrapper) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Create form data
+                const formData = new FormData(form);
+
+                // Submit the form via fetch
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors', // Zoho forms require no-cors mode
+                })
+                    .then(function () {
+                        // Hide form and show success message
+                        formWrapper.style.display = 'none';
+                        successMessage.classList.remove('hidden');
+
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    })
+                    .catch(function (error) {
+                        console.error('Form submission error:', error);
+                        // Still show success message even on error due to no-cors mode
+                        formWrapper.style.display = 'none';
+                        successMessage.classList.remove('hidden');
+                        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    });
+            });
+        }
+    });
 {% endjavascript %}
 
 {% schema %}
 {
-  "name": "Breed Landing Page",
-  "settings": [
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection",
-      "info": "Select the breed collection. The page will use the collection's name, image, description, and products."
-    }
-  ],
-  "presets": [
-    {
-      "name": "Breed Landing Page"
-    }
-  ]
+    "name": "Breed Landing Page",
+    "settings": [
+        {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection",
+            "info": "Select the breed collection. The page will use the collection's name, image, description, and products."
+        }
+    ],
+    "presets": [
+        {
+            "name": "Breed Landing Page"
+        }
+    ]
 }
 {% endschema %}

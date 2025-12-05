@@ -1,85 +1,49 @@
 {% doc %}
-  Renders the "Puppys R Us Difference" section with three feature columns.
+    Renders the "Puppys R Us Difference" section with three feature columns.
   
   This is a reusable component that can be included on any page to showcase
   the three main differentiators: We Take it Personal, Health Guarantee, and We Come to You.
 
-  @example
-  {% render 'puppiesrus-difference' %}
+    @example
+    {% render 'puppiesrus-difference' %}
 {% enddoc %}
 
 <div class="text-center pt-10">
-  <h2
-    class="inline-block bg-primary text-white font-titles text-center mx-auto mb-0 pt-0.5 px-4 text-5xl leading-tight"
-    style="border-top-left-radius:.25em;border-top-right-radius:.25em;"
-  >
-    The Puppys R Us Difference
-  </h2>
+    <h2
+        class="inline-block bg-primary text-white font-titles text-center mx-auto mb-0 pt-0.5 px-4 text-5xl leading-tight"
+        style="border-top-left-radius:.25em;border-top-right-radius:.25em;"
+    >
+        The Puppys R Us Difference
+    </h2>
 </div>
 
 <section id="puppiesrus-difference" class="bg-bg-light border-t-[0.65rem] border-t-primary">
-  <div class="container mt-5 pb-5">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 py-12">
-      <div class="text-center">
-        <img
-          class="mx-auto"
-          src="https://dr9yafd9jyp80.cloudfront.net/pru/we-take-it-personal.webp"
-          alt="We Take it Personal"
-          width="140"
-          height="140"
-          title="We Take it Personal"
-          decoding="async"
-          loading="lazy"
-        >
-        <h3 class="mt-6 mb-4 text-primary font-titles text-4xl leading-tight font-bold">We Take it Personal!</h3>
-        <p>
-          We have decades of experience in caring for and raising our own puppies, and we work only with other breeders
-          who share our passion and commitment for&hellip;
-        </p>
-        <p class="mt-4">
-          <a class="btn btn-secondary" href="/pages/about">Learn more</a>
-        </p>
-      </div>
-      <div class="text-center">
-        <img
-          class="mx-auto"
-          src="https://dr9yafd9jyp80.cloudfront.net/pru/health-guarantee.webp"
-          alt="Health Guarantee"
-          width="140"
-          height="140"
-          title="Health Guarantee"
-          decoding="async"
-          loading="lazy"
-        >
-        <h3 class="mt-6 mb-4 text-primary font-titles text-4xl leading-tight font-bold">Health Guarantee</h3>
-        <p>
-          Our commitment to you, our new puppy family, is for a lifetime. We understand the importance of receiving a
-          healthy happy puppy, and we work hard every day...
-        </p>
-        <p class="mt-4">
-          <a class="btn btn-secondary" href="/pages/health-guarantee">Learn more</a>
-        </p>
-      </div>
-      <div class="text-center">
-        <img
-          class="mx-auto"
-          src="https://dr9yafd9jyp80.cloudfront.net/pru/travel.webp"
-          alt="We Come to You"
-          width="140"
-          height="140"
-          title="We Come to You"
-          decoding="async"
-          loading="lazy"
-        >
-        <h3 class="mt-6 mb-4 text-primary font-titles text-4xl leading-tight font-bold">We Come to You</h3>
-        <p>
-          We offer several travel options to choose from and will help you find the one that meets the needs of your
-          family. We handle the details from start to finish so the&hellip;
-        </p>
-        <p class="mt-4">
-          <a class="btn btn-secondary" href="/pages/travel">Learn more</a>
-        </p>
-      </div>
+    <div class="container mt-5 pb-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 py-12 justify-items-center">
+            <div class="text-center mb-6">
+                <img class="mx-auto" src="https://dr9yafd9jyp80.cloudfront.net/pru/we-take-it-personal.webp" alt="We Take it Personal" width="140" height="140" title="We Take it Personal" decoding="async" loading="lazy">
+                <h3 class="mt-6 mb-1 text-primary font-titles text-4xl leading-tight font-bold">We Take it Personal!</h3>
+                <p>We have decades of experience in caring for and raising our own puppies, and we work only with other breeders who share our passion and commitment for&hellip;</p>
+                <p class="mt-4">
+                    <a class="btn btn-secondary inline-flex" href="/pages/about">Learn more</a>
+                </p>
+            </div>
+            <div class="text-center mb-6">
+                <img class="mx-auto" src="https://dr9yafd9jyp80.cloudfront.net/pru/health-guarantee.webp" alt="Health Guarantee" width="140" height="140" title="Health Guarantee" decoding="async" loading="lazy">
+                <h3 class="mt-6 mb-1 text-primary font-titles text-4xl leading-tight font-bold">Health Guarantee</h3>
+                <p>Our commitment to you, our new puppy family, is for a lifetime. We understand the importance of receiving a healthy happy puppy, and we work hard every day...</p>
+                <p class="mt-4">
+                    <a class="btn btn-secondary inline-flex" href="/pages/health-guarantee">Learn more</a>
+                </p>
+            </div>
+            <div class="text-center mb-6">
+                <img class="mx-auto" src="https://dr9yafd9jyp80.cloudfront.net/pru/travel.webp" alt="We Come to You" width="140" height="140" title="We Come to You" decoding="async" loading="lazy">
+                <h3 class="mt-6 mb-1 text-primary font-titles text-4xl leading-tight font-bold">We Come to You</h3>
+                <p>We offer several travel options to choose from and will help you find the one that meets the needs of your family. We handle the details from start to finish so the&hellip;</p>
+                <p class="mt-4">
+                    <a class="btn btn-secondary inline-flex" href="/pages/travel">Learn more</a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </section>

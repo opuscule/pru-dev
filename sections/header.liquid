@@ -44,7 +44,8 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <nav class="header__menu" aria-label="{{ 'general.accessibility.nav_main' | t }}">
+                <!-- Desktop Menu -->
+                <nav class="header__menu hidden min-[992px]:block" aria-label="{{ 'general.accessibility.nav_main' | t }}">
                     <ul class="header__menu-list flex gap-x-4" role="list">
                         <li class="header__menu-item whitespace-nowrap relative group">
                             <a href="/collections/all" class="header__menu-link submenu-link flex items-center gap-2">
@@ -145,9 +146,94 @@
                         </li>
                     </ul>
                 </nav>
+
+                <!-- Hamburger Button -->
+                <button id="mobile-menu-toggle" class="block min-[992px]:hidden p-2" aria-label="Toggle menu">
+                    <svg id="icon-hamburger" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 hidden">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="absolute top-full left-0 w-full bg-white shadow-lg z-50 hidden border-t border-gray-100">
+        <nav class="container max-w-[var(--width-container-content)] mx-auto px-4 py-6" aria-label="Mobile menu">
+            <ul class="flex flex-col gap-4 list-none m-0 p-0">
+                <li>
+                    <a href="/collections/all" class="text-lg font-medium text-body-copy block py-2">Available Puppies</a>
+                    <ul class="pl-4 mt-2 flex flex-col gap-2 border-l-2 border-gray-100">
+                        <li><a href="/collections/all" class="text-body-copy block py-1">All Puppies</a></li>
+                        {% for collection in collections %}
+                            {% if collection.metafields.custom.shown_on_website == true %}
+                                <li>
+                                    <a href="{{ collection.url }}" class="text-body-copy block py-1">{{ collection.title }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="text-lg font-medium text-body-copy block py-2">How to Purchase</a>
+                    <ul class="pl-4 mt-2 flex flex-col gap-2 border-l-2 border-gray-100">
+                        <li><a href="/pages/how-to-purchase" class="text-body-copy block py-1">Purchase</a></li>
+                        <li><a href="/pages/financing" class="text-body-copy block py-1">Financing</a></li>
+                        <li><a href="/pages/health-guarantee" class="text-body-copy block py-1">Health Guarantee</a></li>
+                        <li><a href="/pages/travel" class="text-body-copy block py-1">Travel</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="text-lg font-medium text-body-copy block py-2">Testimonials</a>
+                    <ul class="pl-4 mt-2 flex flex-col gap-2 border-l-2 border-gray-100">
+                        <li><a href="/pages/happy-families" class="text-body-copy block py-1">Happy Families</a></li>
+                        <li><a href="/pages/share-experience" class="text-body-copy block py-1">Share Your Experience</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="text-lg font-medium text-body-copy block py-2">Company</a>
+                    <ul class="pl-4 mt-2 flex flex-col gap-2 border-l-2 border-gray-100">
+                        <li><a href="/pages/learning-center" class="text-body-copy block py-1">Learning Center</a></li>
+                        <li><a href="/pages/about" class="text-body-copy block py-1">About</a></li>
+                        <li><a href="/pages/contact-us" class="text-body-copy block py-1">Contact Us</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 border-t border-gray-100">
+                    <a href="{{ routes.cart_url }}" class="flex items-center gap-2 text-lg font-medium text-body-copy py-2">
+                        <span>Cart</span>
+                        <div class="relative w-6 h-6">
+                            {%- if cart.item_count > 0 -%}
+                                <div class="rounded-full bg-primary w-3 h-3 flex items-center justify-center top-0 right-0 absolute"></div>
+                            {%- endif -%}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path stroke="#000" stroke-linecap="round" stroke-width="2.25" d="M10 20h.012M18.49 20.026h.012"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2 2h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L22 7H7.08"/>
+                            </svg>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconHamburger = document.getElementById('icon-hamburger');
+            const iconClose = document.getElementById('icon-close');
+
+            if (toggleBtn && mobileMenu) {
+                toggleBtn.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                    iconHamburger.classList.toggle('hidden');
+                    iconClose.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
 </header>
 
 {% stylesheet %}
