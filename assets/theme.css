@@ -720,10 +720,6 @@ video {
   left: -1rem !important;
 }
 
-.\!-left-6 {
-  left: -1.5rem !important;
-}
-
 .\!-right-4 {
   right: -1rem !important;
 }
@@ -834,6 +830,10 @@ video {
 
 .top-full {
   top: 100%;
+}
+
+.\!-left-6 {
+  left: -1.5rem !important;
 }
 
 .isolate {
@@ -1063,12 +1063,20 @@ video {
   margin-top: 3rem;
 }
 
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
 .mt-16 {
   margin-top: 4rem;
 }
 
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.mt-20 {
+  margin-top: 5rem;
 }
 
 .mt-3 {

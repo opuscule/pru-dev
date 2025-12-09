@@ -1,7 +1,62 @@
 <section class="w-full bg-bg-extralight pt-[5rem]" style="padding-bottom:200px;margin-bottom:-200px">
     <div class="rounded-top-left w-auto bg-bg-light rounded-none rounded-tl-[12.5vw] ms-[4vw] py-16" style="padding-bottom:200px;margin-bottom:-200px">
         <div class="max-w-[var(--width-container-content)] mx-auto px-5">
-            {{ page.content }}
+            <h1 class="text-5xl font-bold mb-6 mt-14">{{ page.title }}</h1>
+            <div class="prose-content">
+                {{ page.content }}
+            </div>
         </div>
     </div>
 </section>
+
+<style>
+    .prose-content h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .prose-content h3 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    .prose-content h4 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .prose-content p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+    .prose-content ul,
+    .prose-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .prose-content ul {
+        list-style-type: disc;
+    }
+    .prose-content ol {
+        list-style-type: decimal;
+    }
+    .prose-content li {
+        margin-bottom: 0.25rem;
+    }
+    .prose-content a {
+        color: var(--color-accent);
+        text-decoration: underline;
+    }
+    .prose-content a:hover {
+        opacity: 0.8;
+    }
+    .prose-content strong {
+        font-weight: bold;
+    }
+    .prose-content em {
+        font-style: italic;
+    }
+</style>
