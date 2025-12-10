@@ -3199,6 +3199,10 @@ video {
     margin-bottom: 0px;
   }
 
+  .md\:ml-16 {
+    margin-left: 4rem;
+  }
+
   .md\:mt-0 {
     margin-top: 0px;
   }
@@ -3294,6 +3298,10 @@ video {
 
   .md\:p-10 {
     padding: 2.5rem;
+  }
+
+  .md\:p-8 {
+    padding: 2rem;
   }
 
   .md\:pr-5 {
