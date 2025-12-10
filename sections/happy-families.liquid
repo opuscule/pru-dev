@@ -1,6 +1,6 @@
-<section id="happy-families" class="pt-24 pb-24 bg-[var(--color-bg-extralight)]">
+<section id="happy-families" class="pt-24 bg-[var(--color-bg-extralight)]" style="padding-bottom:200px;margin-bottom:-200px">
   <div class="max-w-[var(--width-container-content)] mx-auto px-4">
-    <h2 class="font-titles text-center text-5xl mb-16">Happy Families</h2>
+    <h1 class="font-titles text-center text-5xl md:text-7xl font-bold mb-12">Happy Families</h1>
     
     <!-- Masonry Grid Container -->
     <div id="happy-families-grid" class="masonry-grid"></div>
@@ -55,7 +55,7 @@
             }
           }
           
-          const stars = '<span class="text-[#F2635B]">★</span>'.repeat(5);
+          const stars = '<span class="text-[var(--color-primary)]">★</span>'.repeat(5);
           
           // Generate card HTML with masonry-friendly structure
           cards.push(`
@@ -73,10 +73,11 @@
                 </div>
                 <div class="flex-1 pt-2">
                   <div class="mb-2 leading-none text-lg">${stars}</div>
+                  <h3 class="font-titles text-3xl tracking-wide mb-4 leading-tight">${f.title || ''}</h3>
                 </div>
               </div>
-              <h3 class="font-titles text-3xl tracking-wide mb-4 leading-tight" style="font-family: var(--font-titles);">${f.title || ''}</h3>
-              <p class="text-[1.1rem] leading-relaxed text-gray-800">${f.quote || ''}</p>
+              
+              <p class="leading-relaxed text- text-gray-800">${f.quote || ''}</p>
             </div>`);
           
           // Format date for schema (YYYY-MM-DD format)
