@@ -350,7 +350,7 @@
         if (!gallery) return;
 
         const lightbox = document.querySelector('[data-lightbox]');
-        const slides = [...lightbox.querySelectorAll('.pg-slide')];
+        const slides = [...lightbox.querySelectorAll('[data-slide]')];
         const thumbs = [...gallery.querySelectorAll('.pg-thumb')];
         const openers = [...gallery.querySelectorAll('[data-open-lightbox]')];
         const btnPrev = lightbox.querySelector('[data-prev]');
