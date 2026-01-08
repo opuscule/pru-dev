@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
     <head>
+        {% # Redirect /breed/* URLs to /collections/* %}
+        {% if request.path contains '/breed/' %}
+          {% assign breed = request.path | remove: '/breed/' | remove: '/' %}
+          <script>
+            window.location.href = '/collections/{{ breed }}';
+          </script>
+        {% endif %}
+
         {% # Load and preload the critical CSS %}
         {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
