@@ -115,9 +115,8 @@
                 <div class="w-full md:w-[48%] min-w-0">
                     <div class="product-info flex-1">
                         {% if product.metafields.custom.availability == 'Reserved' %}
-                            <div class="puppy-status">
-                                This puppy is not available:
-                                <strong>I AM RESERVED</strong>
+                            <div class="text-center border-2 bg-white border-primary text-body-copy p-6 mb-4">
+                                This puppy is not available: <strong>I AM RESERVED</strong>
                             </div>
                         {% endif %}
                         {% if product.metafields.custom.availability == 'Sold, but Show' %}
