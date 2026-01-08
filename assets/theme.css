@@ -3301,6 +3301,10 @@ video {
     width: 48%;
   }
 
+  .md\:w-3\/5 {
+    width: 60%;
+  }
+
   .md\:max-w-prose {
     max-width: 65ch;
   }
