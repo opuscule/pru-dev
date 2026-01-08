@@ -1440,6 +1440,10 @@ video {
   max-width: 36rem;
 }
 
+.max-w-prose {
+  max-width: 65ch;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -3274,6 +3278,10 @@ video {
 
   .md\:w-\[48\%\] {
     width: 48%;
+  }
+
+  .md\:max-w-prose {
+    max-width: 65ch;
   }
 
   .md\:grid-cols-2 {
