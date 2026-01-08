@@ -1107,6 +1107,10 @@ video {
   margin-top: auto;
 }
 
+.mb-11 {
+  margin-bottom: 2.75rem;
+}
+
 .block {
   display: block;
 }
@@ -3247,6 +3251,10 @@ video {
 
   .md\:mt-0 {
     margin-top: 0px;
+  }
+
+  .md\:mb-11 {
+    margin-bottom: 2.75rem;
   }
 
   .md\:block {
