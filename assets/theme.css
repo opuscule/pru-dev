@@ -1131,6 +1131,10 @@ video {
   margin-top: auto;
 }
 
+.mt-28 {
+  margin-top: 7rem;
+}
+
 .block {
   display: block;
 }
