@@ -1271,6 +1271,10 @@ video {
   height: 100%;
 }
 
+.h-\[86vh\] {
+  height: 86vh;
+}
+
 .max-h-0 {
   max-height: 0px;
 }
@@ -1414,6 +1418,10 @@ video {
 .w-max {
   width: -moz-max-content;
   width: max-content;
+}
+
+.w-\[min\(92vw\2c 1200px\)\] {
+  width: min(92vw,1200px);
 }
 
 .min-w-0 {
@@ -2259,6 +2267,11 @@ video {
 
 .fill-white {
   fill: var(--color-white);
+}
+
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .object-cover {

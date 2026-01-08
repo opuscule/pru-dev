@@ -74,14 +74,14 @@
 
                         <!-- Lightbox -->
                         <div class="pg-lightbox fixed inset-0 bg-black/80 hidden items-center justify-center z-[9999]" data-lightbox aria-hidden="true">
-                            <button class="absolute top-4 right-5 text-4xl text-white bg-transparent border-0 cursor-pointer" data-close aria-label="Close">&times;</button>
-                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer left-4" data-prev aria-label="Previous">&#10094;</button>
-                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer right-4" data-next aria-label="Next">&#10095;</button>
+                            <button class="absolute top-4 right-5 text-4xl text-white bg-transparent border-0 cursor-pointer z-10" data-close aria-label="Close">&times;</button>
+                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer left-4 z-10" data-prev aria-label="Previous">&#10094;</button>
+                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer right-4 z-10" data-next aria-label="Next">&#10095;</button>
 
-                            <div class="max-w-[min(92vw,1200px)] max-h-[86vh] relative">
+                            <div class="relative w-[min(92vw,1200px)] h-[86vh] flex items-center justify-center">
                                 {%- for image in imgs -%}
                                     <img
-                                        class="max-w-full max-h-[86vh] block mx-auto"
+                                        class="absolute inset-0 w-full h-full object-contain"
                                         data-slide="{{ forloop.index0 }}"
                                         src="{{ image | image_url: width: 1600 }}"
                                         alt="{{ image.alt | escape }}"
@@ -91,21 +91,6 @@
                                         {% endunless %}
                                     >
                                 {%- endfor -%}
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        document.querySelectorAll('[data-slide]').forEach(function (img) {
-                                            if (img.complete) {
-                                                if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                                                if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                                            } else {
-                                                img.addEventListener('load', function () {
-                                                    if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                                                    if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                                                });
-                                            }
-                                        });
-                                    });
-                                </script>
                             </div>
                         </div>
                     </div>
