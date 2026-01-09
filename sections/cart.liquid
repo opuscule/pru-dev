@@ -5,7 +5,7 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
-{% stylesheet %}
+<style>
   .cart-item-pod {
     background-color: var(--color-bg-card);
     border-radius: 30px;
@@ -47,13 +47,10 @@
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
   }
-{% endstylesheet %}
-
-<div class="text-center mb-8">
-  <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">Order Summary</h1>
-</div>
+</style>
 
 <section class="bg-bg-extralight py-20" data-cart-section>
+  <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl text-center">Order Summary</h1>
   <div class="w-full px-4 mx-auto">
     <div class="max-w-[var(--width-container-content)] mx-auto">
       {% comment %} Fetch the Puppy Delivery Option product {% endcomment %}
