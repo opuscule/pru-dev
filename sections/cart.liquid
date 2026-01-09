@@ -76,10 +76,13 @@
                   {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
 
                   <!-- each cart item -->
-                  <a class="" href="{{ item.url }}" data-line="{{ item.key }}">
+                  
+                  <!-- border radius, background color --color-bg-light,  -->
+                  <a class="block bg-bg-light rounded-[30px] overflow-hidden" href="{{ item.url }}" data-line="{{ item.key }}">
                     <div class="flex">
-                      <div class="w-1/4 background-cover bg-no-repeat bg-center border-r-8 aspect-square" style="background-image:url({{ item.image | image_url: width: 360 }})">
-                        
+
+                      <!-- border-right 5px --color-primary -->
+                      <div class="w-1/4 bg-cover bg-no-repeat bg-center border-r-[5px] border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 360 }})">
                       </div>
                       <div class="w-3/4 p-4">
                         <h3>{{- item.product.title -}}</h3>

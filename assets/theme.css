@@ -1892,6 +1892,10 @@ video {
   border-radius: 0.75rem;
 }
 
+.rounded-\[30px\] {
+  border-radius: 30px;
+}
+
 .rounded-l-3xl {
   border-top-left-radius: 1.5rem;
   border-bottom-left-radius: 1.5rem;
@@ -2026,6 +2030,10 @@ video {
 
 .border-r-8 {
   border-right-width: 8px;
+}
+
+.border-r-\[5px\] {
+  border-right-width: 5px;
 }
 
 .border-solid {
