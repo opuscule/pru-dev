@@ -78,8 +78,11 @@
                   <!-- each cart item -->
                   <a href="{{ item.url }}" data-line="{{ item.key }}">
                     <div class="flex">
-                      <div class="w-full max-w-1/3" style="background-image:url({{ item.image | image_url: width: 360 }})">
+                      <div class="w-full max-w-1/3 background-cover" style="background-image:url({{ item.image | image_url: width: 360 }})">
                         
+                      </div>
+                      <div class="">
+
                       </div>
                     </div>
                   </a>
