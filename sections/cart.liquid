@@ -104,67 +104,7 @@
                     </div>
                   </a>
 
-                  <div class="cart-item-pod mb-8" data-line="{{ item.key }}">
-                    <div class="flex flex-wrap -mx-4">
-                      <div class="w-full md:w-3/12 px-4">
-                        <div class="w-full h-full">
-                          <figure class="m-0 relative">
-                            <a href="{{ item.url }}">
-                              {% if item.image %}
-                                <img
-                                  src="{{ item.image | image_url: width: 360 }}"
-                                  alt="{{ item.title | escape }}"
-                                  loading="lazy"
-                                  width="360"
-                                  height="360"
-                                  class="w-full h-full max-h-[290px] object-cover rounded-t-[30px] rounded-bl-none border-r-0 md:rounded-l-[30px] md:rounded-tr-none md:border-r-[7px] md:border-primary"
-                                >
-                              {% else %}
-                                {{ 'product-apparel-1' | placeholder_svg_tag }}
-                              {% endif %}
-                            </a>
-                          </figure>
-                        </div>
-                      </div>
 
-                      <div class="w-full md:w-9/12 px-4">
-                        <div class="flex justify-between items-start p-4">
-                          <div class="flex-1">
-                            <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl mb-2">
-                              <a href="{{ item.url }}" class="text-[#646665] no-underline hover:text-primary">
-                                {{- item.product.title -}}
-                              </a>
-                            </h2>
-
-                            
-
-                            {% if item.properties and item.properties.size > 0 %}
-                              <details class="mt-2">
-                                <summary class="cursor-pointer">Details</summary>
-                                <ul class="mt-2 ml-0 list-none">
-                                  {% for p in item.properties %}
-                                    {% unless p.last == blank %}
-                                      <li>
-                                        <strong>{{ p.first }}:</strong> {{ p.last }}
-                                      </li>
-                                    {% endunless %}
-                                  {% endfor %}
-                                </ul>
-                              </details>
-                            {% endif %}
-
-                            <a
-                              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
-                              class="inline-block mt-5 text-[#646665] no-underline text-base hover:text-primary"
-                              >Remove</a
-                            >
-                          </div>
-
-                          <div class="text-[#646665] text-3xl font-body-copy ml-4">{{ unit_price | money }}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 {% endunless %}
               {% endfor %}
             {% endif %}
