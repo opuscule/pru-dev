@@ -47,6 +47,67 @@
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
   }
+
+  /* Collapsible section styles */
+  .cart-accordion {
+    background-color: var(--color-bg-light);
+    border-radius: 30px;
+    margin-top: 0.75rem;
+    overflow: hidden;
+  }
+
+  .cart-accordion summary {
+    padding: 2rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cart-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .cart-accordion summary::marker {
+    display: none;
+  }
+
+  .cart-accordion-title {
+    margin: 0;
+  }
+
+  .cart-accordion-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .cart-accordion[open] .cart-accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .cart-accordion-content {
+    padding: 0 2rem 2rem 2rem;
+  }
+
+  .cart-accordion-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #646665;
+  }
+
+  .cart-accordion-status.complete {
+    color: #22c55e;
+  }
+
+  .status-icon {
+    width: 20px;
+    height: 20px;
+  }
 </style>
 
 <section class="bg-bg-extralight py-16" data-cart-section>
@@ -108,19 +169,31 @@
               {% endfor %}
             {% endif %}
 
+
+            <!-- Delivery Options section -->
             {% comment %} Only show delivery options if there's a puppy in the cart {% endcomment %}
             {% if has_puppy and delivery_product %}
-              <div class="p-8 mt-3 bg-bg-light rounded-[30px]">
-                <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">
-                  Choose Delivery Option
-                </h2>
+              <details class="cart-accordion" id="delivery-accordion">
+                <summary>
+                  <div>
+                    <h2 class="cart-accordion-title font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665]">
+                      Choose Delivery Option
+                    </h2>
+                    <div class="cart-accordion-status mt-2" id="delivery-status">
+                      <span>Not selected</span>
+                    </div>
+                  </div>
+                  <svg class="cart-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </summary>
+                <div class="cart-accordion-content">
+                  {% comment %} Hidden container for variant descriptions {% endcomment %}
+                  <div id="variant-descriptions" style="display: none;">
+                    {{ delivery_product.description }}
+                  </div>
 
-                {% comment %} Hidden container for variant descriptions {% endcomment %}
-                <div id="variant-descriptions" style="display: none;">
-                  {{ delivery_product.description }}
-                </div>
-
-                <div id="delivery-options" class="space-y-3">
+                  <div id="delivery-options" class="space-y-3">
                   {% for variant in delivery_product.variants %}
                     {% comment %} Map variant title to description div ID {% endcomment %}
                     {% assign description_id = '' %}
@@ -162,8 +235,9 @@
                       </div>
                     </div>
                   {% endfor %}
+                  </div>
                 </div>
-              </div>
+              </details>
 
               <script>
                 // Move descriptions from hidden container to variant options
@@ -183,11 +257,23 @@
               </script>
             {% endif %}
 
-            <div class="p-8 mt-3 bg-bg-light rounded-[30px]">
-              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy mb-6">
-                Required Agreements
-              </h2>
 
+            <!-- Required Agreements section -->
+            <details class="cart-accordion" id="agreements-accordion">
+              <summary>
+                <div>
+                  <h2 class="cart-accordion-title font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy">
+                    Required Agreements
+                  </h2>
+                  <div class="cart-accordion-status mt-2" id="agreements-status">
+                    <span>0 of 5 completed</span>
+                  </div>
+                </div>
+                <svg class="cart-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="cart-accordion-content">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
                   <div class="checkout-agreement p-8">
@@ -197,7 +283,7 @@
                         <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
                           Health Guarantee Agreement
                         </label>
-                        <div class="text-sm mt-1">
+                        <div class="mt-1">
                           I have read and agree to the Puppys R Us
                           <a
                             href="https://puppysrusdev.myshopify.com/pages/health-guarantee"
@@ -271,7 +357,8 @@
                   </div>
                 </div>
               {% endif %}
-            </div>
+              </div>
+            </details>
           </div>
 
           <div class="w-full lg:w-3/12 px-4">
@@ -454,6 +541,57 @@
     checks.forEach((cb) => cb.addEventListener('change', syncCheckoutState));
     deliveryOptions.forEach((radio) => radio.addEventListener('change', syncCheckoutState));
     syncCheckoutState();
+
+    // Update accordion status indicators
+    function updateDeliveryStatus() {
+      const deliveryStatus = document.getElementById('delivery-status');
+      if (!deliveryStatus) return;
+      
+      const selectedRadio = document.querySelector('input[name="delivery"]:checked');
+      if (selectedRadio) {
+        const label = selectedRadio.closest('.checkout-agreement').querySelector('label');
+        const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
+        deliveryStatus.innerHTML = `
+          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>${selectedText}</span>
+        `;
+        deliveryStatus.classList.add('complete');
+      } else {
+        deliveryStatus.innerHTML = '<span>Not selected</span>';
+        deliveryStatus.classList.remove('complete');
+      }
+    }
+
+    function updateAgreementsStatus() {
+      const agreementsStatus = document.getElementById('agreements-status');
+      if (!agreementsStatus) return;
+      
+      const checkedCount = checks.filter(cb => cb.checked).length;
+      const totalCount = checks.length;
+      
+      if (checkedCount === totalCount) {
+        agreementsStatus.innerHTML = `
+          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>All agreements accepted</span>
+        `;
+        agreementsStatus.classList.add('complete');
+      } else {
+        agreementsStatus.innerHTML = `<span>${checkedCount} of ${totalCount} completed</span>`;
+        agreementsStatus.classList.remove('complete');
+      }
+    }
+
+    // Add listeners for status updates
+    checks.forEach((cb) => cb.addEventListener('change', updateAgreementsStatus));
+    deliveryOptions.forEach((radio) => radio.addEventListener('change', updateDeliveryStatus));
+    
+    // Initial status update
+    updateDeliveryStatus();
+    updateAgreementsStatus();
   });
 </script>
 
