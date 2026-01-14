@@ -180,21 +180,33 @@
                               </div>
                             {% endif %}
 
+                            {% if item.product.metafields.custom.size %}
+                              <div class="text-[#646665]">
+                                <span class="font-medium text-body-copy">Size:</span> {{ item.product.metafields.custom.size }}
+                              </div>
+                            {% endif %}
+
                             {% if item.product.metafields.custom.variety %}
                               <div class="text-[#646665]">
                                 <span class="font-medium text-body-copy">Variety:</span> {{ item.product.metafields.custom.variety }}
                               </div>
                             {% endif %}
+
+                            {% if item.product.metafields.custom.generation %}
+                              <div class="text-[#646665]">
+                                <span class="font-medium text-body-copy">Generation:</span> {{ item.product.metafields.custom.generation }}
+                              </div>
+                            {% endif %}
                           </div>
 
                           {% comment %} Registration badge if available {% endcomment %}
-                          {% if item.product.metafields.custom.registration %}
+                          {% if item.product.metafields.custom.registry %}
                             <div class="mb-3">
                               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
                                 </svg>
-                                {{ item.product.metafields.custom.registration }} Registered
+                                {{ item.product.metafields.custom.registry }} Registered
                               </span>
                             </div>
                           {% endif %}
