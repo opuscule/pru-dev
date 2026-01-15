@@ -516,7 +516,11 @@
       const selectedId = deliveryItem.variant_id;
 
       radios.forEach((radio) => {
-        radio.checked = Number(radio.value) === selectedId;
+        if (Number(radio.value) === selectedId) {
+          radio.checked = true;
+          // Dispatch change event to update status display
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
       });
     }
   });
