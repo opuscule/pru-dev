@@ -12,7 +12,7 @@
     display: none;
   }
 
-  /* Accordion icon rotation on open - uses group-open */
+  /* Accordion icon rotation on open */
   details[open] .accordion-icon {
     transform: rotate(180deg);
   }
@@ -20,6 +20,91 @@
   /* Status complete state - toggled via JS */
   .status-complete {
     color: #22c55e;
+  }
+
+  /* Custom radio button styles */
+  .custom-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #b1b1b1;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .custom-radio:hover {
+    border-color: var(--color-primary);
+  }
+
+  .custom-radio:checked {
+    border-color: var(--color-primary);
+  }
+
+  .custom-radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* Custom checkbox styles */
+  .custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #b1b1b1;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .custom-checkbox:hover {
+    border-color: var(--color-primary);
+  }
+
+  .custom-checkbox:checked {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+  }
+
+  .custom-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 8px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+  }
+
+  /* Clickable card styles */
+  .selectable-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .selectable-card:hover {
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  .selectable-card:has(input:checked) {
+    box-shadow: 0 0 0 3px var(--color-primary);
   }
 </style>
 
@@ -178,24 +263,24 @@
                       {% assign description_id = 'decide-later' %}
                     {% endif %}
 
-                    <div class="bg-white rounded-[20px] p-8">
+                    <label class="selectable-card bg-white rounded-[20px] p-8 block">
                       <div class="flex items-start gap-4">
                         <input
                           type="radio"
                           name="delivery"
                           value="{{ variant.id }}"
-                          class="mt-1 checked:bg-black checked:border-black"
+                          class="custom-radio mt-1"
                           data-description-id="{{ description_id }}"
                         >
                         <div class="flex-1">
-                          <label class="text-lg font-medium cursor-pointer select-none block">
+                          <span class="text-lg font-medium cursor-pointer select-none block">
                             {{ variant.title }}
                             {% if variant.price > 0 %}
                               ({{ variant.price | money }})
                             {% else %}
                               (Free)
                             {% endif %}
-                          </label>
+                          </span>
                           {% if description_id != '' %}
                             <div
                               class="variant-description text-sm text-[#646665] mt-2"
@@ -204,7 +289,7 @@
                           {% endif %}
                         </div>
                       </div>
-                    </div>
+                    </label>
                   {% endfor %}
                   </div>
                 </div>
@@ -247,85 +332,87 @@
               <div class="px-8 pb-8">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
-                  <div class="bg-white rounded-[20px] p-8">
+                  <label class="selectable-card bg-white rounded-[20px] p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="certifyAge">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="certifyAge">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Health Guarantee Agreement
-                        </label>
-                        <div class="mt-1">
+                        </span>
+                        <div class="mt-1 text-sm text-[#646665]">
                           I have read and agree to the Puppys R Us
                           <a
                             href="https://puppysrusdev.myshopify.com/pages/health-guarantee"
                             class="text-primary no-underline hover:underline"
+                            onclick="event.stopPropagation();"
                             >Health Guarantee</a
                           >.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="bg-white rounded-[20px] p-8">
+                  <label class="selectable-card bg-white rounded-[20px] p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="understandTerms">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="understandTerms">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Terms & Conditions / Purchase Agreement
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-[#646665]">
                           I confirm I am 18+ and agree to the Puppys R Us
                           <a
                             href="https://puppysrusdev.myshopify.com/pages/terms-of-service"
                             class="text-primary no-underline hover:underline"
+                            onclick="event.stopPropagation();"
                             >Terms & Conditions</a
                           >.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="bg-white rounded-[20px] p-8">
+                  <label class="selectable-card bg-white rounded-[20px] p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Veterinary Care Acknowledgment
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-[#646665]">
                           I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving
                           him/her.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="bg-white rounded-[20px] p-8">
+                  <label class="selectable-card bg-white rounded-[20px] p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement1">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement1">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Transportation Agreement
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-[#646665]">
                           I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I
                           will be contacted to confirm details.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="bg-white rounded-[20px] p-8">
+                  <label class="selectable-card bg-white rounded-[20px] p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement2">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement2">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Puppy Confirmation
-                        </label>
-                        <div class="text-sm mt-1">I confirm I am purchasing the puppy listed in my order summary.</div>
+                        </span>
+                        <div class="text-sm mt-1 text-[#646665]">I confirm I am purchasing the puppy listed in my order summary.</div>
                       </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
               {% endif %}
               </div>
@@ -521,7 +608,7 @@
       
       const selectedRadio = document.querySelector('input[name="delivery"]:checked');
       if (selectedRadio) {
-        const label = selectedRadio.closest('.bg-white').querySelector('label');
+        const label = selectedRadio.closest('.selectable-card').querySelector('span');
         const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
         deliveryStatus.innerHTML = `
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
