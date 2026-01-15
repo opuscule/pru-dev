@@ -13,6 +13,10 @@
   }
 
   /* Accordion icon rotation on open */
+  details .accordion-icon {
+    transition: transform 0.3s ease-out;
+  }
+
   details[open] .accordion-icon {
     transform: rotate(180deg);
   }
@@ -31,6 +35,12 @@
   .accordion-content-inner {
     overflow: hidden;
     min-height: 0;
+  }
+
+  /* Add padding inside inner wrapper to prevent box-shadow clipping */
+  .accordion-content-padding {
+    padding: 4px 2rem 2rem 2rem;
+    margin: -4px 0 0 0;
   }
 
   /* Status complete state - toggled via JS */
@@ -120,7 +130,7 @@
   }
 
   .selectable-card:has(input:checked) {
-    box-shadow: 0 0 0 3px var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary);
   }
 </style>
 
