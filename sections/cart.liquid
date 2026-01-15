@@ -521,18 +521,18 @@
       
       const selectedRadio = document.querySelector('input[name="delivery"]:checked');
       if (selectedRadio) {
-        const label = selectedRadio.closest('.checkout-agreement').querySelector('label');
+        const label = selectedRadio.closest('.bg-white').querySelector('label');
         const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
         deliveryStatus.innerHTML = `
-          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
           <span>${selectedText}</span>
         `;
-        deliveryStatus.classList.add('complete');
+        deliveryStatus.classList.add('status-complete');
       } else {
         deliveryStatus.innerHTML = '<span>Not selected</span>';
-        deliveryStatus.classList.remove('complete');
+        deliveryStatus.classList.remove('status-complete');
       }
     }
 
@@ -545,15 +545,15 @@
       
       if (checkedCount === totalCount) {
         agreementsStatus.innerHTML = `
-          <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
           <span>All agreements accepted</span>
         `;
-        agreementsStatus.classList.add('complete');
+        agreementsStatus.classList.add('status-complete');
       } else {
         agreementsStatus.innerHTML = `<span>${checkedCount} of ${totalCount} completed</span>`;
-        agreementsStatus.classList.remove('complete');
+        agreementsStatus.classList.remove('status-complete');
       }
     }
 
