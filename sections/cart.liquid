@@ -28,10 +28,6 @@
     transition: grid-template-rows 0.3s ease-out;
   }
 
-  details[open] .accordion-content-wrapper {
-    grid-template-rows: 1fr;
-  }
-
   .accordion-content-inner {
     overflow: hidden;
     min-height: 0;
@@ -685,6 +681,39 @@
     // Initial status update
     updateDeliveryStatus();
     updateAgreementsStatus();
+
+    // Smooth accordion animation for details elements
+    document.querySelectorAll('details').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const contentWrapper = details.querySelector('.accordion-content-wrapper');
+      
+      if (!summary || !contentWrapper) return;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (details.open) {
+          // Closing: animate first, then remove open
+          contentWrapper.style.gridTemplateRows = '0fr';
+          setTimeout(() => {
+            details.open = false;
+          }, 300);
+        } else {
+          // Opening: add open first, then animate
+          details.open = true;
+          // Force reflow
+          contentWrapper.offsetHeight;
+          contentWrapper.style.gridTemplateRows = '1fr';
+        }
+      });
+
+      // Set initial state based on open attribute
+      if (details.open) {
+        contentWrapper.style.gridTemplateRows = '1fr';
+      } else {
+        contentWrapper.style.gridTemplateRows = '0fr';
+      }
+    });
   });
 </script>
 
