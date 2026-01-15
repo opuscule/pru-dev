@@ -184,37 +184,37 @@
                           <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-base md:text-lg mb-3">
                             {% if item.product.metafields.custom.sex %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Sex:</span> {{ item.product.metafields.custom.sex }}
+                                <span class="font-semibold text-body-copy">Sex:</span> {{ item.product.metafields.custom.sex }}
                               </div>
                             {% endif %}
                             
                             {% if item.product.metafields.custom.color %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Color:</span> {{ item.product.metafields.custom.color }}
+                                <span class="font-semibold text-body-copy">Color:</span> {{ item.product.metafields.custom.color }}
                               </div>
                             {% endif %}
                             
                             {% if weeks_old %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Age:</span> {{ weeks_old | floor }} weeks
+                                <span class="font-semibold text-body-copy">Age:</span> {{ weeks_old | floor }} weeks
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.size %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Size:</span> {{ item.product.metafields.custom.size }}
+                                <span class="font-semibold text-body-copy">Size:</span> {{ item.product.metafields.custom.size }}
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.variety %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Variety:</span> {{ item.product.metafields.custom.variety }}
+                                <span class="font-semibold text-body-copy">Variety:</span> {{ item.product.metafields.custom.variety }}
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.generation %}
                               <div class="text-body-copy">
-                                <span class="font-medium text-body-copy">Generation:</span> {{ item.product.metafields.custom.generation }}
+                                <span class="font-semibold text-body-copy">Generation:</span> {{ item.product.metafields.custom.generation }}
                               </div>
                             {% endif %}
                           </div>
