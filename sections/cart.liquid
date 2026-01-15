@@ -6,107 +6,20 @@
 {% endcomment %}
 
 <style>
-  .cart-item-pod {
-    background-color: var(--color-bg-card);
-    border-radius: 30px;
-  }
-
-  .order-summary-box {
-    background-color: var(--color-bg-card);
-    border-radius: 30px;
-  }
-
-  .order-summary-box ul li {
-    border-bottom: 1px solid #b1b1b1;
-  }
-
-  .checkout-agreement {
-    background-color: var(--color-white);
-    border-radius: 20px;
-  }
-
-  .form-check-input:checked {
-    background-color: var(--color-black);
-    border-color: var(--color-black);
-  }
-
-  .checkout-btn {
-    border-radius: 10rem;
-    font-size: 1.125rem;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .checkout-btn:disabled {
-    background-color: #d7d5ce;
-    border-color: #d7d5ce;
-    color: var(--color-white);
-  }
-
-  .checkout-btn:not(:disabled):hover {
-    background-color: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
-  }
-
-  /* Collapsible section styles */
-  .cart-accordion {
-    background-color: var(--color-bg-light);
-    border-radius: 30px;
-    margin-top: 0.75rem;
-    overflow: hidden;
-  }
-
-  .cart-accordion summary {
-    padding: 2rem;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .cart-accordion summary::-webkit-details-marker {
+  /* Hide default details marker - no Tailwind equivalent */
+  details summary::-webkit-details-marker,
+  details summary::marker {
     display: none;
   }
 
-  .cart-accordion summary::marker {
-    display: none;
-  }
-
-  .cart-accordion-title {
-    margin: 0;
-  }
-
-  .cart-accordion-icon {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.3s ease;
-    flex-shrink: 0;
-  }
-
-  .cart-accordion[open] .cart-accordion-icon {
+  /* Accordion icon rotation on open - uses group-open */
+  details[open] .accordion-icon {
     transform: rotate(180deg);
   }
 
-  .cart-accordion-content {
-    padding: 0 2rem 2rem 2rem;
-  }
-
-  .cart-accordion-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #646665;
-  }
-
-  .cart-accordion-status.complete {
+  /* Status complete state - toggled via JS */
+  .status-complete {
     color: #22c55e;
-  }
-
-  .status-icon {
-    width: 20px;
-    height: 20px;
   }
 </style>
 
@@ -231,21 +144,21 @@
             <!-- Delivery Options section -->
             {% comment %} Only show delivery options if there's a puppy in the cart {% endcomment %}
             {% if has_puppy and delivery_product %}
-              <details class="cart-accordion" id="delivery-accordion">
-                <summary>
+              <details class="bg-bg-light rounded-[30px] mt-3 overflow-hidden" id="delivery-accordion">
+                <summary class="p-8 cursor-pointer list-none flex justify-between items-center">
                   <div>
-                    <h2 class="cart-accordion-title font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665]">
+                    <h2 class="m-0 font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665]">
                       Choose Delivery Option
                     </h2>
-                    <div class="cart-accordion-status mt-2" id="delivery-status">
+                    <div class="flex items-center gap-2 text-sm text-[#646665] mt-2" id="delivery-status">
                       <span>Not selected</span>
                     </div>
                   </div>
-                  <svg class="cart-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="accordion-icon w-6 h-6 transition-transform duration-300 ease-in-out shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
                 </summary>
-                <div class="cart-accordion-content">
+                <div class="px-8 pb-8">
                   {% comment %} Hidden container for variant descriptions {% endcomment %}
                   <div id="variant-descriptions" style="display: none;">
                     {{ delivery_product.description }}
@@ -265,13 +178,13 @@
                       {% assign description_id = 'decide-later' %}
                     {% endif %}
 
-                    <div class="checkout-agreement p-8">
+                    <div class="bg-white rounded-[20px] p-8">
                       <div class="flex items-start gap-4">
                         <input
                           type="radio"
                           name="delivery"
                           value="{{ variant.id }}"
-                          class="mt-1"
+                          class="mt-1 checked:bg-black checked:border-black"
                           data-description-id="{{ description_id }}"
                         >
                         <div class="flex-1">
@@ -317,26 +230,26 @@
 
 
             <!-- Required Agreements section -->
-            <details class="cart-accordion" id="agreements-accordion">
-              <summary>
+            <details class="bg-bg-light rounded-[30px] mt-3 overflow-hidden" id="agreements-accordion">
+              <summary class="p-8 cursor-pointer list-none flex justify-between items-center">
                 <div>
-                  <h2 class="cart-accordion-title font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy">
+                  <h2 class="m-0 font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy">
                     Required Agreements
                   </h2>
-                  <div class="cart-accordion-status mt-2" id="agreements-status">
+                  <div class="flex items-center gap-2 text-sm text-[#646665] mt-2" id="agreements-status">
                     <span>0 of 5 completed</span>
                   </div>
                 </div>
-                <svg class="cart-accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="accordion-icon w-6 h-6 transition-transform duration-300 ease-in-out shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </summary>
-              <div class="cart-accordion-content">
+              <div class="px-8 pb-8">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
-                  <div class="checkout-agreement p-8">
+                  <div class="bg-white rounded-[20px] p-8">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="certifyAge">
+                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="certifyAge">
                       <div class="flex-1">
                         <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
                           Health Guarantee Agreement
@@ -353,9 +266,9 @@
                     </div>
                   </div>
 
-                  <div class="checkout-agreement p-8">
+                  <div class="bg-white rounded-[20px] p-8">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="understandTerms">
+                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="understandTerms">
                       <div class="flex-1">
                         <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
                           Terms & Conditions / Purchase Agreement
@@ -372,9 +285,9 @@
                     </div>
                   </div>
 
-                  <div class="checkout-agreement p-8">
+                  <div class="bg-white rounded-[20px] p-8">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement">
+                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement">
                       <div class="flex-1">
                         <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
                           Veterinary Care Acknowledgment
@@ -387,9 +300,9 @@
                     </div>
                   </div>
 
-                  <div class="checkout-agreement p-8">
+                  <div class="bg-white rounded-[20px] p-8">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement1">
+                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement1">
                       <div class="flex-1">
                         <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
                           Transportation Agreement
@@ -402,9 +315,9 @@
                     </div>
                   </div>
 
-                  <div class="checkout-agreement p-8">
+                  <div class="bg-white rounded-[20px] p-8">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement2">
+                      <input class="mt-1 checked:bg-black checked:border-black" type="checkbox" id="acknowledgeAgreement2">
                       <div class="flex-1">
                         <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
                           Puppy Confirmation
@@ -420,8 +333,9 @@
           </div>
 
           <div class="w-full lg:w-3/12 px-4">
-            <div class="order-summary-box p-4">
+            <div class="p-4">
               <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-4">Total</h4>
+              <p>You're securing this puppy—final details confirmed at checkout.</p>
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-[#646665]">Puppy Price</strong>
@@ -445,7 +359,7 @@
                   id="checkoutBtn"
                   type="submit"
                   name="checkout"
-                  class="checkout-btn w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-[var(--color-primary)] border-[var(--color-primary)]"
+                  class="w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-primary border-primary rounded-full text-lg font-medium transition-all duration-200 disabled:bg-[#d7d5ce] disabled:border-[#d7d5ce] disabled:text-white hover:enabled:bg-primary-hover hover:enabled:border-primary-hover"
                   disabled
                   aria-disabled="true"
                   value="{{ 'cart.checkout' | t }}"
