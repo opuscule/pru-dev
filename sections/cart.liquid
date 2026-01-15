@@ -17,6 +17,22 @@
     transform: rotate(180deg);
   }
 
+  /* Smooth accordion animation using grid */
+  .accordion-content-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
+  }
+
+  details[open] .accordion-content-wrapper {
+    grid-template-rows: 1fr;
+  }
+
+  .accordion-content-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
   /* Status complete state - toggled via JS */
   .status-complete {
     color: #22c55e;
@@ -243,13 +259,15 @@
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
                 </summary>
-                <div class="px-8 pb-8">
-                  {% comment %} Hidden container for variant descriptions {% endcomment %}
-                  <div id="variant-descriptions" style="display: none;">
-                    {{ delivery_product.description }}
-                  </div>
+                <div class="accordion-content-wrapper">
+                  <div class="accordion-content-inner">
+                    <div class="px-8 pb-8">
+                      {% comment %} Hidden container for variant descriptions {% endcomment %}
+                      <div id="variant-descriptions" style="display: none;">
+                        {{ delivery_product.description }}
+                      </div>
 
-                  <div id="delivery-options" class="space-y-3">
+                      <div id="delivery-options" class="space-y-3">
                   {% for variant in delivery_product.variants %}
                     {% comment %} Map variant title to description div ID {% endcomment %}
                     {% assign description_id = '' %}
@@ -292,6 +310,8 @@
                     </label>
                   {% endfor %}
                   </div>
+                    </div>
+                  </div>
                 </div>
               </details>
 
@@ -329,7 +349,9 @@
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </summary>
-              <div class="px-8 pb-8">
+              <div class="accordion-content-wrapper">
+                <div class="accordion-content-inner">
+                  <div class="px-8 pb-8">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
                   <label class="selectable-card bg-white rounded-2xl p-8 block">
@@ -415,6 +437,8 @@
                   </label>
                 </div>
               {% endif %}
+                  </div>
+                </div>
               </div>
             </details>
           </div>
