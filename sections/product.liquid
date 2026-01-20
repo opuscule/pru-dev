@@ -1,87 +1,14 @@
 <style>
-    .puppy_listing_container {
-        display: flex;
-        flex-direction: row;
-
-        .puppy_listing_col {
-            flex: 1;
-        }
-    }
-    .puppy-gallery {
-        --r: 24px;
-    }
-    .pg-hero {
-        display: block;
-        width: 100%;
-        padding: 0;
-        background: transparent;
-        overflow: hidden;
-
-        img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-    }
-
+    /* State-based styles that require attribute selectors */
     .pg-thumb.is-active {
         outline: 2px solid rgba(0, 0, 0, 0.2);
         opacity: 1;
     }
-
-    .pg-lightbox {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.8);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-    }
     .pg-lightbox[aria-hidden='false'] {
         display: flex;
     }
-    .pg-stage {
-        max-width: min(92vw, 1200px);
-        max-height: 86vh;
-        position: relative;
-    }
-    .pg-slide {
-        max-width: 100%;
-        max-height: 86vh;
-        display: block;
-        margin: auto;
-    }
-    .pg-close {
-        position: absolute;
-        top: 16px;
-        right: 20px;
-        font-size: 36px;
-        color: #fff;
-        background: transparent;
-        border: 0;
-        cursor: pointer;
-    }
-    .pg-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 42px;
-        color: #fff;
-        background: rgba(0, 0, 0, 0.35);
-        border: 0;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-    .pg-prev {
-        left: 16px;
-    }
-    .pg-next {
-        right: 16px;
-    }
 
+    /* Complex grid that benefits from custom CSS */
     .puppy_meta_grid {
         display: grid;
         grid-template-rows: auto;
@@ -97,21 +24,21 @@
             padding-bottom: 10px;
             display: block;
         }
-    }
+    }`
 </style>
 
-<div class="puppy_listing_container bg-bg-light pt-12">
+<div class="flex flex-row bg-bg-light pt-12 pb-16">
     <div class="w-full px-4 mx-auto">
         <div class="max-w-[var(--width-container-content)] mx-auto">
             <div class="flex flex-wrap justify-between">
                 <div class="w-full md:w-[48%] min-w-0">
-                    <div class="puppy-gallery puppy_listing_col" data-gallery>
+                    <div class="flex-1" data-gallery>
                         {%- assign imgs = product.images -%}
 
                         <!-- Hero -->
                         {%- if imgs.size > 0 -%}
                             {%- assign hero = imgs.first -%}
-                            <button class="pg-hero border-[2rem] border-[#e0dbc9] rounded-[4rem] mb-6" data-open-lightbox data-index="0" aria-label="Open image 1 of {{ imgs.size }}">
+                            <button class="block w-full p-0 bg-transparent overflow-hidden border-[2rem] border-[#e0dbc9] rounded-[4rem] mb-6 [&>img]:w-full [&>img]:h-auto [&>img]:block" data-open-lightbox data-index="0" aria-label="Open image 1 of {{ imgs.size }}">
                                 <img
                                     src="{{ hero | image_url: width: 1200 }}"
                                     srcset="{{ hero | image_url: width: 600 }} 600w, {{ hero | image_url: width: 900 }} 900w, {{ hero | image_url: width: 1200 }} 1200w"
@@ -146,15 +73,15 @@
                         </div>
 
                         <!-- Lightbox -->
-                        <div class="pg-lightbox" data-lightbox aria-hidden="true">
-                            <button class="pg-close" data-close aria-label="Close">&times;</button>
-                            <button class="pg-nav pg-prev" data-prev aria-label="Previous">&#10094;</button>
-                            <button class="pg-nav pg-next" data-next aria-label="Next">&#10095;</button>
+                        <div class="pg-lightbox fixed inset-0 bg-black/80 hidden items-center justify-center z-[9999]" data-lightbox aria-hidden="true">
+                            <button class="absolute top-4 right-5 text-4xl text-white bg-transparent border-0 cursor-pointer z-10" data-close aria-label="Close">&times;</button>
+                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer left-4 z-10" data-prev aria-label="Previous">&#10094;</button>
+                            <button class="absolute top-1/2 -translate-y-1/2 text-[42px] text-white bg-black/35 border-0 w-14 h-14 rounded-full cursor-pointer right-4 z-10" data-next aria-label="Next">&#10095;</button>
 
-                            <div class="pg-stage">
+                            <div class="relative w-[min(92vw,1200px)] h-[86vh] flex items-center justify-center">
                                 {%- for image in imgs -%}
                                     <img
-                                        class="pg-slide max-w-[var(--width-container-content)] h-auto block mx-auto"
+                                        class="absolute inset-0 w-full h-full object-contain"
                                         data-slide="{{ forloop.index0 }}"
                                         src="{{ image | image_url: width: 1600 }}"
                                         alt="{{ image.alt | escape }}"
@@ -164,21 +91,6 @@
                                         {% endunless %}
                                     >
                                 {%- endfor -%}
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        document.querySelectorAll('.pg-slide').forEach(function (img) {
-                                            if (img.complete) {
-                                                if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                                                if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                                            } else {
-                                                img.addEventListener('load', function () {
-                                                    if (!img.hasAttribute('width')) img.setAttribute('width', img.naturalWidth);
-                                                    if (!img.hasAttribute('height')) img.setAttribute('height', img.naturalHeight);
-                                                });
-                                            }
-                                        });
-                                    });
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -186,17 +98,15 @@
                 <!-- # left column -->
 
                 <div class="w-full md:w-[48%] min-w-0">
-                    <div class="product-info puppy_listing_col">
+                    <div class="product-info flex-1">
                         {% if product.metafields.custom.availability == 'Reserved' %}
-                            <div class="puppy-status">
-                                This puppy is not available:
-                                <span>I AM RESERVED</span>
+                            <div class="text-center border-[1px] bg-white border-primary text-body-copy p-6 mb-6 mt-10">
+                                This puppy is not available: <strong>I AM RESERVED</strong>
                             </div>
                         {% endif %}
                         {% if product.metafields.custom.availability == 'Sold, but Show' %}
-                            <div class="puppy-status">
-                                This puppy is not available:
-                                <span>I FOUND MY NEW HOME</span>
+                            <div class="text-center border-[1px] bg-white border-primary text-body-copy p-6 mb-6 mt-10">
+                                This puppy is not available: <strong>I FOUND MY NEW HOME</strong>
                             </div>
                         {% endif %}
 
@@ -240,16 +150,16 @@
                                 <h3 class="text-3xl font-titles font-bold leading-tight mb-4">Ask About {{ product.title }}</h3>
                                 <p class="text leading-relaxed mb-4">
                                     Interested in learning more about this adorable puppy?
-                                    <a href="/pages/contact" class="text-[var(--color-primary)] underline">Contact us</a>
+                                    <a href="/pages/contact/" class="text-[var(--color-primary)] underline">Contact us</a>
                                     , or fill out the form below and we'll get back to you as soon as possible.
                                 </p>
                                 <p class="text leading-relaxed mb-6">
                                     Other questions? Check out our information about
-                                    <a href="/pages/financing" class="text-[var(--color-primary)] underline">financing</a>
+                                    <a href="/pages/financing/" class="text-[var(--color-primary)] underline">financing</a>
                                     ,
-                                    <a href="/pages/travel" class="text-[var(--color-primary)] underline">travel</a>
+                                    <a href="/pages/travel/" class="text-[var(--color-primary)] underline">travel</a>
                                     , and our
-                                    <a href="/pages/health-guarantee" class="text-[var(--color-primary)] underline">health guarantee</a>
+                                    <a href="/pages/health-guarantee/" class="text-[var(--color-primary)] underline">health guarantee</a>
                                     .
                                 </p>
 
@@ -319,7 +229,7 @@
 
                                 <p>
                                     {% if now_ts >= ready_ts %}
-                                        <span>I’m Ready!</span>
+                                        <span>I'm Ready!</span>
                                     {% else %}
                                         <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
                                     {% endif %}
@@ -425,7 +335,7 @@
         if (!gallery) return;
 
         const lightbox = document.querySelector('[data-lightbox]');
-        const slides = [...lightbox.querySelectorAll('.pg-slide')];
+        const slides = [...lightbox.querySelectorAll('[data-slide]')];
         const thumbs = [...gallery.querySelectorAll('.pg-thumb')];
         const openers = [...gallery.querySelectorAll('[data-open-lightbox]')];
         const btnPrev = lightbox.querySelector('[data-prev]');
@@ -528,10 +438,10 @@
 {% assign current_collection = product.collections.first %}
 
 {% if current_collection and current_collection.products_count > 1 %}
-    <div class="bg-bg-extralight pb-[200px] mb-[-200px]">
+    <div class="bg-bg-extralight pt-12 pb-[200px] mb-[-200px]">
         <div class="w-full px-4 mx-auto">
             <div class="max-w-[var(--width-container-content)] mx-auto text-center">
-                <h2 class="fs-xl mb-6" style="font-size: 3rem;">Other {{ current_collection.title }} Puppies for Sale</h2>
+                <h2 class="fs-xl mb-6 text-4xl md:text-5xl">Other {{ current_collection.title }} Puppies for Sale</h2>
 
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 

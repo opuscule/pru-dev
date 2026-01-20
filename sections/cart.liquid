@@ -5,56 +5,129 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
-{% stylesheet %}
-  .cart-item-pod {
-    background-color: var(--color-bg-card);
-    border-radius: 30px;
+<style>
+  /* Hide default details marker - no Tailwind equivalent */
+  details summary::-webkit-details-marker,
+  details summary::marker {
+    display: none;
   }
 
-  .order-summary-box {
-    background-color: var(--color-bg-card);
-    border-radius: 30px;
+  /* Accordion icon rotation on open */
+  details .accordion-icon {
+    transition: transform 0.3s ease-out;
   }
 
-  .order-summary-box ul li {
-    border-bottom: 1px solid #b1b1b1;
+  details[open] .accordion-icon {
+    transform: rotate(180deg);
   }
 
-  .checkout-agreement {
-    background-color: var(--color-white);
-    border-radius: 20px;
+  /* Smooth accordion animation using grid */
+  .accordion-content-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
   }
 
-  .form-check-input:checked {
-    background-color: var(--color-black);
-    border-color: var(--color-black);
+  .accordion-content-inner {
+    overflow: hidden;
+    min-height: 0;
   }
 
-  .checkout-btn {
-    border-radius: 10rem;
-    font-size: 1.125rem;
-    font-weight: 500;
-    transition: all 0.2s;
+  /* Add padding inside inner wrapper to prevent box-shadow clipping */
+  .accordion-content-padding {
+    padding: 4px 2rem 2rem 2rem;
+    margin: -4px 0 0 0;
   }
 
-  .checkout-btn:disabled {
-    background-color: #d7d5ce;
-    border-color: #d7d5ce;
-    color: var(--color-white);
+  /* Status complete state - toggled via JS */
+  .status-complete {
+    color: var(--color-primary);
   }
 
-  .checkout-btn:not(:disabled):hover {
-    background-color: var(--color-primary-hover);
-    border-color: var(--color-primary-hover);
+  /* Custom radio button styles */
+  .custom-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #b1b1b1;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
   }
-{% endstylesheet %}
 
-<div class="text-center mb-8">
-  <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl">Order Summary</h1>
-</div>
+  .custom-radio:hover {
+    border-color: var(--color-primary);
+  }
 
-<section class="bg-bg-extralight py-20" data-cart-section>
-  <div class="w-full px-4 mx-auto">
+  .custom-radio:checked {
+    border-color: var(--color-primary);
+  }
+
+  .custom-radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* Custom checkbox styles */
+  .custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #b1b1b1;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .custom-checkbox:hover {
+    border-color: var(--color-primary);
+  }
+
+  .custom-checkbox:checked {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+  }
+
+  .custom-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 8px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+  }
+
+  /* Clickable card styles */
+  .selectable-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+
+</style>
+
+<section class="bg-bg-extralight py-16" data-cart-section>
+  <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl text-center">Order Summary</h1>
+  <p class="text-center mt-2">You're securing this puppy—final details confirmed at checkout.</p>
+  <div class="w-full px-4 mx-auto mt-8">
     <div class="max-w-[var(--width-container-content)] mx-auto">
       {% comment %} Fetch the Puppy Delivery Option product {% endcomment %}
       {% assign delivery_product = all_products['puppy-delivery-option'] %}
@@ -78,97 +151,131 @@
                 {% unless item.product.title contains 'Puppy Delivery Option' %}
                   {% assign unit_price = item.final_line_price | divided_by: item.quantity %}
 
-                  <div class="cart-item-pod mb-8" data-line="{{ item.key }}">
-                    <div class="flex flex-wrap -mx-4">
-                      <div class="w-full md:w-3/12 px-4">
-                        <div class="w-full h-full">
-                          <figure class="m-0 relative">
-                            <a href="{{ item.url }}">
-                              {% if item.image %}
-                                <img
-                                  src="{{ item.image | image_url: width: 360 }}"
-                                  alt="{{ item.title | escape }}"
-                                  loading="lazy"
-                                  width="360"
-                                  height="360"
-                                  class="w-full h-full max-h-[290px] object-cover rounded-t-[30px] rounded-bl-none border-r-0 md:rounded-l-[30px] md:rounded-tr-none md:border-r-[7px] md:border-primary"
-                                >
-                              {% else %}
-                                {{ 'product-apparel-1' | placeholder_svg_tag }}
-                              {% endif %}
-                            </a>
-                          </figure>
-                        </div>
+                  <!-- each cart item -->
+                  
+                  <!-- border radius, background color --color-bg-light,  -->
+                  <a class="block bg-bg-light rounded-[30px] overflow-hidden" href="{{ item.url }}" data-line="{{ item.key }}">
+                    <div class="flex">
+
+                      <!-- border-right 5px --color-primary -->
+                      <div class="w-1/4 bg-cover bg-no-repeat bg-center border-r-[8px] border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 360 }})">
                       </div>
-
-                      <div class="w-full md:w-9/12 px-4">
-                        <div class="flex justify-between items-start p-4">
-                          <div class="flex-1">
-                            <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl mb-2">
-                              <a href="{{ item.url }}" class="text-[#646665] no-underline hover:text-primary">
-                                {{- item.product.title -}}
-                              </a>
-                            </h2>
-
-                            {% assign dob_val = item.product.metafields.custom.dob.value %}
-                            {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
-                            {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
-                            {% assign diff_seconds = now_ts | minus: dob_ts %}
-                            {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-
-                            <div class="text-2xl font-medium mb-2 text-[#646665]">
-                              {{ item.product.collections.first.title }}
-                            </div>
-                            <div class="mb-2">
-                              <span class="text-[#646665] text-xl">
-                                {{- item.product.metafields.custom.sex }} • {{ weeks_old | floor }} Weeks Old</span
-                              >
-                            </div>
-
-                            {% if item.properties and item.properties.size > 0 %}
-                              <details class="mt-2">
-                                <summary class="cursor-pointer">Details</summary>
-                                <ul class="mt-2 ml-0 list-none">
-                                  {% for p in item.properties %}
-                                    {% unless p.last == blank %}
-                                      <li>
-                                        <strong>{{ p.first }}:</strong> {{ p.last }}
-                                      </li>
-                                    {% endunless %}
-                                  {% endfor %}
-                                </ul>
-                              </details>
-                            {% endif %}
-
-                            <a
-                              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
-                              class="inline-block mt-5 text-[#646665] no-underline text-base hover:text-primary"
-                              >Remove</a
-                            >
+                      <div class="w-3/4 p-4 md:p-6 flex flex-col justify-between">
+                        <div>
+                          {% if item.product.metafields.custom.pruid %}
+                            <pre class="px-3 text-sm bg-white inline-flex rounded-full pt-[2px]">ID:{{ item.product.metafields.custom.pruid }}</pre>
+                          {% endif %}
+                          <div class="flex justify-between items-center">
+                            <h3 class="text-3xl md:text-6xl font-semibold leading-tight tracking-tight mb-2 mt-2">{{- item.product.title -}}</h3>
+                            <span class="text-2xl md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                          </div>
+                          
+                          <div class="text-lg font-medium text-body-copy mb-3">
+                            {{ item.product.collections.first.title }}
                           </div>
 
-                          <div class="text-[#646665] text-3xl font-body-copy ml-4">{{ unit_price | money }}</div>
+                          {% comment %} Calculate age in weeks {% endcomment %}
+                          {% assign dob_val = item.product.metafields.custom.dob.value %}
+                          {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                          {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+                          {% assign diff_seconds = now_ts | minus: dob_ts %}
+                          {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+
+                          {% comment %} Details grid {% endcomment %}
+                          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-base md:text-lg mb-3">
+                            {% if item.product.metafields.custom.sex %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Sex:</span> {{ item.product.metafields.custom.sex }}
+                              </div>
+                            {% endif %}
+                            
+                            {% if item.product.metafields.custom.color %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Color:</span> {{ item.product.metafields.custom.color }}
+                              </div>
+                            {% endif %}
+                            
+                            {% if weeks_old %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Age:</span> {{ weeks_old | floor }} weeks
+                              </div>
+                            {% endif %}
+
+                            {% if item.product.metafields.custom.size and item.product.metafields.custom.size != 'None' %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Size:</span> {{ item.product.metafields.custom.size }}
+                              </div>
+                            {% endif %}
+
+                            {% if item.product.metafields.custom.variety %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Variety:</span> {{ item.product.metafields.custom.variety }}
+                              </div>
+                            {% endif %}
+
+                            {% if item.product.metafields.custom.generation %}
+                              <div class="text-body-copy text-base">
+                                <span class="font-semibold">Generation:</span> {{ item.product.metafields.custom.generation }}
+                              </div>
+                            {% endif %}
+                          </div>
+
+                          {% comment %} Registration badge if available 
+                          {% if item.product.metafields.custom.registry %}
+                            <div class="mb-3">
+                              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                </svg>
+                                {{ item.product.metafields.custom.registry }} Registered
+                              </span>
+                            </div>
+                          {% endif %}
+                           {% endcomment %}
+                        </div>
+
+                        {% comment %} Price at bottom {% endcomment %}
+                        <div class="flex items-center justify-between mt-2">
+                          
+                          <span class="text-sm text-body-copy hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
+                            Remove
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
+
                 {% endunless %}
               {% endfor %}
             {% endif %}
 
+
+            <!-- Delivery Options section -->
             {% comment %} Only show delivery options if there's a puppy in the cart {% endcomment %}
             {% if has_puppy and delivery_product %}
-              <div class="cart-item-pod p-8 mt-3">
-                <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">
-                  Choose Delivery Option
-                </h2>
+              <details class="bg-bg-light rounded-3xl mt-6 overflow-hidden" id="delivery-accordion">
+                <summary class="p-8 cursor-pointer list-none flex justify-between items-center">
+                  <div>
+                    <h3 class="m-0 font-titles font-bold text-4xl md:text-5xl text-body-copy">
+                      Choose Delivery Option
+                    </h3>
+                    <div class="flex items-center gap-2 text-sm text-body-copy mt-2" id="delivery-status">
+                      <span>Not selected</span>
+                    </div>
+                  </div>
+                  <svg class="accordion-icon w-6 h-6 transition-transform duration-300 ease-in-out shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </summary>
+                <div class="accordion-content-wrapper">
+                  <div class="accordion-content-inner">
+                    <div class="accordion-content-padding">
+                      {% comment %} Hidden container for variant descriptions {% endcomment %}
+                      <div id="variant-descriptions" style="display: none;">
+                        {{ delivery_product.description }}
+                      </div>
 
-                {% comment %} Hidden container for variant descriptions {% endcomment %}
-                <div id="variant-descriptions" style="display: none;">
-                  {{ delivery_product.description }}
-                </div>
-
-                <div id="delivery-options" class="space-y-3">
+                      <div id="delivery-options" class="space-y-4 pt-1">
                   {% for variant in delivery_product.variants %}
                     {% comment %} Map variant title to description div ID {% endcomment %}
                     {% assign description_id = '' %}
@@ -182,36 +289,39 @@
                       {% assign description_id = 'decide-later' %}
                     {% endif %}
 
-                    <div class="checkout-agreement p-8">
+                    <label class="selectable-card bg-white rounded-[20px] p-8 block">
                       <div class="flex items-start gap-4">
                         <input
                           type="radio"
                           name="delivery"
                           value="{{ variant.id }}"
-                          class="mt-1"
+                          class="custom-radio mt-1"
                           data-description-id="{{ description_id }}"
                         >
                         <div class="flex-1">
-                          <label class="text-lg font-medium cursor-pointer select-none block">
+                          <span class="text-lg font-medium cursor-pointer select-none block">
                             {{ variant.title }}
                             {% if variant.price > 0 %}
                               ({{ variant.price | money }})
                             {% else %}
                               (Free)
                             {% endif %}
-                          </label>
+                          </span>
                           {% if description_id != '' %}
                             <div
-                              class="variant-description text-sm text-[#646665] mt-2"
+                              class="variant-description text-sm text-body-copy mt-1"
                               data-for="{{ description_id }}"
                             ></div>
                           {% endif %}
                         </div>
                       </div>
-                    </div>
+                    </label>
                   {% endfor %}
+                  </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </details>
 
               <script>
                 // Move descriptions from hidden container to variant options
@@ -231,103 +341,122 @@
               </script>
             {% endif %}
 
-            <div class="cart-item-pod p-8 mt-3">
-              <h2 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-6">
-                Required Agreements
-              </h2>
 
+            <!-- Required Agreements section -->
+            <details class="bg-bg-light rounded-3xl mt-6 overflow-hidden" id="agreements-accordion">
+              <summary class="p-8 cursor-pointer list-none flex justify-between items-center">
+                <div>
+                  <h3 class="m-0 font-titles font-bold text-4xl md:text-5xl text-body-copy">
+                    Required Agreements
+                  </h3>
+                  <div class="flex items-center gap-2 text-sm text-body-copy mt-2" id="agreements-status">
+                    <span>0 of 5 completed</span>
+                  </div>
+                </div>
+                <svg class="accordion-icon w-6 h-6 transition-transform duration-300 ease-in-out shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="accordion-content-wrapper">
+                <div class="accordion-content-inner">
+                  <div class="accordion-content-padding">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
-                  <div class="checkout-agreement p-8">
+                  <label class="selectable-card bg-white rounded-2xl p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="certifyAge">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="certifyAge">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="certifyAge">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Health Guarantee Agreement
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="mt-1 text-sm text-body-copy">
                           I have read and agree to the Puppys R Us
                           <a
                             href="https://puppysrusdev.myshopify.com/pages/health-guarantee"
                             class="text-primary no-underline hover:underline"
+                            onclick="event.stopPropagation();"
                             >Health Guarantee</a
                           >.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="checkout-agreement p-8">
+                  <label class="selectable-card bg-white rounded-2xl p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="understandTerms">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="understandTerms">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="understandTerms">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Terms & Conditions / Purchase Agreement
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-body-copy">
                           I confirm I am 18+ and agree to the Puppys R Us
                           <a
                             href="https://puppysrusdev.myshopify.com/pages/terms-of-service"
                             class="text-primary no-underline hover:underline"
+                            onclick="event.stopPropagation();"
                             >Terms & Conditions</a
                           >.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="checkout-agreement p-8">
+                  <label class="selectable-card bg-white rounded-2xl p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Veterinary Care Acknowledgment
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-body-copy">
                           I understand I must take my puppy to a licensed veterinarian within 72 hours of receiving
                           him/her.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="checkout-agreement p-8">
+                  <label class="selectable-card bg-white rounded-2xl p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement1">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement1">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement1">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Transportation Agreement
-                        </label>
-                        <div class="text-sm mt-1">
+                        </span>
+                        <div class="text-sm mt-1 text-body-copy">
                           I understand my puppy will travel by safe, approved methods arranged by Puppys R Us, and I
                           will be contacted to confirm details.
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div class="checkout-agreement p-8">
+                  <label class="selectable-card bg-white rounded-2xl p-8 block">
                     <div class="flex items-start gap-4">
-                      <input class="form-check-input mt-1" type="checkbox" id="acknowledgeAgreement2">
+                      <input class="custom-checkbox mt-1" type="checkbox" id="acknowledgeAgreement2">
                       <div class="flex-1">
-                        <label class="text-lg font-medium cursor-pointer select-none block" for="acknowledgeAgreement2">
+                        <span class="text-lg font-medium cursor-pointer select-none block">
                           Puppy Confirmation
-                        </label>
-                        <div class="text-sm mt-1">I confirm I am purchasing the puppy listed in my order summary.</div>
+                        </span>
+                        <div class="text-sm mt-1 text-body-copy">I confirm I am purchasing the puppy listed in my order summary.</div>
                       </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
               {% endif %}
-            </div>
+                  </div>
+                </div>
+              </div>
+            </details>
           </div>
 
           <div class="w-full lg:w-3/12 px-4">
-            <div class="order-summary-box p-4">
-              <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-[#646665] mb-4">Total</h4>
+            <div class="p-4">
+              <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy mb-4">Total</h4>
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
-                  <strong class="text-[#646665]">Puppy Price</strong>
+                  <strong class="text-body-copy">Puppy Price</strong>
                   <span>{{ cart.items_subtotal_price | money }}</span>
                 </li>
 
@@ -338,7 +467,7 @@
                 {% endif %}
 
                 <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
-                  <strong class="text-[#646665] font-titles">Total</strong>
+                  <strong class="text-body-copy font-titles">Total</strong>
                   <span>{{ cart.items_subtotal_price | money }}</span>
                 </li>
               </ul>
@@ -348,7 +477,7 @@
                   id="checkoutBtn"
                   type="submit"
                   name="checkout"
-                  class="checkout-btn w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-[var(--color-primary)] border-[var(--color-primary)]"
+                  class="w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-primary border-primary rounded-full text-lg font-medium transition-all duration-200 disabled:bg-[#d7d5ce] disabled:border-[#d7d5ce] disabled:text-white hover:enabled:bg-primary-hover hover:enabled:border-primary-hover"
                   disabled
                   aria-disabled="true"
                   value="{{ 'cart.checkout' | t }}"
@@ -376,6 +505,9 @@
 </section>
 
 <script>
+  // Flag to prevent cart updates when programmatically setting radio
+  let isInitializing = true;
+
   // Auto-check the correct radio on page load
   document.addEventListener('DOMContentLoaded', async () => {
     const radios = document.querySelectorAll('input[name="delivery"]');
@@ -388,14 +520,39 @@
       const selectedId = deliveryItem.variant_id;
 
       radios.forEach((radio) => {
-        radio.checked = Number(radio.value) === selectedId;
+        if (Number(radio.value) === selectedId) {
+          radio.checked = true;
+        }
       });
+      
+      // Update delivery status display after checking radio
+      const deliveryStatus = document.getElementById('delivery-status');
+      if (deliveryStatus) {
+        const selectedRadio = document.querySelector('input[name="delivery"]:checked');
+        if (selectedRadio) {
+          const label = selectedRadio.closest('.selectable-card').querySelector('span');
+          const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
+          deliveryStatus.innerHTML = `
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>${selectedText}</span>
+          `;
+          deliveryStatus.classList.add('status-complete');
+        }
+      }
     }
+    
+    // Allow cart updates after initialization
+    isInitializing = false;
   });
 
   // Add / remove delivery options on change
   document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
     radio.addEventListener('change', async (e) => {
+      // Skip cart update if we're just initializing from page load
+      if (isInitializing) return;
+      
       const selectedVariant = Number(e.target.value);
 
       // Fetch current cart
@@ -502,6 +659,90 @@
     checks.forEach((cb) => cb.addEventListener('change', syncCheckoutState));
     deliveryOptions.forEach((radio) => radio.addEventListener('change', syncCheckoutState));
     syncCheckoutState();
+
+    // Update accordion status indicators
+    function updateDeliveryStatus() {
+      const deliveryStatus = document.getElementById('delivery-status');
+      if (!deliveryStatus) return;
+      
+      const selectedRadio = document.querySelector('input[name="delivery"]:checked');
+      if (selectedRadio) {
+        const label = selectedRadio.closest('.selectable-card').querySelector('span');
+        const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
+        deliveryStatus.innerHTML = `
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>${selectedText}</span>
+        `;
+        deliveryStatus.classList.add('status-complete');
+      } else {
+        deliveryStatus.innerHTML = '<span>Not selected</span>';
+        deliveryStatus.classList.remove('status-complete');
+      }
+    }
+
+    function updateAgreementsStatus() {
+      const agreementsStatus = document.getElementById('agreements-status');
+      if (!agreementsStatus) return;
+      
+      const checkedCount = checks.filter(cb => cb.checked).length;
+      const totalCount = checks.length;
+      
+      if (checkedCount === totalCount) {
+        agreementsStatus.innerHTML = `
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>All agreements accepted</span>
+        `;
+        agreementsStatus.classList.add('status-complete');
+      } else {
+        agreementsStatus.innerHTML = `<span>${checkedCount} of ${totalCount} completed</span>`;
+        agreementsStatus.classList.remove('status-complete');
+      }
+    }
+
+    // Add listeners for status updates
+    checks.forEach((cb) => cb.addEventListener('change', updateAgreementsStatus));
+    deliveryOptions.forEach((radio) => radio.addEventListener('change', updateDeliveryStatus));
+    
+    // Initial status update
+    updateDeliveryStatus();
+    updateAgreementsStatus();
+
+    // Smooth accordion animation for details elements
+    document.querySelectorAll('details').forEach((details) => {
+      const summary = details.querySelector('summary');
+      const contentWrapper = details.querySelector('.accordion-content-wrapper');
+      
+      if (!summary || !contentWrapper) return;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (details.open) {
+          // Closing: animate first, then remove open
+          contentWrapper.style.gridTemplateRows = '0fr';
+          setTimeout(() => {
+            details.open = false;
+          }, 300);
+        } else {
+          // Opening: add open first, then animate
+          details.open = true;
+          // Force reflow
+          contentWrapper.offsetHeight;
+          contentWrapper.style.gridTemplateRows = '1fr';
+        }
+      });
+
+      // Set initial state based on open attribute
+      if (details.open) {
+        contentWrapper.style.gridTemplateRows = '1fr';
+      } else {
+        contentWrapper.style.gridTemplateRows = '0fr';
+      }
+    });
   });
 </script>
 
