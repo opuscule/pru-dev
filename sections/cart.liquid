@@ -200,7 +200,7 @@
                               </div>
                             {% endif %}
 
-                            {% if item.product.metafields.custom.size %}
+                            {% if item.product.metafields.custom.size and item.product.metafields.custom.size != 'None' %}
                               <div class="text-body-copy text-base">
                                 <span class="font-semibold">Size:</span> {{ item.product.metafields.custom.size }}
                               </div>
