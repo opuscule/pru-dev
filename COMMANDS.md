@@ -41,7 +41,7 @@ Pushes theme to the default theme on Shopify.
 
 ### Push to Specific Theme
 ```bash
-shopify theme push --theme pru-dev
+shopify theme push --theme pru-dev/main
 ```
 Pushes to a specific theme (development, staging, or production).
 

@@ -124,7 +124,7 @@
 
 </style>
 
-<section class="bg-bg-extralight py-16" data-cart-section>
+<section class="bg-bg-extralight pt-16 pb-[200px] -mb-[200px]" data-cart-section>
   <h1 class="font-titles font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl text-center">Order Summary</h1>
   <p class="text-center mt-2">You're securing this puppy—final details confirmed at checkout.</p>
   <div class="w-full px-4 mx-auto mt-8">
@@ -167,7 +167,14 @@
                           {% endif %}
                           <div class="flex justify-between items-center">
                             <h3 class="text-3xl md:text-6xl font-semibold leading-tight tracking-tight mb-2 mt-2">{{- item.product.title -}}</h3>
-                            <span class="text-2xl md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                            <div>
+                              <span class="text-2xl md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                              <div class="flex items-center justify-between mt-2">
+                                <span class="text-sm text-body-copy hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
+                                  Remove
+                                </span>
+                              </div>
+                            </div>
                           </div>
                           
                           <div class="text-lg font-medium text-body-copy mb-3">
@@ -235,12 +242,7 @@
                         </div>
 
                         {% comment %} Price at bottom {% endcomment %}
-                        <div class="flex items-center justify-between mt-2">
-                          
-                          <span class="text-sm text-body-copy hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
-                            Remove
-                          </span>
-                        </div>
+                        
                       </div>
                     </div>
                   </a>
@@ -452,18 +454,43 @@
           </div>
 
           <div class="w-full lg:w-3/12 px-4">
-            <div class="p-4">
+            <div class="p-4 bg-bg-light rounded-3xl mt-6 md:mt-0">
               <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy mb-4">Total</h4>
+              
+              {% comment %} Calculate puppy price (excluding delivery option) {% endcomment %}
+              {% assign puppy_price = 0 %}
+              {% assign delivery_price = 0 %}
+              {% assign has_delivery = false %}
+              {% for item in cart.items %}
+                {% if item.product.title contains 'Puppy Delivery Option' %}
+                  {% assign delivery_price = item.final_line_price %}
+                  {% assign has_delivery = true %}
+                {% else %}
+                  {% assign puppy_price = puppy_price | plus: item.final_line_price %}
+                {% endif %}
+              {% endfor %}
+              
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Puppy Price</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
+                  <span>{{ puppy_price | money }}</span>
+                </li>
+                
+                <li class="flex justify-between items-center py-2">
+                  <strong class="text-body-copy">Delivery Option</strong>
+                  <span id="delivery-price-display">
+                    {% if has_delivery %}
+                      {{ delivery_price | money }}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </span>
                 </li>
 
                 {% if shop.taxes_included %}
                   <li class="text-sm italic border-b-0">Tax included. Shipping calculated at checkout.</li>
                 {% else %}
-                  <li class="text-sm italic border-b-0">Taxes and shipping calculated at checkout.</li>
+                  <li class="text-sm italic border-b-0">Taxes calculated at checkout.</li>
                 {% endif %}
 
                 <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
@@ -490,13 +517,7 @@
                 </div>
               {% endif %}
             </div>
-            <img
-              class="w-full mt-5 ml-5"
-              src="{{ 'puppies Images.png' | asset_url }}"
-              alt="Payment methods"
-              width="300"
-              height="100"
-            >
+              <img src="https://help.trustpilot.com/servlet/rtaImage?eid=ka0Sh0000008Y7l&feoid=00N7U000000O2jv&refid=0EMSh0000055viq" alt="Trustpilot reviews" class="w-full mt-5">
           </div>
         </div>
       </form>

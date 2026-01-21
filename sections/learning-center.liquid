@@ -97,23 +97,13 @@
 {%- assign end_index = start_index | plus: per_page -%}
 {%- if end_index > total_articles -%}{%- assign end_index = total_articles -%}{%- endif -%}
 
+<div class="bg-bg-light pb-[200px] -mb-[200px]">
   <section class="learning-center container mx-auto py-12">
     <header class="lc-header text-center mb-12">
       <h1 class="font-bold text-5xl sm:text-6xl md:text-7xl tracking-tight">Learning Center</h1>
       <p class="mt-4 text-base text-gray-600">Articles, guides and tips for caring for your new puppy.</p>
     </header>
 
-    {%- comment -%} Debug info {%- endcomment -%}
-    <div class="mb-8 p-4 bg-gray-100 rounded text-sm">
-      <p><strong>Debug:</strong></p>
-      <p>Blog handles setting: {{ section.settings.blog_handles }}</p>
-      <p>Blogs checked: {{ debug_blogs }}</p>
-      <p>Total article keys collected: {{ article_keys | split: '||' | size }}</p>
-      <p>Total after sorting: {{ sorted_desc.size }}</p>
-      <p>Page {{ page_param }} of {{ total_pages }}</p>
-      <p>Showing articles {{ start_index }} to {{ end_index }}</p>
-      <p>First few keys: {{ article_keys | truncate: 200 }}</p>
-    </div>
 
   <div class="lc-grid grid gap-10 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
       {%- for i in (start_index..end_index) -%}
@@ -141,15 +131,14 @@
             {%- else -%}
               <div class="relative aspect-[4/3] bg-gray-100 flex items-center justify-center text-gray-400 text-sm">No image</div>
             {%- endif -%}
-            <div class="flex flex-col h-full p-8 pt-10">
-              <h2 class="font-titles text-[1.75rem] leading-snug font-semibold mb-4 tracking-tight">{{ article.title | escape }}</h2>
+            <div class="flex flex-col p-8 pt-0">
+              <span class="text-xs uppercase tracking-wide text-gray-500">{{ article.published_at | date: '%b %d, %Y' }}</span>
+              <h2 class="font-titles text-3xl font-semibold mb-4 tracking-tight leading-tight mt-2">{{ article.title | escape }}</h2>
               {%- if article.excerpt != blank -%}
-                <p class="text-base text-gray-600 mb-6">{{ article.excerpt | strip_html | truncate: 180 }}</p>
+                <p class="text-base text-gray-600 mb-6">{{ article.excerpt | strip_html | truncate: 150 }}</p>
+              {%- elsif article.content != blank -%}
+                <p class="text-base text-gray-600 mb-6">{{ article.content | strip_html | truncate: 150 }}</p>
               {%- endif -%}
-              <div class="mt-auto flex items-center justify-between text-xs uppercase tracking-wide text-gray-500">
-                <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
-                <span>{{ blogs[blog_handle].title }}</span>
-              </div>
             </div>
           </a>
         {%- endif -%}
@@ -166,7 +155,7 @@
       {%- endif -%}
     </div>
   </section>
-
+</div>
 {% stylesheet %}
 .learning-center { --gap: 2rem; }
 .lc-grid { align-items: stretch; }
