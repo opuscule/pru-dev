@@ -103,17 +103,6 @@
       <p class="mt-4 text-base text-gray-600">Articles, guides and tips for caring for your new puppy.</p>
     </header>
 
-    {%- comment -%} Debug info {%- endcomment -%}
-    <div class="mb-8 p-4 bg-gray-100 rounded text-sm">
-      <p><strong>Debug:</strong></p>
-      <p>Blog handles setting: {{ section.settings.blog_handles }}</p>
-      <p>Blogs checked: {{ debug_blogs }}</p>
-      <p>Total article keys collected: {{ article_keys | split: '||' | size }}</p>
-      <p>Total after sorting: {{ sorted_desc.size }}</p>
-      <p>Page {{ page_param }} of {{ total_pages }}</p>
-      <p>Showing articles {{ start_index }} to {{ end_index }}</p>
-      <p>First few keys: {{ article_keys | truncate: 200 }}</p>
-    </div>
 
   <div class="lc-grid grid gap-10 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
       {%- for i in (start_index..end_index) -%}
