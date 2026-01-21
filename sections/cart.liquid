@@ -167,7 +167,15 @@
                           {% endif %}
                           <div class="flex justify-between items-center">
                             <h3 class="text-3xl md:text-6xl font-semibold leading-tight tracking-tight mb-2 mt-2">{{- item.product.title -}}</h3>
-                            <span class="text-2xl md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                            <div>
+                              <span class="text-2xl md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                              <div class="flex items-center justify-between mt-2">
+                          
+                                <span class="text-sm text-body-copy hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
+                                  Remove
+                                </span>
+                              </div>
+                            </div>
                           </div>
                           
                           <div class="text-lg font-medium text-body-copy mb-3">
@@ -235,12 +243,7 @@
                         </div>
 
                         {% comment %} Price at bottom {% endcomment %}
-                        <div class="flex items-center justify-between mt-2">
-                          
-                          <span class="text-sm text-body-copy hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
-                            Remove
-                          </span>
-                        </div>
+                        
                       </div>
                     </div>
                   </a>
