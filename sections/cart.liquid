@@ -456,10 +456,35 @@
           <div class="w-full lg:w-3/12 px-4">
             <div class="p-4 bg-bg-light rounded-3xl mt-6 md:mt-0">
               <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy mb-4">Total</h4>
+              
+              {% comment %} Calculate puppy price (excluding delivery option) {% endcomment %}
+              {% assign puppy_price = 0 %}
+              {% assign delivery_price = 0 %}
+              {% assign has_delivery = false %}
+              {% for item in cart.items %}
+                {% if item.product.title contains 'Puppy Delivery Option' %}
+                  {% assign delivery_price = item.final_line_price %}
+                  {% assign has_delivery = true %}
+                {% else %}
+                  {% assign puppy_price = puppy_price | plus: item.final_line_price %}
+                {% endif %}
+              {% endfor %}
+              
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Puppy Price</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
+                  <span>{{ puppy_price | money }}</span>
+                </li>
+                
+                <li class="flex justify-between items-center py-2">
+                  <strong class="text-body-copy">Delivery Option</strong>
+                  <span id="delivery-price-display">
+                    {% if has_delivery %}
+                      {{ delivery_price | money }}
+                    {% else %}
+                      —
+                    {% endif %}
+                  </span>
                 </li>
 
                 {% if shop.taxes_included %}
