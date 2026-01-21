@@ -133,7 +133,9 @@
             <div class="flex flex-col h-full p-8 pt-10">
               <h2 class="font-titles text-[1.75rem] leading-snug font-semibold mb-4 tracking-tight">{{ article.title | escape }}</h2>
               {%- if article.excerpt != blank -%}
-                <p class="text-base text-gray-600 mb-6">{{ article.excerpt | strip_html | truncate: 180 }}</p>
+                <p class="text-base text-gray-600 mb-6">{{ article.excerpt | strip_html | truncate: 150 }}</p>
+              {%- elsif article.content != blank -%}
+                <p class="text-base text-gray-600 mb-6">{{ article.content | strip_html | truncate: 150 }}</p>
               {%- endif -%}
               <div class="mt-auto flex items-center justify-between text-xs uppercase tracking-wide text-gray-500">
                 <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
