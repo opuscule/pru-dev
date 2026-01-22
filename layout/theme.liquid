@@ -120,7 +120,8 @@
                                             <a href="/collections/all" class="header__submenu-link block px-2 py-1 text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100">All Puppies</a>
                                         </li>
                                         {% for collection in collections %}
-                                            {% if collection.metafields.custom.shown_on_website == true %}
+                                            {% assign active_count = collection.products | where: 'available', true | size %}
+                                            {% if active_count >= 1 %}
                                                 <li>
                                                     <a href="{{ collection.url }}" class="header__submenu-link block text-body-copy no-underline transition-colors duration-200 ease-in-out hover:bg-gray-100 px-2 py-1">
                                                         {{ collection.title }}
