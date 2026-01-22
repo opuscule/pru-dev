@@ -234,9 +234,12 @@
                                 <li><a href="/collections/all" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">All Puppies</a></li>
                                 {% for collection in collections %}
                                     {% if collection.metafields.custom.shown_on_website == true %}
-                                        <li>
-                                            <a href="{{ collection.url }}" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">{{ collection.title }}</a>
-                                        </li>
+                                        {% assign active_count = collection.products | where: 'available', true | size %}
+                                        {% if active_count >= 1 %}
+                                            <li>
+                                                <a href="{{ collection.url }}" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">{{ collection.title }}</a>
+                                            </li>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </ul>
