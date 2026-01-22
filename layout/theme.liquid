@@ -233,13 +233,11 @@
                             <ul class="mobile-accordion-content hidden pl-4 py-2 flex flex-col gap-1 border-l-2 border-gray-200 ml-2">
                                 <li><a href="/collections/all" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">All Puppies</a></li>
                                 {% for collection in collections %}
-                                    {% if collection.metafields.custom.shown_on_website == true %}
-                                        {% assign active_count = collection.products | where: 'available', true | size %}
-                                        {% if active_count >= 1 %}
-                                            <li>
-                                                <a href="{{ collection.url }}" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">{{ collection.title }}</a>
-                                            </li>
-                                        {% endif %}
+                                    {% assign active_count = collection.products | where: 'available', true | size %}
+                                    {% if active_count >= 1 %}
+                                        <li>
+                                            <a href="{{ collection.url }}" class="text-body-copy block py-2 px-2 hover:bg-gray-50 rounded">{{ collection.title }}</a>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                             </ul>
