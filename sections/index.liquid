@@ -150,6 +150,102 @@
     </div>
 -->
 
+<section id="available-breeds" class="py-12">
+    <div class="max-w-[var(--width-container-content)] mx-auto px-8">
+        <h2 class="font-titles text-center text-5xl mb-8">Browse by Breed</h2>
+
+        <!-- carousel of breeds available -->
+        <div
+            id="homepage-breeds-carousel"
+            class="splide relative"
+            role="group"
+            aria-label="Available breeds carousel"
+        >
+            <div class="splide__track">
+                <ul class="splide__list">
+                    {% for collection in collections %}
+                        {% if collection.products_count > 0 and collection.handle != 'all' %}
+                            {% assign breed_image = collection.image %}
+                            {% if breed_image == blank %}
+                                {% assign breed_image = collection.products.first.featured_image %}
+                            {% endif %}
+                            
+                            <li class="splide__slide">
+                                <a href="{{ collection.url }}" class="block group h-full">
+                                    <div class="flex flex-col bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all h-full pb-4">
+                                        <div class="relative w-full aspect-square overflow-hidden bg-gray-100">
+                                            {% if breed_image != blank %}
+                                                <img 
+                                                    src="{{ breed_image | image_url: width: 400, height: 400, crop: 'center' }}"
+                                                    alt="{{ collection.title | escape }}"
+                                                    loading="lazy"
+                                                    width="400"
+                                                    height="400"
+                                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                >
+                                            {% else %}
+                                                <img 
+                                                    src="https://picsum.photos/350" 
+                                                    alt="{{ collection.title | escape }}" 
+                                                    loading="lazy"
+                                                    width="350"
+                                                    height="350"
+                                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                >
+                                            {% endif %}
+                                        </div>
+                                        <div class="p-4 text-center">
+                                            <h3 class="font-titles text-2xl text-gray-800 group-hover:text-primary transition-colors leading-tight">{{ collection.title }}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Custom navigation arrows -->
+            <button
+                id="breeds-prev"
+                type="button"
+                aria-label="Previous breeds"
+                class="
+                    puppies-arrow absolute top-1/2 -translate-y-1/2 left-2
+                    bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
+                    w-12 h-12 rounded-full z-10 flex items-center justify-center
+                    text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
+                    focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
+                "
+                style="margin-left: 10px;"
+            >
+                <span class="block translate-y-[2px]" style="margin-top: -10px;">&lsaquo;</span>
+            </button>
+
+            <button
+                id="breeds-next"
+                type="button"
+                aria-label="Next breeds"
+                class="
+                    puppies-arrow absolute top-1/2 -translate-y-1/2 right-2
+                    bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
+                    w-12 h-12 rounded-full z-10 flex items-center justify-center
+                    text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
+                    focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
+                "
+                style="margin-right: 10px;"
+            >
+                <span class="block translate-y-[2px]" style="margin-top: -10px;">&rsaquo;</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+
+
+
 <section id="newest-additions" class="border-t-[0.65rem] border-t-primary pt-12">
     <!-- Homepage puppies carousel -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
@@ -493,11 +589,41 @@
             });
         }
 
+        function initBreedsCarousel() {
+            const el = document.getElementById('homepage-breeds-carousel');
+            if (!el) return;
+            
+            const splide = new Splide('#homepage-breeds-carousel', {
+                type: 'slide',
+                perPage: 4,
+                perMove: 1,
+                gap: '0', 
+                arrows: false,
+                pagination: false,
+                padding: { left: 0, right: 0 },
+                focus: 'start',
+                trimSpace: true,
+                breakpoints: {
+                    1023: { perPage: 3 },
+                    767: { perPage: 2 },
+                },
+            }).mount();
+
+            const prevBtn = document.getElementById('breeds-prev');
+            const nextBtn = document.getElementById('breeds-next');
+            if (prevBtn) prevBtn.addEventListener('click', () => splide.go('<'));
+            if (nextBtn) nextBtn.addEventListener('click', () => splide.go('>'));
+        }
+
         if (window.Splide) {
             initPuppiesCarousel();
+            initBreedsCarousel();
         } else {
             window.addEventListener('load', function () {
-                if (window.Splide) initPuppiesCarousel();
+                if (window.Splide) {
+                    initPuppiesCarousel();
+                    initBreedsCarousel();
+                }
             });
         }
     });
@@ -572,6 +698,33 @@
     /* Mobile < 768px: 2 slides */
     @media (max-width: 767.98px) {
         #homepage-puppies-carousel .splide__slide {
+            flex: 0 0 calc((100% - 2rem) / 2);
+        }
+    }
+
+    /* Breeds Carousel Styles */
+    #homepage-breeds-carousel .splide__track {
+        overflow: hidden;
+    }
+    #homepage-breeds-carousel .splide__list {
+        display: flex;
+        gap: 2rem;
+    }
+    /* Desktop >= 1024px: 4 slides */
+    @media (min-width: 1024px) {
+        #homepage-breeds-carousel .splide__slide {
+            flex: 0 0 calc((100% - 6rem) / 4);
+        }
+    }
+    /* Tablet 768-1023px: 3 slides */
+    @media (min-width: 768px) and (max-width: 1023.98px) {
+        #homepage-breeds-carousel .splide__slide {
+            flex: 0 0 calc((100% - 4rem) / 3);
+        }
+    }
+    /* Mobile < 768px: 2 slides */
+    @media (max-width: 767.98px) {
+        #homepage-breeds-carousel .splide__slide {
             flex: 0 0 calc((100% - 2rem) / 2);
         }
     }
