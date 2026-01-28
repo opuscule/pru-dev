@@ -1275,6 +1275,11 @@ video {
   height: 100%;
 }
 
+.h-min {
+  height: -moz-min-content;
+  height: min-content;
+}
+
 .max-h-0 {
   max-height: 0px;
 }
