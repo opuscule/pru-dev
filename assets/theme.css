@@ -2801,6 +2801,10 @@ video {
   letter-spacing: 0.025em;
 }
 
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
 .text-\[\#F2635B\] {
   --tw-text-opacity: 1;
   color: rgb(242 99 91 / var(--tw-text-opacity, 1));
