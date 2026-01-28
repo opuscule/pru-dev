@@ -163,7 +163,7 @@
             <div class="splide__track">
                 <ul class="splide__list">
                     {% for collection in collections %}
-                        {% if collection.products_count > 0 and collection.handle != 'all' %}
+                        {% if collection.products_count > 0 and collection.handle != 'all' and collection.handle != 'home-pages' %}
                             {% assign breed_image = collection.image %}
                             {% if breed_image == blank %}
                                 {% assign breed_image = collection.products.first.featured_image %}
