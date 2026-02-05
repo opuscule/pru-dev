@@ -263,19 +263,7 @@
             tabindex="0"
         >
             <div class="splide__track">
-                <ul class="splide__list">
-                    {% assign ap = collections.all | default: collections.all %}
-                    {% if ap and ap.products.size > 0 %}
-                        {% assign count = 0 %}
-                        {% for p in ap.products %}
-                            {% if count >= 8 %}{% break %}{% endif %}
-                            <li class="splide__slide">
-                                {% render 'puppy-card', product: p %}
-                            </li>
-                            {% assign count = count | plus: 1 %}
-                        {% endfor %}
-                    {% endif %}
-                </ul>
+                
             </div>
             <!-- Custom navigation arrows -->
             <button
