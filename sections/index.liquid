@@ -407,122 +407,6 @@
             });
         }
 
-        // Initialize Splide homepage carousel if available
-        function initPuppiesCarousel() {
-            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            let autoplayEnabled = !prefersReduced; // Respect user reduced motion preference
-
-            const splide = new Splide('#homepage-puppies-carousel', {
-                type: 'slide',
-                perPage: 4, // desktop: 4 full slides
-                perMove: 1,
-                gap: '0', // we handle visual gap via CSS gap to avoid rounding overflow
-                arrows: false, // using custom arrows
-                pagination: false,
-                autoplay: autoplayEnabled,
-                interval: 5000,
-                padding: { left: 0, right: 0 },
-                focus: 'start',
-                trimSpace: true,
-                breakpoints: {
-                    1023: { perPage: 3 }, // tablet
-                    767: { perPage: 2 },
-                },
-            }).mount();
-
-            // Expose instance for external handlers / late-bound scripts
-            window.__puppiesSplide = splide;
-
-            function getSplide() {
-                const inst = window.__puppiesSplide;
-                if (!inst || typeof inst.go !== 'function') {
-                    console.warn('[Puppies Carousel] Splide instance not ready when arrow clicked.');
-                    return null;
-                }
-                return inst;
-            }
-
-            const prevBtn = document.getElementById('puppies-prev');
-            const nextBtn = document.getElementById('puppies-next');
-            if (prevBtn)
-                prevBtn.addEventListener('click', () => {
-                    const inst = getSplide();
-                    if (inst) inst.go('<');
-                });
-            if (nextBtn)
-                nextBtn.addEventListener('click', () => {
-                    const inst = getSplide();
-                    if (inst) inst.go('>');
-                });
-
-            // Autoplay toggle button
-            const toggleBtn = document.getElementById('puppies-autoplay-toggle');
-            let playing = autoplayEnabled;
-            function updateToggle() {
-                if (!toggleBtn) return;
-                toggleBtn.textContent = playing ? 'Pause' : 'Play';
-                toggleBtn.setAttribute('aria-label', (playing ? 'Pause' : 'Play') + ' carousel autoplay');
-                toggleBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-            }
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    if (!playing) {
-                        splide.Components.Autoplay.play();
-                        playing = true;
-                    } else {
-                        splide.Components.Autoplay.pause();
-                        playing = false;
-                    }
-                    updateToggle();
-                });
-                updateToggle();
-            }
-
-            // Keyboard navigation & spacebar autoplay toggle when carousel focused
-            const carouselEl = document.getElementById('homepage-puppies-carousel');
-            if (carouselEl) {
-                carouselEl.addEventListener('keydown', (e) => {
-                    switch (e.key) {
-                        case 'ArrowLeft':
-                            splide.go('<');
-                            e.preventDefault();
-                            break;
-                        case 'ArrowRight':
-                            splide.go('>');
-                            e.preventDefault();
-                            break;
-                        case ' ': // Space toggles autoplay
-                        case 'Spacebar':
-                            if (playing) {
-                                splide.Components.Autoplay.pause();
-                                playing = false;
-                            } else {
-                                splide.Components.Autoplay.play();
-                                playing = true;
-                            }
-                            updateToggle();
-                            e.preventDefault();
-                            break;
-                    }
-                });
-            }
-
-            // Listen for reduced motion preference changes
-            const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-            media.addEventListener('change', (ev) => {
-                if (ev.matches) {
-                    // user now prefers reduced motion
-                    splide.Components.Autoplay.pause();
-                    playing = false;
-                } else if (!playing) {
-                    // user no longer prefers reduced motion, but only auto-resume if previously playing before
-                    splide.Components.Autoplay.play();
-                    playing = true;
-                }
-                updateToggle();
-            });
-        }
-
         function initBreedsCarousel() {
             const el = document.getElementById('homepage-breeds-carousel');
             if (!el) return;
@@ -550,14 +434,10 @@
         }
 
         if (window.Splide) {
-            initPuppiesCarousel();
             initBreedsCarousel();
         } else {
             window.addEventListener('load', function () {
-                if (window.Splide) {
-                    initPuppiesCarousel();
-                    initBreedsCarousel();
-                }
+                if (window.Splide) initBreedsCarousel();
             });
         }
     });
