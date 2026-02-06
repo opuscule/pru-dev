@@ -489,32 +489,7 @@
     #breed-search-btn {
         letter-spacing: 0.5px;
     }
-    /* Ensure equal spacing & exactly 4 (desktop) / 3 (tablet) / 2 (mobile) visible slides without peeking */
-    #homepage-puppies-carousel .splide__track {
-        overflow: hidden;
-    }
-    #homepage-puppies-carousel .splide__list {
-        display: flex;
-        gap: 2rem;
-    }
-    /* Desktop >= 1024px: 4 slides */
-    @media (min-width: 1024px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 6rem) / 4);
-        }
-    }
-    /* Tablet 768-1023px: 3 slides */
-    @media (min-width: 768px) and (max-width: 1023.98px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 4rem) / 3);
-        }
-    }
-    /* Mobile < 768px: 2 slides */
-    @media (max-width: 767.98px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 2rem) / 2);
-        }
-    }
+
 
     /* Breeds Carousel Styles */
     #homepage-breeds-carousel .splide__track {
