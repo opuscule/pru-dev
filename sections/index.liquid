@@ -432,17 +432,25 @@
             
             const splide = new Splide('#homepage-breeds-carousel', {
                 type: 'slide',
-                perPage: 4,
+                perPage: 3,
                 perMove: 1,
-                gap: '0', 
+                gap: '1.5rem',
                 arrows: false,
                 pagination: false,
-                padding: { left: 0, right: 0 },
+                padding: { left: 0, right: '15%' },
                 focus: 'start',
-                trimSpace: true,
+                trimSpace: false,
                 breakpoints: {
-                    1023: { perPage: 3 },
-                    767: { perPage: 2 },
+                    1023: {
+                        perPage: 2,
+                        gap: '1.25rem',
+                        padding: { left: 0, right: '20%' },
+                    },
+                    767: {
+                        perPage: 1,
+                        gap: '1rem',
+                        padding: { left: 0, right: '30%' },
+                    },
                 },
             }).mount();
 
@@ -513,27 +521,7 @@
     /* Breeds Carousel Styles */
     #homepage-breeds-carousel .splide__track {
         overflow: hidden;
-    }
-    #homepage-breeds-carousel .splide__list {
-        display: flex;
-        gap: 2rem;
-    }
-    /* Desktop >= 1024px: 4 slides */
-    @media (min-width: 1024px) {
-        #homepage-breeds-carousel .splide__slide {
-            flex: 0 0 calc((100% - 6rem) / 4);
-        }
-    }
-    /* Tablet 768-1023px: 3 slides */
-    @media (min-width: 768px) and (max-width: 1023.98px) {
-        #homepage-breeds-carousel .splide__slide {
-            flex: 0 0 calc((100% - 4rem) / 3);
-        }
-    }
-    /* Mobile < 768px: 2 slides */
-    @media (max-width: 767.98px) {
-        #homepage-breeds-carousel .splide__slide {
-            flex: 0 0 calc((100% - 2rem) / 2);
-        }
+        -webkit-mask-image: linear-gradient(to right, #000 80%, transparent 100%);
+        mask-image: linear-gradient(to right, #000 80%, transparent 100%);
     }
 {% endstylesheet %}
