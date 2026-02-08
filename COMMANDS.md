@@ -51,7 +51,7 @@ shopify theme push --store <store-url> --theme <theme-name-or-id>
 ```
 Example:
 ```bash
-shopify theme push --store puppysrusdev.myshopify.com --theme pru-dev
+shopify theme push --store puppysrusdev.myshopify.com --theme pru-dev/main
 ```
 
 ### Pull from Shopify

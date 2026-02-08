@@ -1,0 +1,252 @@
+[
+{
+"show": true,
+"label": "Beagle",
+"value": "beagle"
+},
+{
+"show": true,
+"label": "Cocker Spaniel",
+"value": "cocker-spaniel"
+},
+{
+"show": false,
+"label": "American Corgi",
+"value": "american-corgi"
+},
+{
+"show": false,
+"label": "American Eskimo",
+"value": "american-eskimo"
+},
+{
+"show": false,
+"label": "Auggie",
+"value": "auggie"
+},
+{
+"show": false,
+"label": "Aussiedoodle",
+"value": "aussiedoodle"
+},
+{
+"show": true,
+"label": "Basset Hound",
+"value": "basset-hound"
+},
+{
+"show": false,
+"label": "Beaglier",
+"value": "beaglier"
+},
+{
+"show": true,
+"label": "Bernedoodle",
+"value": "bernedoodle"
+},
+{
+"show": false,
+"label": "Bichon Frise",
+"value": "bichon-frise"
+},
+{
+"show": false,
+"label": "Bichonpoo",
+"value": "bichonpoo"
+},
+{
+"show": false,
+"label": "Border Collie",
+"value": "border-collie"
+},
+{
+"show": false,
+"label": "Boston Terrier",
+"value": "boston-terrier"
+},
+{
+"show": false,
+"label": "Boxer",
+"value": "boxer"
+},
+{
+"show": true,
+"label": "Cavapoo",
+"value": "cavapoo"
+},
+{
+"show": false,
+"label": "Cockalier",
+"value": "cockalier"
+},
+{
+"show": false,
+"label": "Dalmatian",
+"value": "dalmatian"
+},
+{
+"show": false,
+"label": "English Bulldog",
+"value": "english-bulldog"
+},
+{
+"show": false,
+"label": "French Bulldog",
+"value": "french-bulldog"
+},
+{
+"show": true,
+"label": "German Shepherd",
+"value": "german-shepherd"
+},
+{
+"show": true,
+"label": "Goldendoodle",
+"value": "goldendoodle"
+},
+{
+"show": false,
+"label": "Havanese",
+"value": "havanese"
+},
+{
+"show": false,
+"label": "Havapoo",
+"value": "havapoo"
+},
+{
+"show": false,
+"label": "Labradoodle",
+"value": "labradoodle"
+},
+{
+"show": true,
+"label": "Labrador Retriever",
+"value": "labrador-retriever"
+},
+{
+"show": false,
+"label": "Maltipoo",
+"value": "maltipoo"
+},
+{
+"show": false,
+"label": "Morkie",
+"value": "morkie"
+},
+{
+"show": false,
+"label": "Pembroke Welsh Corgi",
+"value": "pembroke-welsh-corgi"
+},
+{
+"show": true,
+"label": "Pomapoo",
+"value": "pomapoo"
+},
+{
+"show": true,
+"label": "Pomeranian",
+"value": "pomeranian"
+},
+{
+"show": true,
+"label": "Poodle",
+"value": "poodle"
+},
+{
+"show": false,
+"label": "Pug",
+"value": "pug"
+},
+{
+"show": true,
+"label": "Rottweiler",
+"value": "rottweiler"
+},
+{
+"show": false,
+"label": "Schnoodle",
+"value": "schnoodle"
+},
+{
+"show": false,
+"label": "Shiba Inu",
+"value": "shiba-inu"
+},
+{
+"show": false,
+"label": "Shichon",
+"value": "shichon"
+},
+{
+"show": false,
+"label": "Shih Tzu",
+"value": "shih-tzu"
+},
+{
+"show": false,
+"label": "Shihpoo",
+"value": "shihpoo"
+},
+{
+"show": false,
+"label": "Siberian Husky",
+"value": "siberian-husky"
+},
+{
+"show": true,
+"label": "Yorkie Poo",
+"value": "yorkie-poo"
+},
+{
+"show": true,
+"label": "Yorkshire Terrier",
+"value": "yorkshire-terrier"
+},
+{
+"show": false,
+"label": "Maltese",
+"value": "maltese"
+},
+{
+"show": true,
+"label": "Dachshund",
+"value": "dachshund"
+},
+{
+"show": false,
+"label": "Miniature Schnauzer",
+"value": "miniature-schnauzer"
+},
+{
+"show": false,
+"label": "Silky Terrier",
+"value": "silky-terrier"
+},
+{
+"show": true,
+"label": "Cavalier King Charles Spaniel",
+"value": "cavalier-king-charles-spaniel"
+},
+{
+"show": false,
+"label": "Golden Retriever",
+"value": "golden-retriever"
+},
+{
+"show": false,
+"label": "Cockapoo",
+"value": "cockapoo"
+},
+{
+"show": false,
+"label": "Australian Shepherd",
+"value": "australian-shepherd"
+},
+{
+"show": false,
+"label": "Bernese Mountain Dog",
+"value": "bernese-mountain-dog"
+}
+]

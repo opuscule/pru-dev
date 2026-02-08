@@ -104,7 +104,7 @@
 
     <section
         id="homepage-hero"
-        class="relative isolate pt-40 bg-cover bg-[url('https://cdn.shopify.com/s/files/1/0603/0471/9957/files/puppysrus-banner-2023.webp?v=1764048706')] bg-[position:center_-3rem]"
+        class="relative isolate pt-40 bg-cover bg-[url('https://cdn.shopify.com/s/files/1/0603/0471/9957/files/puppysrus-banner-2023.webp?v=1764048706')] bg-no-repeat"
     >
         <div class="bg-cover bg-center">
             <div class="container-width-banner">
@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div class="next_section_tab mt-5 flex justify-center">
-                <h2 class="bg-primary rounded-t text-white inline-flex text-5xl font-semibold leading-none mx-auto pt-[0.2em] px-[1em] text-center">Our Newest Additions</h2>
+                <h2 class="bg-primary rounded-t-xl text-white inline-flex text-4xl md:text-5xl font-semibold leading-none mx-auto pt-2 px-[1em] pb-1 text-center">Browse by Breed</h2>
             </div>
         </div>
     </section>
@@ -150,83 +150,132 @@
     </div>
 -->
 
-<section id="newest-additions" class="border-t-[0.65rem] border-t-primary pt-12">
-    <!-- Homepage puppies carousel -->
+<section id="available-breeds" class="border-t-8 border-t-primary pt-16 pb-12">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    <div class="max-w-[var(--width-container-content)] mx-auto px-8">
 
-    <div class="home_carousel_wrapper max-w-[var(--width-container-content)] mx-auto px-8">
+        <!-- carousel of breeds available -->
         <div
-            id="homepage-puppies-carousel"
-            class="splide mt-6 relative"
+            id="homepage-breeds-carousel"
+            class="splide relative"
             role="group"
-            aria-label="Newest puppies carousel"
-            tabindex="0"
+            aria-label="Available breeds carousel"
         >
             <div class="splide__track">
                 <ul class="splide__list">
-                    {% assign ap = collections.all | default: collections.all %}
-                    {% if ap and ap.products.size > 0 %}
-                        {% assign count = 0 %}
-                        {% for p in ap.products %}
-                            {% if count >= 8 %}{% break %}{% endif %}
+                    {% for collection in collections %}
+                        {% if collection.products_count > 0 and collection.handle != 'all' and collection.handle != 'frontpage' %}
+                            {% assign breed_image = collection.image %}
+                            {% if breed_image == blank %}
+                                {% assign breed_image = collection.products.first.featured_image %}
+                            {% endif %}
+                            
                             <li class="splide__slide">
-                                {% render 'puppy-card', product: p %}
+                                <a href="{{ collection.url }}" class="block group h-full">
+                                    <div class="flex flex-col rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all pb-4 bg-bg-card align-top">
+                                        <div class="relative w-full aspect-square overflow-hidden">
+                                            {% if breed_image != blank %} 
+                                                <img 
+                                                    src="{{ breed_image | image_url: width: 400, height: 400, crop: 'center' }}"
+                                                    alt="{{ collection.title | escape }}"
+                                                    loading="lazy"
+                                                    width="400"
+                                                    height="400"
+                                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                >
+                                            {% else %}
+                                                <img 
+                                                    src="https://picsum.photos/350" 
+                                                    alt="{{ collection.title | escape }}" 
+                                                    loading="lazy"
+                                                    width="350"
+                                                    height="350"
+                                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                >
+                                            {% endif %}
+                                        </div>
+                                        <div class="p-4 pb-1 text-center border-t-4 border-t-primary">
+                                            <h3 class="font-titles font-bold text-3xl group-hover:text-primary transition-colors leading-tight tracking-tight">{{ collection.title }}s</h3>
+                                        </div>
+                                    </div>
+                                </a>
                             </li>
-                            {% assign count = count | plus: 1 %}
-                        {% endfor %}
-                    {% endif %}
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
+
             <!-- Custom navigation arrows -->
             <button
-                id="puppies-prev"
+                id="breeds-prev"
                 type="button"
-                aria-label="Previous puppies"
+                aria-label="Previous breeds"
                 class="
-                    puppies-arrow absolute top-1/2 -translate-y-1/2 left-2
+                    puppies-arrow absolute top-1/2 -translate-y-1/2 left-4
                     bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
                     w-12 h-12 rounded-full z-10 flex items-center justify-center
                     text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
                     focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
                     focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
+                    pb-1 pr-[2pxgit]
                 "
-                style="margin-left: 10px;"
             >
                 <span class="block translate-y-[2px]" style="margin-top: -10px;">&lsaquo;</span>
             </button>
 
             <button
-                id="puppies-next"
+                id="breeds-next"
                 type="button"
-                aria-label="Next puppies"
+                aria-label="Next breeds"
                 class="
-                    puppies-arrow absolute top-1/2 -translate-y-1/2 right-2
+                    puppies-arrow absolute top-1/2 -translate-y-1/2 right-4
                     bg-[rgba(238,106,91,0.6)] hover:bg-[rgba(238,106,91,0.85)]
                     w-12 h-12 rounded-full z-10 flex items-center justify-center
                     text-white text-[45px] leading-[0] p-0 cursor-pointer select-none
                     focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60
                     focus-visible:ring-offset-2 focus-visible:ring-offset-white transition
                 "
-                style="margin-right: 10px;"
             >
                 <span class="block translate-y-[2px]" style="margin-top: -10px;">&rsaquo;</span>
             </button>
         </div>
-    </div>
-    <!-- .home_carousel_wrapper -->
+        <script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-
-    <div class="my-12 text-center">
-        <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">View All Puppies</a>
+        <div class="mt-14 mb-2 text-center">
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary transition-colors duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary outline-none">
+                View All Puppies
+            </a>
+        </div>
     </div>
 </section>
+
+
+
+
+
 
 {% render 'puppiesrus-difference' %}
 
 {% render 'meet-a-breeder' %}
 
-{% render 'about-us' %}
+<section id="about_us">
+    <div class="max-w-[var(--width-container-content)] mx-auto px-4 mb-16">
+        <div class="flex items-center flex-wrap justify-between">
+            <div class="pr-0 md:pr-5 w-full md:w-2/5 mb-4 md:mb-0">
+                <h2 class="font-titles text-6xl font-semibold leading-tight">About Us</h2>
+                <h3 class="font-titles text-4xl leading-tight mb-4">Sonny &amp; Amy Smith - Owners</h3>
+                <p class="mb-4">We are passionate about finding and connecting families with their perfect puppy through responsible breeding. We've spent time building relationships with our breeder families to ensure we are providing families with healthy &amp; happy puppies!</p>
+                <p class="mb-4">All puppies are raised around families, are well cared for and socialized before being placed with their furever homes. Above all, we understand adding a puppy to your family can be an overwhelming experience, for that reason, we take the time to understand your lifestyle and needs that way you end up with your perfect puppy!</p>
+                <p>
+                    <a class="btn btn-secondary inline-flex" href="/pages/about-us/">Learn more</a>
+                </p>
+            </div>
+            <div class="w-full md:w-2/5">
+                <img class="w-full border-b-8 border-l-8 border-solid border-[var(--color-primary)] rounded-l-3xl" src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/amy-sonny-puppysrus.webp?v=1764041698" alt="Owners Amy and Sonny" width="725" height="947" title="Owners Amy and Sonny Smith" decoding="async" loading="lazy">
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Embedded Testimonials (previously separate section) -->
 <section id="happy-families" class="pt-24 pb-[200px] mb-[-200px] bg-[var(--color-bg-extralight)]">
@@ -377,127 +426,45 @@
             });
         }
 
-        // Initialize Splide homepage carousel if available
-        function initPuppiesCarousel() {
-            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            let autoplayEnabled = !prefersReduced; // Respect user reduced motion preference
-
-            const splide = new Splide('#homepage-puppies-carousel', {
+        function initBreedsCarousel() {
+            const el = document.getElementById('homepage-breeds-carousel');
+            if (!el) return;
+            
+            const splide = new Splide('#homepage-breeds-carousel', {
                 type: 'slide',
-                perPage: 4, // desktop: 4 full slides
+                perPage: 3,
                 perMove: 1,
-                gap: '0', // we handle visual gap via CSS gap to avoid rounding overflow
-                arrows: false, // using custom arrows
+                gap: '1.5rem',
+                arrows: false,
                 pagination: false,
-                autoplay: autoplayEnabled,
-                interval: 5000,
-                padding: { left: 0, right: 0 },
+                padding: { left: 0, right: '15%' },
                 focus: 'start',
-                trimSpace: true,
+                trimSpace: false,
                 breakpoints: {
-                    1023: { perPage: 3 }, // tablet
-                    767: { perPage: 2 },
+                    1023: {
+                        perPage: 2,
+                        gap: '1.25rem',
+                        padding: { left: 0, right: '20%' },
+                    },
+                    767: {
+                        perPage: 1,
+                        gap: '1rem',
+                        padding: { left: 0, right: '30%' },
+                    },
                 },
             }).mount();
 
-            // Expose instance for external handlers / late-bound scripts
-            window.__puppiesSplide = splide;
-
-            function getSplide() {
-                const inst = window.__puppiesSplide;
-                if (!inst || typeof inst.go !== 'function') {
-                    console.warn('[Puppies Carousel] Splide instance not ready when arrow clicked.');
-                    return null;
-                }
-                return inst;
-            }
-
-            const prevBtn = document.getElementById('puppies-prev');
-            const nextBtn = document.getElementById('puppies-next');
-            if (prevBtn)
-                prevBtn.addEventListener('click', () => {
-                    const inst = getSplide();
-                    if (inst) inst.go('<');
-                });
-            if (nextBtn)
-                nextBtn.addEventListener('click', () => {
-                    const inst = getSplide();
-                    if (inst) inst.go('>');
-                });
-
-            // Autoplay toggle button
-            const toggleBtn = document.getElementById('puppies-autoplay-toggle');
-            let playing = autoplayEnabled;
-            function updateToggle() {
-                if (!toggleBtn) return;
-                toggleBtn.textContent = playing ? 'Pause' : 'Play';
-                toggleBtn.setAttribute('aria-label', (playing ? 'Pause' : 'Play') + ' carousel autoplay');
-                toggleBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-            }
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    if (!playing) {
-                        splide.Components.Autoplay.play();
-                        playing = true;
-                    } else {
-                        splide.Components.Autoplay.pause();
-                        playing = false;
-                    }
-                    updateToggle();
-                });
-                updateToggle();
-            }
-
-            // Keyboard navigation & spacebar autoplay toggle when carousel focused
-            const carouselEl = document.getElementById('homepage-puppies-carousel');
-            if (carouselEl) {
-                carouselEl.addEventListener('keydown', (e) => {
-                    switch (e.key) {
-                        case 'ArrowLeft':
-                            splide.go('<');
-                            e.preventDefault();
-                            break;
-                        case 'ArrowRight':
-                            splide.go('>');
-                            e.preventDefault();
-                            break;
-                        case ' ': // Space toggles autoplay
-                        case 'Spacebar':
-                            if (playing) {
-                                splide.Components.Autoplay.pause();
-                                playing = false;
-                            } else {
-                                splide.Components.Autoplay.play();
-                                playing = true;
-                            }
-                            updateToggle();
-                            e.preventDefault();
-                            break;
-                    }
-                });
-            }
-
-            // Listen for reduced motion preference changes
-            const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-            media.addEventListener('change', (ev) => {
-                if (ev.matches) {
-                    // user now prefers reduced motion
-                    splide.Components.Autoplay.pause();
-                    playing = false;
-                } else if (!playing) {
-                    // user no longer prefers reduced motion, but only auto-resume if previously playing before
-                    splide.Components.Autoplay.play();
-                    playing = true;
-                }
-                updateToggle();
-            });
+            const prevBtn = document.getElementById('breeds-prev');
+            const nextBtn = document.getElementById('breeds-next');
+            if (prevBtn) prevBtn.addEventListener('click', () => splide.go('<'));
+            if (nextBtn) nextBtn.addEventListener('click', () => splide.go('>'));
         }
 
         if (window.Splide) {
-            initPuppiesCarousel();
+            initBreedsCarousel();
         } else {
             window.addEventListener('load', function () {
-                if (window.Splide) initPuppiesCarousel();
+                if (window.Splide) initBreedsCarousel();
             });
         }
     });
@@ -549,30 +516,12 @@
     #breed-search-btn {
         letter-spacing: 0.5px;
     }
-    /* Ensure equal spacing & exactly 4 (desktop) / 3 (tablet) / 2 (mobile) visible slides without peeking */
-    #homepage-puppies-carousel .splide__track {
+
+
+    /* Breeds Carousel Styles */
+    #homepage-breeds-carousel .splide__track {
         overflow: hidden;
-    }
-    #homepage-puppies-carousel .splide__list {
-        display: flex;
-        gap: 2rem;
-    }
-    /* Desktop >= 1024px: 4 slides */
-    @media (min-width: 1024px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 6rem) / 4);
-        }
-    }
-    /* Tablet 768-1023px: 3 slides */
-    @media (min-width: 768px) and (max-width: 1023.98px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 4rem) / 3);
-        }
-    }
-    /* Mobile < 768px: 2 slides */
-    @media (max-width: 767.98px) {
-        #homepage-puppies-carousel .splide__slide {
-            flex: 0 0 calc((100% - 2rem) / 2);
-        }
+        -webkit-mask-image: linear-gradient(to right, #000 80%, transparent 100%);
+        mask-image: linear-gradient(to right, #000 80%, transparent 100%);
     }
 {% endstylesheet %}

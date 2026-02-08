@@ -73,6 +73,14 @@
       "normal": "Normal text"
     },
   },
+  "contact": {
+    "title": "Contact us",
+    "sidebar": {
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Business hours"
+    }
+  },
   "sections": {
     "testimonials": {
       "name": "Testimonials (Contentful)",
