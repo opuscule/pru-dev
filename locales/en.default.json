@@ -68,6 +68,27 @@
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
   },
+  "contact": {
+    "title": "Contact us",
+    "form": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email address",
+      "subject": "Subject",
+      "message": "Your message",
+      "message_placeholder": "How can we help you?",
+      "submit": "Send message"
+    },
+    "sidebar": {
+      "get_in_touch": "Get in touch",
+      "description": "Have a question about a puppy or need help? We'd love to hear from you!",
+      "call": "Call",
+      "text": "Text",
+      "email": "Email",
+      "owners": "Owners",
+      "mailing_address": "Mailing address"
+    }
+  },
   "financing": {
     "title": "Financing",
     "boost_power": "Boost your Purchasing Power!",
