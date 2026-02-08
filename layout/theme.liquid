@@ -48,6 +48,49 @@
             })(window, document, 'script', 'dataLayer', 'GTM-NVBX4VJ');
         </script>
         <!-- End Google Tag Manager -->
+
+        <!-- GCLID capture: store in cookie, populate hidden form fields -->
+        <script>
+            (function () {
+                var COOKIE_NAME = '_pru_gclid';
+                var COOKIE_DAYS = 90;
+
+                function setCookie(name, value, days) {
+                    var d = new Date();
+                    d.setTime(d.getTime() + days * 864e5);
+                    document.cookie = name + '=' + encodeURIComponent(value) +
+                        ';expires=' + d.toUTCString() +
+                        ';path=/;SameSite=Lax';
+                }
+
+                function getCookie(name) {
+                    var m = document.cookie.match('(^|;)\\s*' + name + '=([^;]*)');
+                    return m ? decodeURIComponent(m[2]) : '';
+                }
+
+                // 1. If gclid is in the URL, save it to a cookie
+                var params = new URLSearchParams(window.location.search);
+                var gclid = params.get('gclid');
+                if (gclid) {
+                    setCookie(COOKIE_NAME, gclid, COOKIE_DAYS);
+                } else {
+                    gclid = getCookie(COOKIE_NAME);
+                }
+
+                // 2. Once DOM is ready, fill every matching hidden field
+                if (gclid) {
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Zoho's zc_gad fields
+                        var gadFields = document.querySelectorAll('input[name="zc_gad"]');
+                        for (var i = 0; i < gadFields.length; i++) gadFields[i].value = gclid;
+
+                        // Explicit gclid field (e.g. breed-landing form)
+                        var gclidField = document.getElementById('gclid');
+                        if (gclidField) gclidField.value = gclid;
+                    });
+                }
+            })();
+        </script>
     </head>
 
     <body>

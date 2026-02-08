@@ -383,17 +383,6 @@
 
 {% javascript %}
     document.addEventListener('DOMContentLoaded', function () {
-        // Capture GCLID from URL parameter for Google Ads tracking
-        const urlParams = new URLSearchParams(window.location.search);
-        const gclid = urlParams.get('gclid');
-
-        if (gclid) {
-            const gclidInput = document.getElementById('gclid');
-            if (gclidInput) {
-                gclidInput.value = gclid;
-            }
-        }
-
         // Handle form submission and show success message
         const form = document.getElementById('breed-contact-form');
         const successMessage = document.getElementById('form-success-message');
