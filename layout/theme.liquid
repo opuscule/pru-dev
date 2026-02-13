@@ -9,6 +9,14 @@
           </script>
         {% endif %}
 
+        {% # Redirect /pup/* URLs to /products/* %}
+        {% if request.path contains '/pup/' %}
+          {% assign pup = request.path | remove: '/pup/' | remove: '/' %}
+          <script>
+            window.location.href = '/products/{{ pup }}';
+          </script>
+        {% endif %}
+
         {% # Load and preload the critical CSS %}
         {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
