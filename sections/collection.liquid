@@ -127,7 +127,7 @@
                         </div>
                     {% else %}
                         <div class="collection-products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center w-[95%] mx-auto gap-8 {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
-                            {% assign sorted_products = collection.products | sort: "metafields.custom.sort_order_by_date" | reverse %}
+                            {% assign sorted_products = collection.products | sort: "metafields.custom.sort_order_by_date" %}
                             {% for product in sorted_products %}
                                 {% render 'puppy-card', product: product %}
                             {% endfor %}

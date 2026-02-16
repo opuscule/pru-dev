@@ -95,7 +95,7 @@
                                 <div id="breed-puppies-carousel" class="splide" aria-label="Puppies Carousel">
                                     <div class="splide__track">
                                         <ul class="splide__list">
-                                            {% assign sorted_products = collection.products | sort: "metafields.custom.sort_order_by_date" | reverse %}
+                                            {% assign sorted_products = collection.products | sort: "metafields.custom.sort_order_by_date" %}
                                             {%- for product in sorted_products limit: 8 -%}
                                                 <li class="splide__slide">
                                                     {% render 'puppy-card', product: product %}
