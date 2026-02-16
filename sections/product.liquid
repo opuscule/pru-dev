@@ -405,21 +405,59 @@
         const askBtn = document.getElementById('ask-about-btn');
         const takeBtn = document.getElementById('take-me-home-btn');
         const askModal = document.getElementById('ask-modal');
-        const askCancel = document.getElementById('ask-cancel');
+        const askCloseBtn = document.getElementById('ask-close-btn');
         const askForm = document.getElementById('ask-form');
 
-        if (askBtn && askModal) {
-            askBtn.addEventListener('click', () => {
-                askModal.classList.remove('hidden');
-                askModal.classList.add('flex');
-                askModal.setAttribute('aria-hidden', 'false');
-            });
-        }
-        if (askCancel && askModal) {
-            askCancel.addEventListener('click', () => {
+        const closeModal = () => {
+            if (askModal) {
                 askModal.classList.add('hidden');
                 askModal.classList.remove('flex');
                 askModal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = ''; // Restore scroll
+            }
+        };
+
+        const openModal = () => {
+            if (askModal) {
+                askModal.classList.remove('hidden');
+                askModal.classList.add('flex');
+                askModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden'; // Prevent scroll
+                if (askCloseBtn) askCloseBtn.focus();
+            }
+        };
+
+        if (askBtn && askModal) {
+            askBtn.addEventListener('click', openModal);
+        }
+
+        if (askCloseBtn) {
+            askCloseBtn.addEventListener('click', closeModal);
+        }
+
+        if (askModal) {
+            // Close on click outside content
+            askModal.addEventListener('click', (e) => {
+                if (e.target === askModal) {
+                    closeModal();
+                }
+            });
+            // Close on Esc key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && askModal && askModal.getAttribute('aria-hidden') === 'false') {
+                    closeModal();
+                }
+            });
+        }
+
+        if (askForm) {
+            askForm.addEventListener('submit', (e) => {
+                // If using AJAX submission, preventDefault would go here.
+                // Currently it submits to Zoho directly, so we let it proceed or handle it as needed.
+                // e.preventDefault(); 
+                
+                // For now, we can close the modal after a short delay or let the redirect happen
+                // setTimeout(closeModal, 100);
             });
         }
         if (askForm) {
