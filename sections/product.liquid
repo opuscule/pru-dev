@@ -218,15 +218,19 @@
                                     <input type="hidden" name="zf_redirect_url" value="">
                                     <input type="hidden" name="zc_gad" value="">
 
+                                    <!-- Hidden fields for disabled inputs (disabled fields don't submit) -->
+                                    <input type="hidden" name="SingleLine" value="{{ product.title }}">
+                                    <input type="hidden" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}">
+
                                     <!-- Two-column (on md+) wrapper for Name & ID -->
                                     <div class="md:flex md:gap-4">
                                         <div class="md:w-1/2 w-full mb-4 md:mb-0">
-                                            <label for="SingleLine" class="block mb-1">Puppy's Name</label>
-                                            <input type="text" name="SingleLine" value="{{ product.title }}" fieldType="1" maxlength="55" disabled class="w-full py-2.5 px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                            <label for="SingleLine_display" class="block mb-1">Puppy's Name</label>
+                                            <input type="text" id="SingleLine_display" value="{{ product.title }}" maxlength="55" disabled class="w-full py-2.5 px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
                                         </div>
                                         <div class="md:w-1/2 w-full">
-                                            <label for="Number" class="block mb-1">Puppy's ID</label>
-                                            <input type="text" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-2.5 px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                            <label for="Number_display" class="block mb-1">Puppy's ID</label>
+                                            <input type="text" id="Number_display" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-2.5 px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
                                         </div>
                                     </div>
 
@@ -463,7 +467,7 @@
         const takeBtn = document.getElementById('take-me-home-btn');
         const askModal = document.getElementById('ask-modal');
         const askCloseBtn = document.getElementById('ask-close-btn');
-        const askForm = document.getElementById('ask-form');
+        const askForm = document.getElementById('form');
 
         const closeModal = () => {
             if (askModal) {
@@ -508,23 +512,44 @@
         }
 
         if (askForm) {
-            askForm.addEventListener('submit', (e) => {
-                // If using AJAX submission, preventDefault would go here.
-                // Currently it submits to Zoho directly, so we let it proceed or handle it as needed.
-                // e.preventDefault(); 
-                
-                // For now, we can close the modal after a short delay or let the redirect happen
-                // setTimeout(closeModal, 100);
-            });
-        }
-        if (askForm) {
-            askForm.addEventListener('submit', (e) => {
+            askForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                // placeholder: implement AJAX or email submission here
-                alert('Message sent — placeholder');
-                askModal.classList.add('hidden');
-                askModal.classList.remove('flex');
-                askModal.setAttribute('aria-hidden', 'true');
+                
+                const formData = new FormData(askForm);
+                const submitBtn = askForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending...';
+                    
+                    const response = await fetch(askForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors' // Zoho doesn't support CORS, so we use no-cors
+                    });
+                    
+                    // With no-cors, we can't read the response, but if no error was thrown, assume success
+                    // Replace form content with success message
+                    const formContainer = askForm.parentElement;
+                    formContainer.innerHTML = `
+                        <div class="text-center py-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h3 class="text-2xl font-bold mb-2">Message Sent!</h3>
+                            <p class="text-gray-600 mb-4">Thank you for your inquiry about {{ product.title }}. We'll get back to you as soon as possible.</p>
+                            <button type="button" class="btn btn-primary" onclick="document.getElementById('ask-modal').classList.add('hidden'); document.getElementById('ask-modal').classList.remove('flex'); document.getElementById('ask-modal').setAttribute('aria-hidden', 'true'); document.body.style.overflow = '';">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    alert('There was an error sending your message. Please try again or contact us directly.');
+                }
             });
         }
 
