@@ -529,9 +529,9 @@
 
             // Phone number auto-tabbing
             const phoneInputs = [
-                document.getElementById('PhoneNumber_countrycode'),
-                document.getElementById('PhoneNumber_first'),
-                document.getElementById('PhoneNumber_second')
+                document.getElementById('PhoneNumber_countrycode'), // Area code (3 digits)
+                document.getElementById('PhoneNumber_first'),       // Prefix (3 digits)
+                document.getElementById('PhoneNumber_second')       // Line number (4 digits)
             ];
 
             phoneInputs.forEach((input, index) => {
@@ -540,9 +540,10 @@
                     const maxLength = parseInt(input.getAttribute('maxlength'), 10);
                     const currentLength = input.value.length;
 
-                    if (currentLength >= maxLength && index < phoneInputs.length - 1) {
-                        const nextInput = phoneInputs[index + 1];
-                        if (nextInput) nextInput.focus();
+                    if (currentLength >= maxLength) {
+                        if (index < phoneInputs.length - 1) {
+                            phoneInputs[index + 1].focus();
+                        }
                     }
                 });
             });
