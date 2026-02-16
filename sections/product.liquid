@@ -526,6 +526,25 @@
                 askModal.classList.remove('flex');
                 askModal.setAttribute('aria-hidden', 'true');
             });
+
+            // Phone number auto-tabbing
+            const phoneInputs = [
+                document.getElementById('PhoneNumber_countrycode'),
+                document.getElementById('PhoneNumber_first'),
+                document.getElementById('PhoneNumber_second')
+            ];
+
+            phoneInputs.forEach((input, index) => {
+                if (!input) return;
+                input.addEventListener('input', () => {
+                    const maxLength = parseInt(input.getAttribute('maxlength'), 10);
+                    const currentLength = input.value.length;
+
+                    if (currentLength >= maxLength && index < phoneInputs.length - 1) {
+                        phoneInputs[index + 1].focus();
+                    }
+                });
+            });
         }
 
         if (takeBtn) {
