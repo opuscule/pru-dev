@@ -27,6 +27,63 @@
     }`
 </style>
 
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org/",
+        "@type": "Product",
+        "name": {{ product.title | json }},
+        "image": [
+            {%- for image in product.images -%}
+                {{ image | image_url: width: 1024 | json }}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+        ],
+        "description": {{ product.description | strip_html | json }},
+        "sku": {{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id | json }},
+        "brand": {
+            "@type": "Brand",
+            "name": "Puppys R Us"
+        },
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "price": {{ product.price | money_without_currency | remove: ',' | json }},
+            "availability": "{% if product.available %}http://schema.org/InStock{% else %}http://schema.org/OutOfStock{% endif %}",
+            "itemCondition": "http://schema.org/NewCondition",
+            "url": "{{ shop.url }}{{ product.url }}"
+        },
+        "additionalProperty": [
+            {%- if product.collections.first -%}
+            {
+                "@type": "PropertyValue",
+                "name": "Breed",
+                "value": {{ product.collections.first.title | json }}
+            },
+            {%- endif -%}
+            {%- if product.metafields.custom.sex.value -%}
+            {
+                "@type": "PropertyValue",
+                "name": "Gender",
+                "value": {{ product.metafields.custom.sex.value | json }}
+            },
+            {%- endif -%}
+            {%- if product.metafields.custom.color.value -%}
+            {
+                "@type": "PropertyValue",
+                "name": "Color",
+                "value": {{ product.metafields.custom.color.value | json }}
+            },
+            {%- endif -%}
+            {%- if product.metafields.custom.dob.value -%}
+            {
+                "@type": "PropertyValue",
+                "name": "Date of Birth",
+                "value": {{ product.metafields.custom.dob.value | date: '%Y-%m-%d' | json }}
+            }
+            {%- endif -%}
+        ]
+    }
+</script>
+
 <div class="flex flex-row bg-bg-light pt-12 pb-16">
     <div class="w-full px-4 mx-auto">
         <div class="max-w-[var(--width-container-content)] mx-auto">
