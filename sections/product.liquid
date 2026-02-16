@@ -172,11 +172,11 @@
                                     <div class="md:flex md:gap-4">
                                         <div class="md:w-1/2 w-full mb-4 md:mb-0">
                                             <label for="SingleLine" class="block mb-1">Puppy's Name</label>
-                                            <input type="text" name="SingleLine" value="{{ product.title }}" fieldType="1" maxlength="55" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                            <input type="text" name="SingleLine" value="{{ product.title }}" fieldType="1" maxlength="55" disabled class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
                                         </div>
                                         <div class="md:w-1/2 w-full">
                                             <label for="Number" class="block mb-1">Puppy's ID</label>
-                                            <input type="text" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
+                                            <input type="text" name="Number" value="{{ product.selected_or_first_available_variant.sku | default: product.variants.first.sku | default: product.id }}" maxlength="18" disabled class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded disabled:opacity-70 bg-gray-100">
                                         </div>
                                     </div>
 
@@ -184,17 +184,17 @@
                                     <div class="md:flex md:gap-4">
                                         <div class="md:w-1/2 w-full mb-4 md:mb-0">
                                             <label for="Name_First">Your First Name</label>
-                                            <input type="text" maxlength="255" name="Name_First" fieldType="7" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                            <input type="text" maxlength="255" name="Name_First" fieldType="7" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
                                         </div>
                                         <div class="md:w-1/2 w-full">
                                             <label for="Name_Last">Your Last Name</label>
-                                            <input type="text" maxlength="255" name="Name_Last" fieldType="7" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                            <input type="text" maxlength="255" name="Name_Last" fieldType="7" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
                                         </div>
                                     </div>
                                     <div class="md:flex md:gap-4">
                                         <div class="md:w-5/12 w-full mb-4 md:mb-0">
                                             <label for="Email">Email Address</label>
-                                            <input type="text" maxlength="255" name="Email" fieldType="9" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                            <input type="text" maxlength="255" name="Email" fieldType="9" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
                                         </div>
                                         <div class="md:w-7/12 w-full">
                                             <div class="">
@@ -202,13 +202,13 @@
                                             </div>
                                             <div class="flex gap-2">
                                                 <label for="PhoneNumber_countrycode" class="sr-only">Phone Country Code</label>
-                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_countrycode" maxlength="3" phoneFormat="2" size="3" fieldType="11" id="PhoneNumber_countrycode" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_countrycode" maxlength="3" phoneFormat="2" size="3" fieldType="11" id="PhoneNumber_countrycode" placeholder="###" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
 
                                                 <label for="PhoneNumber_first" class="sr-only">Phone Area Code</label>
-                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_first" maxlength="3" phoneFormat="2" size="3" value="" id="PhoneNumber_first" placeholder="###" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_first" maxlength="3" phoneFormat="2" size="3" value="" id="PhoneNumber_first" placeholder="###" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
 
                                                 <label for="PhoneNumber_second" class="sr-only">Phone Number</label>
-                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_second" phoneFormat="2" maxlength="4" size="4" value="" id="PhoneNumber_second" placeholder="####" required class="w-full py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                                                <input type="text" compname="PhoneNumber" name="PhoneNumber_second" phoneFormat="2" maxlength="4" size="4" value="" id="PhoneNumber_second" placeholder="####" required class="w-full py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
                                             </div>
                                         </div>
                                     </div>
@@ -227,10 +227,10 @@
 
                                     
                                     <label for="MultiLine">Message</label>
-                                    <textarea name="MultiLine" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
+                                    <textarea name="MultiLine" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
 
                                     <label for="MultiLine1">We would love to learn a little about your home and family life...</label>
-                                    <textarea name="MultiLine1" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-[0.5rem] border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
+                                    <textarea name="MultiLine1" maxlength="65535" placeholder="" required class="w-full min-h-[8rem] py-[0.7rem] px-2 border border-[#dee2e6] text-[var(--color-body-copy)] text-base leading-normal rounded resize-y focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"></textarea>
 
                                     <input type="checkbox" checked="true" id="DecisionBox" name="DecisionBox" class="mr-2 h-4 w-4 accent-[var(--color-primary)] border border-[#dee2e6]">
                                     <label for="DecisionBox">It is OK to text me</label>
