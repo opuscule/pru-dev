@@ -533,6 +533,7 @@
                 document.getElementById('PhoneNumber_first'),       // Prefix (3 digits)
                 document.getElementById('PhoneNumber_second')       // Line number (4 digits)
             ];
+            const messageField = document.querySelector('textarea[name="MultiLine"]');
 
             phoneInputs.forEach((input, index) => {
                 if (!input) return;
@@ -543,6 +544,9 @@
                     if (currentLength >= maxLength) {
                         if (index < phoneInputs.length - 1) {
                             phoneInputs[index + 1].focus();
+                        } else if (messageField) {
+                            // Last phone field - jump to Message
+                            messageField.focus();
                         }
                     }
                 });
