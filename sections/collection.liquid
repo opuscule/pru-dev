@@ -126,8 +126,9 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="collection-products {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
-                            {% for product in collection.products %}
+                        <div class="collection-products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center w-[95%] mx-auto gap-8 {% unless paginate.next or paginate.previous %}no-pagination{% endunless %} {% unless collection.handle == 'all' %}is-collection{% endunless %}">
+                            {% assign sorted_products = collection.products | sort: "metafields.custom.sort_order_by_date" | reverse %}
+                            {% for product in sorted_products %}
                                 {% render 'puppy-card', product: product %}
                             {% endfor %}
                         </div>
@@ -145,15 +146,7 @@
 </div>
 
 {% stylesheet %}
-    .collection-products {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
-        justify-items: center;
-        width: 95%;
-        margin: auto;
-        gap: 1.2rem;
-    }
-
+    
     .no-pagination.is-collection {
         margin-bottom: 3rem;
     }
@@ -174,14 +167,6 @@
     .load-more-btn:hover {
         opacity: 0.85;
     }
-    /* Force breed filter bar content to center align */
-    .breed-filter-container {
-        display: flex; /* ensure flex context even if classes change */
-        justify-content: center;
-        align-items: center;
-        text-align: center; /* center text in child inline elements */
-    }
-
     /* Filtering animation */
     .puppy-card {
         transition: opacity 180ms ease, transform 180ms ease;
@@ -201,32 +186,14 @@
         padding-left: 4vw;
     }
 
-    @media (max-width: 1200px) {
-        .collection-products {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    @media (max-width: 900px) {
-        .collection-products {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
+   
 
     @media (max-width: 600px) {
-        .collection-products {
-            grid-template-columns: repeat(1, 1fr);
-        }
         .puppy-card {
             width: 95%;
         }
     }
 
-    @media screen and (max-width: 600px) {
-        /*  .collection-products {
-      margin: 0 1.75rem;
-    } */
-    }
 {% endstylesheet %}
 
 {% javascript %}
