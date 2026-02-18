@@ -951,6 +951,11 @@ video {
   margin-bottom: 1.25rem;
 }
 
+.mx-\[4vw\] {
+  margin-left: 4vw;
+  margin-right: 4vw;
+}
+
 .-mb-\[200px\] {
   margin-bottom: -200px;
 }
