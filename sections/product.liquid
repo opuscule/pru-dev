@@ -348,14 +348,14 @@
                             <p>
                                 {% liquid
                                     echo product.metafields.custom.sire_weight.value
-                                %}
+                                %}&nbsp;lbs.
                             </p>
 
                             <p class="pl-2 pr-4 font-semibold">Mom Weight:</p>
                             <p>
                                 {% liquid
                                     echo product.metafields.custom.dam_weight.value
-                                %}
+                                %}&nbsp;lbs.
                             </p>
 
                             {% if product.metafields.custom.registry.value != blank %}
