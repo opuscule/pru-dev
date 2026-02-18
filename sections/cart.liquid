@@ -155,7 +155,7 @@
                   
                   <!-- border radius, background color --color-bg-light,  -->
                   <a class="block bg-bg-light rounded-3xl overflow-hidden mb-6" href="{{ item.url }}" data-line="{{ item.key }}">
-                    <div class="flex">
+                    <div class="flex flex-col md:flex-row">
 
                       <!-- border-right 5px --color-primary -->
                       <div class="w-1/4 bg-cover bg-no-repeat bg-center border-r-[8px] border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 360 }})">
