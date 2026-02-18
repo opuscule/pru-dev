@@ -286,7 +286,7 @@
                           data-description-id="{{ description_id }}"
                         >
                         <div class="flex-1">
-                          <span class="text-lg font-medium cursor-pointer select-none block">
+                          <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
                             {{ variant.title }}
                             {% if variant.price > 0 %}
                               ({{ variant.price | money }})
@@ -346,7 +346,7 @@
               </summary>
               <div class="accordion-content-wrapper">
                 <div class="accordion-content-inner">
-                  <div class="accordion-content-padding">
+                  <div class="p-6 md:p-8 pt-1 -mt-1">
               {% if cart.item_count > 0 %}
                 <div class="space-y-3" data-terms>
                   <label class="selectable-card bg-white rounded-2xl p-8 block">
