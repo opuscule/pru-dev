@@ -3580,6 +3580,10 @@ video {
     width: 48%;
   }
 
+  .md\:w-2\/4 {
+    width: 50%;
+  }
+
   .md\:max-w-40 {
     max-width: 10rem;
   }
