@@ -169,8 +169,8 @@
                             <h3 class="text-5xl md:text-6xl font-semibold leading-tight tracking-tight mb-2 mt-1">{{- item.product.title -}}</h3>
                             <div>
                               <span class="text-[20px] md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
-                              <div class="flex items-center justify-end mt-1 md:mt-2">
-                                <span class="text-sm text-body-copy text-right hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
+                              <div class="flex items-center justify-end mt-0 md:mt-2">
+                                <span class="text-sm text-body-copy text-right leading-none hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
                                   Remove
                                 </span>
                               </div>
