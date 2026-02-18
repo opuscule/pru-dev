@@ -154,7 +154,7 @@
                   <!-- each cart item -->
                   
                   <!-- border radius, background color --color-bg-light,  -->
-                  <a class="block bg-bg-light rounded-[30px] overflow-hidden" href="{{ item.url }}" data-line="{{ item.key }}">
+                  <a class="block bg-bg-light rounded-3xl overflow-hidden" href="{{ item.url }}" data-line="{{ item.key }}">
                     <div class="flex">
 
                       <!-- border-right 5px --color-primary -->
@@ -208,7 +208,7 @@
                               </div>
                             {% endif %}
 
-                            {% if item.product.metafields.custom.size and item.product.metafields.custom.size != 'None' %}
+                            {% if item.product.metafields.custom.size and item.product.metafields.custom.size.value != 'None' %}
                               <div class="text-body-copy text-base">
                                 <span class="font-semibold">Size:</span> {{ item.product.metafields.custom.size.value }}
                               </div>
