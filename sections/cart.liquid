@@ -189,7 +189,7 @@
                           {% assign weeks_old = diff_seconds | divided_by: 604800 %}
 
                           {% comment %} Details grid {% endcomment %}
-                          <div class="flex gap-x-8 gap-y-2 text-base md:text-lg mb-3">
+                          <div class="flex flex-wrap gap-x-8 gap-y-2 text-base md:text-lg mb-3">
                             {% if item.product.metafields.custom.sex %}
                               <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Sex:</span><br>{{ item.product.metafields.custom.sex }}
@@ -197,7 +197,7 @@
                             {% endif %}
                             
                             {% if item.product.metafields.custom.color %}
-                              <div class="text-body-copy text-base max-w-40 leading-snug">
+                              <div class="text-body-copy text-base md:max-w-40 leading-snug">
                                 <span class="font-semibold">Color:</span><br>{{ item.product.metafields.custom.color }}
                               </div>
                             {% endif %}
