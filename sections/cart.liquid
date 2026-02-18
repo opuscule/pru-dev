@@ -160,7 +160,7 @@
                       <!-- border-right 5px --color-primary -->
                       <div class="w-full md:w-1/4 bg-cover bg-no-repeat bg-center border-b-8 md:border-r-8 border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 425 }})">
                       </div>
-                      <div class="w-3/4 p-4 md:p-6 flex flex-col justify-between">
+                      <div class="w-full md:w-3/4 p-4 md:p-6 flex flex-col justify-between">
                         <div>
                           {% if item.product.metafields.custom.pruid %}
                             <pre class="px-2 text-[12px] bg-white inline-flex rounded-sm pt-[2px]">ID:{{ item.product.metafields.custom.pruid }}</pre>
