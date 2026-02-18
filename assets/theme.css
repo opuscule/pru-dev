@@ -1994,6 +1994,11 @@ video {
   border-top-right-radius: 0.75rem;
 }
 
+.rounded-r {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
 .rounded-bl-\[1\.5rem\] {
   border-bottom-left-radius: 1.5rem;
 }
