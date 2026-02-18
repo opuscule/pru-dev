@@ -189,39 +189,39 @@
                           {% assign weeks_old = diff_seconds | divided_by: 604800 %}
 
                           {% comment %} Details grid {% endcomment %}
-                          <div class="flex gap-x-4 gap-y-1 text-base md:text-lg mb-3">
+                          <div class="flex gap-x-8 gap-y-2 text-base md:text-lg mb-3">
                             {% if item.product.metafields.custom.sex %}
-                              <div class="text-body-copy text-base">
+                              <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Sex:</span><br>{{ item.product.metafields.custom.sex }}
                               </div>
                             {% endif %}
                             
                             {% if item.product.metafields.custom.color %}
-                              <div class="text-body-copy text-base max-w-40">
+                              <div class="text-body-copy text-base max-w-40 leading-snug">
                                 <span class="font-semibold">Color:</span><br>{{ item.product.metafields.custom.color }}
                               </div>
                             {% endif %}
                             
                             {% if weeks_old %}
-                              <div class="text-body-copy text-base">
+                              <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Age:</span><br>{{ weeks_old | floor }} weeks
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.size and item.product.metafields.custom.size != 13 %}
-                              <div class="text-body-copy text-base">
+                              <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Size:</span><br>{{ item.product.metafields.custom.size }}
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.variety %}
-                              <div class="text-body-copy text-base">
+                              <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Variety:</span><br>{{ item.product.metafields.custom.variety }}
                               </div>
                             {% endif %}
 
                             {% if item.product.metafields.custom.generation %}
-                              <div class="text-body-copy text-base">
+                              <div class="text-body-copy text-base leading-snug">
                                 <span class="font-semibold">Generation:</span><br>{{ item.product.metafields.custom.generation }}
                               </div>
                             {% endif %}
