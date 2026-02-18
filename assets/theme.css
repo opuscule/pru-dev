@@ -3757,6 +3757,10 @@ video {
     flex-direction: row;
   }
 
+  .lg\:flex-nowrap {
+    flex-wrap: nowrap;
+  }
+
   .lg\:gap-16 {
     gap: 4rem;
   }
