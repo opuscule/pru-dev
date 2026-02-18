@@ -33,12 +33,6 @@
     min-height: 0;
   }
 
-  /* Add padding inside inner wrapper to prevent box-shadow clipping */
-  .accordion-content-padding {
-    padding: 4px 2rem 2rem 2rem;
-    margin: -4px 0 0 0;
-  }
-
   /* Status complete state - toggled via JS */
   .status-complete {
     color: var(--color-primary);
@@ -259,7 +253,10 @@
                 </summary>
                 <div class="accordion-content-wrapper">
                   <div class="accordion-content-inner">
-                    <div class="accordion-content-padding">
+                    <div class="p-6 md:p-8 pt-1 -mt-1">
+
+
+
                       {% comment %} Hidden container for variant descriptions {% endcomment %}
                       <div id="variant-descriptions" style="display: none;">
                         {{ delivery_product.description }}
