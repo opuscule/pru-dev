@@ -534,31 +534,6 @@
 </section>
 
 <script>
-  // Cleanup: Remove any old "Puppy Delivery Option" products from cart (legacy cleanup)
-  document.addEventListener('DOMContentLoaded', async () => {
-    try {
-      const cart = await fetch('/cart.js').then((res) => res.json());
-      const deliveryItems = cart.items.filter((item) => item.product_title === 'Puppy Delivery Option');
-      
-      if (deliveryItems.length > 0) {
-        for (const item of deliveryItems) {
-          await fetch('/cart/change.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: item.key,
-              quantity: 0,
-            }),
-          });
-        }
-        // Reload to show updated cart without the delivery product
-        location.reload();
-      }
-    } catch (e) {
-      console.error('Error cleaning up delivery product:', e);
-    }
-  });
-
   // Save delivery method as cart attribute and update UI
   document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
     radio.addEventListener('change', async (e) => {
