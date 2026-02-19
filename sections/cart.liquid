@@ -147,12 +147,11 @@
 
                   <!-- each cart item -->
                   
-                  <!-- border radius, background color --color-bg-light,  -->
                   <a class="block bg-bg-light rounded-3xl overflow-hidden mb-6" href="{{ item.url }}" data-line="{{ item.key }}">
                     <div class="flex flex-col md:flex-row">
 
                       <!-- border-right 5px --color-primary -->
-                      <div class="w-full md:w-1/4 bg-cover bg-no-repeat bg-center border-b-8 md:border-r-8 border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 425 }})">
+                      <div class="w-full md:w-1/4 bg-cover bg-no-repeat bg-center border-b-8 md:border-b-0 md:border-r-8 border-primary aspect-square" style="background-image:url({{ item.image | image_url: width: 425 }})">
                       </div>
                       <div class="w-full md:w-3/4 p-4 md:p-6 flex flex-col justify-between">
                         <div>

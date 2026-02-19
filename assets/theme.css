@@ -3674,6 +3674,10 @@ video {
     border-right-width: 8px;
   }
 
+  .md\:border-b-0 {
+    border-bottom-width: 0px;
+  }
+
   .md\:p-10 {
     padding: 2.5rem;
   }
