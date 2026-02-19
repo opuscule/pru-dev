@@ -59,16 +59,25 @@ module.exports = {
           fontWeight: theme('fontWeight.medium'),
           borderWidth: theme('borderWidth.2'),
           borderStyle: 'solid',
+          transition: 'all 0.2s ease-in-out',
         },
         '.btn-primary': {
           backgroundColor: theme('colors.primary'),
           borderColor: theme('colors.primary'),
           color: theme('colors.white'),
+          '&:hover, &:focus': {
+            backgroundColor: 'transparent',
+            color: theme('colors.primary'),
+          },
         },
         '.btn-secondary': {
           backgroundColor: 'transparent',
           borderColor: theme('colors.primary'),
           color: theme('colors.primary'),
+          '&:hover, &:focus': {
+            backgroundColor: theme('colors.primary'),
+            color: theme('colors.white'),
+          },
         },
       })
     },
