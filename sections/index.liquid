@@ -59,18 +59,16 @@
             z-index: 999;
             position: relative;
         }
-        /* Limit dropdown height and enable scrolling */
         #breed-search .choices__list--dropdown {
-            max-height: 250px; /* adjust height as you prefer */
+            max-height: 250px;
             width: 90%;
-            overflow-y: auto; /* enable vertical scroll */
-            overflow-x: hidden; /* prevent horizontal scroll */
-            scrollbar-width: thin; /* Firefox thin scrollbar */
-            scrollbar-color: #ccc transparent; /* scrollbar styling for Firefox */
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #ccc transparent;
             right: 0px;
         }
 
-        /* Optional: prettier scrollbar for WebKit browsers */
         #breed-search .choices__list--dropdown::-webkit-scrollbar {
             width: 6px;
         }
@@ -112,12 +110,7 @@
                     <h1 class="text-home-index text-white">We have the perfect addition to your family.</h1>
                     <p role="heading" class="text-white text-lg">Creating happier homes one puppy at a time.</p>
                     <div id="breed-search" class="mt-6 flex items-stretch rounded-full bg-white shadow max-w-xl">
-                        <select
-                            class="choices-single flex-1"
-                            id="collection-select"
-                            aria-label="Find your breed"
-                            style="border-bottom: 0px;"
-                        >
+                        <select class="choices-single flex-1" id="collection-select" aria-label="Find your breed" style="border-bottom: 0px;" >
                             <option value="">Find Your Breed</option>
                             {% for collection in collections %}
                                 {% if collection.metafields.custom.shown_on_website == true %}
@@ -125,11 +118,8 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
-                        <button
-                            id="breed-search-btn"
-                            type="button"
-                            style="border-top-right-radius: 33px;border-bottom-right-radius: 33px;"
-                            class="px-6 bg-primary text-white font-bold text-sm tracking-wide uppercase disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition"
+                        <button id="breed-search-btn" type="button"
+                            class="px-6 rounded-e-full bg-primary text-white font-bold text-sm tracking-wide uppercase disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition"
                             disabled
                         >
                             Search

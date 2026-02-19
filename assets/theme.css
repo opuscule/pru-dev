@@ -2025,6 +2025,11 @@ video {
   border-top-right-radius: 0.75rem;
 }
 
+.rounded-e-full {
+  border-start-end-radius: 9999px;
+  border-end-end-radius: 9999px;
+}
+
 .rounded-bl-\[1\.5rem\] {
   border-bottom-left-radius: 1.5rem;
 }
