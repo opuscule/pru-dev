@@ -243,7 +243,14 @@
                       Choose Delivery Option
                     </h3>
                     <div class="flex items-center gap-2 text-sm text-body-copy mt-2" id="delivery-status">
-                      <span>Not selected</span>
+                      {% if cart.attributes['Delivery Method'] %}
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{{ cart.attributes['Delivery Method'] }}</span>
+                      {% else %}
+                        <span>Not selected</span>
+                      {% endif %}
                     </div>
                   </div>
                   <svg class="accordion-icon w-6 h-6 transition-transform duration-300 ease-in-out shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -280,9 +287,11 @@
                         <input
                           type="radio"
                           name="delivery"
-                          value="{{ variant.id }}"
+                          value="{{ variant.title }}"
                           class="custom-radio mt-1"
                           data-description-id="{{ description_id }}"
+                          data-price="{{ variant.price }}"
+                          {% if cart.attributes['Delivery Method'] == variant.title %}checked{% endif %}
                         >
                         <div class="flex-1">
                           <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
@@ -462,13 +471,7 @@
                 
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Delivery Option</strong>
-                  <span id="delivery-price-display">
-                    {% if has_delivery %}
-                      {{ delivery_price | money }}
-                    {% else %}
-                      —
-                    {% endif %}
-                  </span>
+                  <span id="delivery-price-display">—</span>
                 </li>
 
                 {% if shop.taxes_included %}
@@ -541,86 +544,74 @@
 </section>
 
 <script>
-  // Flag to prevent cart updates when programmatically setting radio
-  let isInitializing = true;
-
-  // Auto-check the correct radio on page load
-  document.addEventListener('DOMContentLoaded', async () => {
-    const radios = document.querySelectorAll('input[name="delivery"]');
-
-    const cart = await fetch('/cart.js').then((res) => res.json());
-
-    const deliveryItem = cart.items.find((item) => item.product_title === 'Puppy Delivery Option');
-
-    if (deliveryItem) {
-      const selectedId = deliveryItem.variant_id;
-
-      radios.forEach((radio) => {
-        if (Number(radio.value) === selectedId) {
-          radio.checked = true;
-        }
-      });
-      
-      // Update delivery status display after checking radio
-      const deliveryStatus = document.getElementById('delivery-status');
-      if (deliveryStatus) {
-        const selectedRadio = document.querySelector('input[name="delivery"]:checked');
-        if (selectedRadio) {
-          const label = selectedRadio.closest('.selectable-card').querySelector('span');
-          const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
-          deliveryStatus.innerHTML = `
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            <span>${selectedText}</span>
-          `;
-          deliveryStatus.classList.add('status-complete');
-        }
-      }
-    }
-    
-    // Allow cart updates after initialization
-    isInitializing = false;
-  });
-
-  // Add / remove delivery options on change
+  // Save delivery method as cart attribute and update UI
   document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
     radio.addEventListener('change', async (e) => {
-      // Skip cart update if we're just initializing from page load
-      if (isInitializing) return;
+      const selectedMethod = e.target.value;
+      const selectedPrice = parseInt(e.target.dataset.price, 10) || 0;
       
-      const selectedVariant = Number(e.target.value);
-
-      // Fetch current cart
-      const cart = await fetch('/cart.js').then((res) => res.json());
-
-      // Remove ALL delivery variants
-      const deliveryItems = cart.items.filter((item) => item.product_title === 'Puppy Delivery Option');
-
-      for (const item of deliveryItems) {
-        await fetch('/cart/change.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: item.key,
-            quantity: 0,
-          }),
-        });
-      }
-
-      // Add selected variant
-      await fetch('/cart/add.js', {
+      // Update cart attribute via AJAX
+      await fetch('/cart/update.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          id: selectedVariant,
-          quantity: 1,
+          attributes: {
+            'Delivery Method': selectedMethod
+          }
         }),
       });
-
-      // Refresh
-      location.reload();
+      
+      // Update delivery status display
+      const deliveryStatus = document.getElementById('delivery-status');
+      if (deliveryStatus) {
+        deliveryStatus.innerHTML = `
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>${selectedMethod}</span>
+        `;
+        deliveryStatus.classList.add('status-complete');
+      }
+      
+      // Update delivery price display
+      const priceDisplay = document.getElementById('delivery-price-display');
+      if (priceDisplay) {
+        if (selectedPrice > 0) {
+          priceDisplay.textContent = (selectedPrice / 100).toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          });
+        } else {
+          priceDisplay.textContent = 'Free';
+        }
+      }
     });
+  });
+  
+  // On page load, update price display if a delivery method is already selected
+  document.addEventListener('DOMContentLoaded', () => {
+    const selectedRadio = document.querySelector('input[name="delivery"]:checked');
+    if (selectedRadio) {
+      const selectedPrice = parseInt(selectedRadio.dataset.price, 10) || 0;
+      const priceDisplay = document.getElementById('delivery-price-display');
+      const deliveryStatus = document.getElementById('delivery-status');
+      
+      if (priceDisplay) {
+        if (selectedPrice > 0) {
+          priceDisplay.textContent = (selectedPrice / 100).toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          });
+        } else {
+          priceDisplay.textContent = 'Free';
+        }
+      }
+      
+      // Ensure status shows as complete
+      if (deliveryStatus) {
+        deliveryStatus.classList.add('status-complete');
+      }
+    }
   });
 </script>
 
@@ -703,13 +694,12 @@
       
       const selectedRadio = document.querySelector('input[name="delivery"]:checked');
       if (selectedRadio) {
-        const label = selectedRadio.closest('.selectable-card').querySelector('span');
-        const selectedText = label ? label.textContent.trim().split('(')[0].trim() : 'Selected';
+        const selectedMethod = selectedRadio.value;
         deliveryStatus.innerHTML = `
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span>${selectedText}</span>
+          <span>${selectedMethod}</span>
         `;
         deliveryStatus.classList.add('status-complete');
       } else {
