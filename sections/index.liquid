@@ -158,7 +158,7 @@
             aria-label="Available breeds carousel"
         >
             <div class="splide__track">
-                <ul class="splide__list">
+                <ul class="splide__list ml-4">
                     {% for collection in collections %}
                         {% if collection.products_count > 0 and collection.handle != 'all' and collection.handle != 'frontpage' %}
                             {% assign breed_image = collection.image %}
