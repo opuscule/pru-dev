@@ -1821,6 +1821,11 @@ video {
        column-gap: 1rem;
 }
 
+.gap-x-5 {
+  -moz-column-gap: 1.25rem;
+       column-gap: 1.25rem;
+}
+
 .gap-x-8 {
   -moz-column-gap: 2rem;
        column-gap: 2rem;
@@ -3608,10 +3613,6 @@ video {
 
   .md\:max-w-40 {
     max-width: 10rem;
-  }
-
-  .md\:max-w-\[50\%\] {
-    max-width: 50%;
   }
 
   .md\:grid-cols-2 {
