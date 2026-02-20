@@ -34,16 +34,25 @@
             - If page_title is captured in the section, use it as-is (already includes branding if needed)
             - Otherwise, use page.title and append "Puppys R Us"
             - For description: use page_description if captured, otherwise page.description, then shop.description
+            - Special handling for specific templates (travel page, learning center, etc.)
         endcomment
-        if page_title and page_title != ''
+        
+        comment
+          Travel page hardcoded SEO overrides (template-level)
+        endcomment
+        if template.name == 'page.travel'
+            assign base_title = 'Puppy Travel & Delivery Options | Nationwide Shipping | Puppys R Us'
+            assign base_description = 'From local pickup to nationwide home delivery, discover how your puppy travels safely with climate-controlled transport, experienced handlers, and real-time updates.'
+        elsif page_title and page_title != ''
             assign base_title = page_title
+            assign base_description = page_description | default: page.description | default: shop.description | default: shop.name
         elsif page
             assign base_title = page.title | append: ' - Puppys R Us'
+            assign base_description = page.description | default: shop.description | default: shop.name
         else
             assign base_title = shop.name
+            assign base_description = shop.description | default: shop.name
         endif
-
-        assign base_description = page_description | default: page.description | default: shop.description | default: shop.name
 
         comment
             Homepage SEO overrides (set in settings) – only applied on index template
