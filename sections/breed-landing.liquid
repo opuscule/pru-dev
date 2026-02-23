@@ -211,7 +211,7 @@
                                     <input type="hidden" name="zf_referrer_name" value="">
                                     <input type="hidden" name="zf_redirect_url" value="">
                                     <input type="hidden" name="zc_gad" value="">
-                                    <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}">
+                                    <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | remove: '-for-sale' | remove: 'for-sale' | strip }}">
                                     <input type="hidden" name="SingleLine1" value="for-sale">
                                     <input type="hidden" name="SingleLine2" id="gclid" value="">
 
