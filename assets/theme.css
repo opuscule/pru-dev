@@ -2207,6 +2207,11 @@ video {
   border-color: var(--color-white);
 }
 
+.border-green-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(187 247 208 / var(--tw-border-opacity, 1));
+}
+
 .border-r-primary {
   border-right-color: var(--color-primary);
 }
