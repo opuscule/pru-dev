@@ -399,6 +399,28 @@
 
 {% javascript %}
     document.addEventListener('DOMContentLoaded', function () {
+        // Auto-tab functionality for phone number fields
+        const phoneFields = {
+            'PhoneNumber_countrycode': 'PhoneNumber_first',
+            'PhoneNumber_first': 'PhoneNumber_second'
+        };
+
+        Object.keys(phoneFields).forEach(function(fieldId) {
+            const currentField = document.getElementById(fieldId);
+            const nextFieldId = phoneFields[fieldId];
+            
+            if (currentField) {
+                currentField.addEventListener('input', function() {
+                    if (this.value.length >= parseInt(this.getAttribute('maxlength'))) {
+                        const nextField = document.getElementById(nextFieldId);
+                        if (nextField) {
+                            nextField.focus();
+                        }
+                    }
+                });
+            }
+        });
+
         // Handle form submission and show success message
         const form = document.getElementById('breed-contact-form');
         const successMessage = document.getElementById('form-success-message');
