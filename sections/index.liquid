@@ -301,7 +301,7 @@
                     const stars = '<span class="text-[#F2635B]">★</span>'.repeat(5);
                     slides.push(`
               <div class="slide flex flex-col md:flex-row gap-8 items-start w-full shrink-0" data-index="${i}">
-                <div class="relative shrink-0 mx-auto md:mx-0">
+                <div class="relative shrink-0 mx-auto md:mx-0 md:ml-4">
                   <div class="absolute -left-3 -bottom-3 size-40 rounded-3xl bg-primary"></div>
                   ${imageUrl ? `<img src="${imageUrl}?w=200&h=200" alt="${f.puppysName || ''}" width="400" height="400" class="relative size-40 rounded-3xl object-cover" loading="lazy">` : '<div class="relative size-40 rounded-3xl bg-gray-200"></div>'}
                 </div>
