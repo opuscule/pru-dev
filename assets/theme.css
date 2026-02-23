@@ -1971,6 +1971,11 @@ video {
   aspect-ratio: 1 / 1;
 }
 
+.size-40 {
+  width: 10rem;
+  height: 10rem;
+}
+
 .\!h-12 {
   height: 3rem !important;
 }
