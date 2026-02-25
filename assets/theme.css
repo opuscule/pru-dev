@@ -1923,6 +1923,10 @@ video {
   margin-top: auto;
 }
 
+.mb-0\.5 {
+  margin-bottom: 0.125rem;
+}
+
 .block {
   display: block;
 }
