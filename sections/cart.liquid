@@ -258,7 +258,6 @@
                               value="I Will Decide Later"
                               class="custom-radio mt-1"
                               data-price="0"
-                              {% if cart.attributes['Delivery Method'] == 'I Will Decide Later' %}checked{% endif %}
                             >
                             <div class="flex-1">
                               <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
@@ -280,7 +279,6 @@
                               value="Pick Up from Breeder"
                               class="custom-radio mt-1"
                               data-price="0"
-                              {% if cart.attributes['Delivery Method'] == 'Pick Up from Breeder' %}checked{% endif %}
                             >
                             <div class="flex-1">
                               <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
@@ -302,7 +300,7 @@
                               value="Nearby Location"
                               class="custom-radio mt-1"
                               data-price="40000"
-                              {% if cart.attributes['Delivery Method'] == 'Nearby Location' %}checked{% endif %}
+                              data-product-id="7319932797013"
                             >
                             <div class="flex-1">
                               <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
@@ -324,7 +322,7 @@
                               value="Home Delivery"
                               class="custom-radio mt-1"
                               data-price="50000"
-                              {% if cart.attributes['Delivery Method'] == 'Home Delivery' %}checked{% endif %}
+                              data-product-id="7237943296085"
                             >
                             <div class="flex-1">
                               <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
@@ -546,6 +544,9 @@
   // Save delivery method as cart attribute and update UI
   const puppySubtotal = {{ cart.items_subtotal_price }};
   
+  // Track delivery product variant IDs
+  const DELIVERY_PRODUCT_IDS = ['7319932797013', '7237943296085'];
+  
   function updateCartTotals(deliveryPrice) {
     const priceDisplay = document.getElementById('delivery-price-display');
     const totalDisplay = document.getElementById('cart-total-display');
@@ -570,10 +571,53 @@
     }
   }
   
+  async function removeDeliveryProducts() {
+    // Get current cart
+    const cartResponse = await fetch('/cart.js');
+    const cart = await cartResponse.json();
+    
+    // Find any delivery products in cart
+    const deliveryItems = cart.items.filter(item => 
+      DELIVERY_PRODUCT_IDS.includes(item.variant_id.toString())
+    );
+    
+    // Remove each delivery product
+    for (const item of deliveryItems) {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.key,
+          quantity: 0
+        })
+      });
+    }
+  }
+  
+  async function addDeliveryProduct(variantId) {
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: 1
+      })
+    });
+  }
+  
   document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
     radio.addEventListener('change', async (e) => {
       const selectedMethod = e.target.value;
       const selectedPrice = parseInt(e.target.dataset.price, 10) || 0;
+      const productId = e.target.dataset.productId;
+      
+      // First, remove any existing delivery products
+      await removeDeliveryProducts();
+      
+      // If this option has a product ID, add it to cart
+      if (productId) {
+        await addDeliveryProduct(productId);
+      }
       
       // Update cart attribute via AJAX
       await fetch('/cart/update.js', {
@@ -600,11 +644,29 @@
       
       // Update delivery price and total displays
       updateCartTotals(selectedPrice);
+      
+      // Reload page to reflect cart changes
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     });
   });
   
   // On page load, update price display if a delivery method is already selected
   document.addEventListener('DOMContentLoaded', () => {
+    // Check for saved delivery method in cart attributes
+    const savedDeliveryMethod = {{ cart.attributes['Delivery Method'] | json }};
+    
+    if (savedDeliveryMethod) {
+      // Find and check the corresponding radio button
+      const radioToCheck = document.querySelector(`input[name="delivery"][value="${savedDeliveryMethod}"]`);
+      if (radioToCheck) {
+        radioToCheck.checked = true;
+        const selectedPrice = parseInt(radioToCheck.dataset.price, 10) || 0;
+        updateCartTotals(selectedPrice);
+      }
+    }
+    
     const selectedRadio = document.querySelector('input[name="delivery"]:checked');
     if (selectedRadio) {
       const selectedPrice = parseInt(selectedRadio.dataset.price, 10) || 0;
