@@ -40,7 +40,7 @@
 {%- comment -%} Hero Banner with Collection Image Background {%- endcomment -%}
 <section id="hero_banner" class="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden py-16">
     {%- comment -%} Background Image {%- endcomment -%}
-    {%- if collection.metafields.custom.landing_page_banner_image -%}
+    {%- if collections.metafields.custom.landing_page_banner_image -%}
         <div class="absolute inset-0 z-0">
             {{ page.metafields.custom.landing_page_banner_image | image_url: width: 2000 | image_tag: loading: 'eager', class: 'w-full h-full object-cover' }}
         </div>
