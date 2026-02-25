@@ -4405,12 +4405,12 @@ video {
     flex-wrap: nowrap;
   }
 
-  .md\:justify-start {
-    justify-content: flex-start;
+  .md\:items-center {
+    align-items: center;
   }
 
-  .md\:justify-end {
-    justify-content: flex-end;
+  .md\:justify-start {
+    justify-content: flex-start;
   }
 
   .md\:gap-12 {
@@ -4582,9 +4582,9 @@ video {
     gap: 4rem;
   }
 
-  .lg\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+  .lg\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 
   .lg\:text-6xl {
@@ -4595,11 +4595,6 @@ video {
   .lg\:text-7xl {
     font-size: 4.5rem;
     line-height: 1;
-  }
-
-  .lg\:text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
   }
 }
 
