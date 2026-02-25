@@ -177,6 +177,7 @@
 
                         {% if product.metafields.custom.availability == 'Reserved' %}
                         {% elsif product.metafields.custom.availability == 'Sold, but Show' %}
+                        {% elsif product.metafields.custom.availability == 'Sold' %}
 
                         {% else %}
                             <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
