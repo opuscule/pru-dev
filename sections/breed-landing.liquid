@@ -107,12 +107,12 @@
                                     <!-- Custom Arrows -->
                                     <div class="splide__arrows">
                                         <button class="splide__arrow splide__arrow--prev !bg-[rgba(238,106,91,0.6)] hover:!bg-[rgba(238,106,91,0.85)] !w-12 !h-12 !rounded-full !opacity-100 disabled:!opacity-50 transition-colors !-left-4 sm:!-left-6" aria-label="Previous slide">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-6 h-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-8 h-8">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" transform="scale(-1, 1) translate(-24, 0)" />
                                             </svg>
                                         </button>
                                         <button class="splide__arrow splide__arrow--next !bg-[rgba(238,106,91,0.6)] hover:!bg-[rgba(238,106,91,0.85)] !w-12 !h-12 !rounded-full !opacity-100 disabled:!opacity-50 transition-colors !-right-4 sm:!-right-6" aria-label="Next slide">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-6 h-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="white" class="w-8 h-8">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                             </svg>
                                         </button>
@@ -122,6 +122,21 @@
 
                             <!-- Splide JS -->
                             <script defer src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+                            <style>
+                                /* Remove default Splide arrow backgrounds */
+                                #breed-puppies-carousel .splide__arrow svg {
+                                    background: none !important;
+                                    fill: none !important;
+                                }
+                                #breed-puppies-carousel .splide__arrow::before,
+                                #breed-puppies-carousel .splide__arrow::after {
+                                    display: none !important;
+                                }
+                                .splide__arrow--prev svg {
+                                    transform: none !important;
+                                    
+                                }
+                            </style>
                             <script>
                                 document.addEventListener('DOMContentLoaded', function () {
                                     // Initialize Splide
@@ -167,7 +182,7 @@
                             {%- endif -%}
                         {%- else -%}
                             <div class="py-8 bg-white rounded-lg text-center">
-                                <p class="text-[var(--color-body-copy)]/70">No {{ collection.title }} available at the moment.</p>
+                                <p class="text-[var(--color-body-copy)]/70">No {{ collection.title }} puppies available at the moment.</p>
                             </div>
                         {%- endif -%}
                     </div>
@@ -196,7 +211,7 @@
                                     <input type="hidden" name="zf_referrer_name" value="">
                                     <input type="hidden" name="zf_redirect_url" value="">
                                     <input type="hidden" name="zc_gad" value="">
-                                    <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | strip }}">
+                                    <input type="hidden" name="SingleLine" value="{{ collection.title | remove: 'Puppies' | remove: 'Puppy' | remove: '-for-sale' | remove: 'for-sale' | strip }}">
                                     <input type="hidden" name="SingleLine1" value="for-sale">
                                     <input type="hidden" name="SingleLine2" id="gclid" value="">
 
@@ -384,6 +399,28 @@
 
 {% javascript %}
     document.addEventListener('DOMContentLoaded', function () {
+        // Auto-tab functionality for phone number fields
+        const phoneFields = {
+            'PhoneNumber_countrycode': 'PhoneNumber_first',
+            'PhoneNumber_first': 'PhoneNumber_second'
+        };
+
+        Object.keys(phoneFields).forEach(function(fieldId) {
+            const currentField = document.getElementById(fieldId);
+            const nextFieldId = phoneFields[fieldId];
+            
+            if (currentField) {
+                currentField.addEventListener('input', function() {
+                    if (this.value.length >= parseInt(this.getAttribute('maxlength'))) {
+                        const nextField = document.getElementById(nextFieldId);
+                        if (nextField) {
+                            nextField.focus();
+                        }
+                    }
+                });
+            }
+        });
+
         // Handle form submission and show success message
         const form = document.getElementById('breed-contact-form');
         const successMessage = document.getElementById('form-success-message');

@@ -24,7 +24,15 @@
             padding-bottom: 10px;
             display: block;
         }
-    }`
+    }
+
+    /* Splide carousel pagination customizations */
+    .splide__pagination {
+        bottom: -2.5em !important;
+    }
+    .splide__pagination .splide__pagination__page.is-active {
+        background: var(--color-primary);
+    }
 </style>
 
 <script type="application/ld+json">
@@ -154,14 +162,14 @@
                 </div>
                 <!-- # left column -->
 
-                <div class="w-full md:w-[48%] min-w-0">
+                <div class="w-full md:w-[48%] mt-6 md:mt-0">
                     <div class="product-info flex-1">
                         {% if product.metafields.custom.availability == 'Reserved' %}
                             <div class="text-center border-[1px] bg-white border-primary text-body-copy p-6 mb-6 mt-10">
                                 This puppy is not available: <strong>I AM RESERVED</strong>
                             </div>
                         {% endif %}
-                        {% if product.metafields.custom.availability == 'Sold, but Show' %}
+                        {% if product.metafields.custom.availability == 'Sold, but Show' or product.metafields.custom.availability == 'Sold' %}
                             <div class="text-center border-[1px] bg-white border-primary text-body-copy p-6 mb-6 mt-10">
                                 This puppy is not available: <strong>I FOUND MY NEW HOME</strong>
                             </div>
@@ -177,12 +185,13 @@
 
                         {% if product.metafields.custom.availability == 'Reserved' %}
                         {% elsif product.metafields.custom.availability == 'Sold, but Show' %}
+                        {% elsif product.metafields.custom.availability == 'Sold' %}
 
                         {% else %}
                             <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
 
                             <!-- CTAs -->
-                            <div class="flex gap-4 mt-4 items-center">
+                            <div class="flex flex-col md:flex-row gap-4 mt-4 items-center">
                                 <button type="button" id="ask-about-btn" class="btn btn-secondary">Ask About {{ product.title }}</button>
                                 <!-- <button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button> -->
                                 <div class="product-form">
@@ -292,33 +301,35 @@
                                 %}
                             </p>
 
-                            <p class="pl-2 pr-4 font-semibold">Date Available:</p>
+                            {% unless product.metafields.custom.availability == 'Reserved' or product.metafields.custom.availability == 'Sold, but Show' or product.metafields.custom.availability == 'Sold' %}
+                                <p class="pl-2 pr-4 font-semibold">Date Available:</p>
 
-                            {% assign dob_val = product.metafields.custom.dob.value %}
-                            {% if dob_val %}
-                                {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
-                                {% assign ready_ts = dob_ts | plus: 4838400 %}
-                                {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+                                {% assign dob_val = product.metafields.custom.dob.value %}
+                                {% if dob_val %}
+                                    {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                                    {% assign ready_ts = dob_ts | plus: 4838400 %}
+                                    {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
 
+                                    <p>
+                                        {% if now_ts >= ready_ts %}
+                                            <span>I'm Ready!</span>
+                                        {% else %}
+                                            <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                                <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
                                 <p>
-                                    {% if now_ts >= ready_ts %}
-                                        <span>I'm Ready!</span>
+                                    {% if dob_val %}
+                                        {% assign diff_seconds = now_ts | minus: dob_ts %}
+                                        {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+                                        {{ weeks_old | floor }}
                                     {% else %}
-                                        <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                        N/A
                                     {% endif %}
                                 </p>
-                            {% endif %}
-
-                            <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
-                            <p>
-                                {% if dob_val %}
-                                    {% assign diff_seconds = now_ts | minus: dob_ts %}
-                                    {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                                    {{ weeks_old | floor }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </p>
+                            {% endunless %}
 
                             <p class="pl-2 pr-4 font-semibold">Sex:</p>
                             <p>

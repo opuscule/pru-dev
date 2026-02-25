@@ -123,17 +123,6 @@
   <p class="text-center mt-2">You're securing this puppy—final details confirmed at checkout.</p>
   <div class="w-full px-4 mx-auto mt-8">
     <div class="max-w-[var(--width-container-content)] mx-auto">
-      {% comment %} Fetch the Puppy Delivery Option product {% endcomment %}
-      {% assign delivery_product = all_products['puppy-delivery-option'] %}
-
-      {% comment %} Check if there's a puppy in the cart {% endcomment %}
-      {% assign has_puppy = false %}
-      {% for item in cart.items %}
-        {% unless item.product.title contains 'Puppy Delivery Option' %}
-          {% assign has_puppy = true %}
-          {% break %}
-        {% endunless %}
-      {% endfor %}
 
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
         <div class="flex flex-wrap -mx-4">
@@ -234,8 +223,7 @@
 
 
             <!-- Delivery Options section -->
-            {% comment %} Only show delivery options if there's a puppy in the cart {% endcomment %}
-            {% if has_puppy and delivery_product %}
+            {% if cart.item_count > 0 %}
               <details class="bg-bg-light rounded-3xl mt-6 overflow-hidden" id="delivery-accordion">
                 <summary class="p-6 md:p-8 cursor-pointer list-none flex justify-between items-center">
                   <div>
@@ -260,80 +248,101 @@
                 <div class="accordion-content-wrapper">
                   <div class="accordion-content-inner">
                     <div class="p-6 md:p-8 pt-1 -mt-1">
-
-
-
-                      {% comment %} Hidden container for variant descriptions {% endcomment %}
-                      <div id="variant-descriptions" style="display: none;">
-                        {{ delivery_product.description }}
-                      </div>
-
                       <div id="delivery-options" class="space-y-4 pt-1">
-                  {% for variant in delivery_product.variants %}
-                    {% comment %} Map variant title to description div ID {% endcomment %}
-                    {% assign description_id = '' %}
-                    {% if variant.title contains 'Home' or variant.title contains 'Your Home' %}
-                      {% assign description_id = 'home-delivery' %}
-                    {% elsif variant.title contains 'Nearby' or variant.title contains 'Near' %}
-                      {% assign description_id = 'near-home' %}
-                    {% elsif variant.title contains 'Pick Up' or variant.title contains 'Breeder' %}
-                      {% assign description_id = 'local-pickup' %}
-                    {% elsif variant.title contains 'Later' or variant.title contains 'Decide' %}
-                      {% assign description_id = 'decide-later' %}
-                    {% endif %}
+                        
+                        <label class="selectable-card bg-white rounded-2xl p-6 md:p-8 block">
+                          <div class="flex items-start gap-4">
+                            <input
+                              type="radio"
+                              name="delivery"
+                              value="I Will Decide Later"
+                              class="custom-radio mt-1"
+                              data-price="0"
+                              {% if cart.attributes['Delivery Method'] == 'I Will Decide Later' %}checked{% endif %}
+                            >
+                            <div class="flex-1">
+                              <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
+                                I Will Decide Later
+                                <span class="text-base font-normal text-body-copy">(Free)</span>
+                              </span>
+                              <div class="text-sm text-body-copy mt-1">
+                                Not quite sure? Talk with our team to get the best delivery option.
+                              </div>
+                            </div>
+                          </div>
+                        </label>
 
-                    <label class="selectable-card bg-white rounded-2xl p-6 md:p-8 block">
-                      <div class="flex items-start gap-4">
-                        <input
-                          type="radio"
-                          name="delivery"
-                          value="{{ variant.title }}"
-                          class="custom-radio mt-1"
-                          data-description-id="{{ description_id }}"
-                          data-price="{{ variant.price }}"
-                          {% if cart.attributes['Delivery Method'] == variant.title %}checked{% endif %}
-                        >
-                        <div class="flex-1">
-                          <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
-                            {{ variant.title }}
-                            {% if variant.price > 0 %}
-                              ({{ variant.price | money }})
-                            {% else %}
-                              (Free)
-                            {% endif %}
-                          </span>
-                          {% if description_id != '' %}
-                            <div
-                              class="variant-description text-sm text-body-copy mt-1"
-                              data-for="{{ description_id }}"
-                            ></div>
-                          {% endif %}
-                        </div>
+                        <label class="selectable-card bg-white rounded-2xl p-6 md:p-8 block">
+                          <div class="flex items-start gap-4">
+                            <input
+                              type="radio"
+                              name="delivery"
+                              value="Pick Up from Breeder"
+                              class="custom-radio mt-1"
+                              data-price="0"
+                              {% if cart.attributes['Delivery Method'] == 'Pick Up from Breeder' %}checked{% endif %}
+                            >
+                            <div class="flex-1">
+                              <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
+                                Pick Up from Breeder
+                                <span class="text-base font-normal text-body-copy">(Free)</span>
+                              </span>
+                              <div class="text-sm text-body-copy mt-1">
+                                Ideal for customers within driving distance of our breeders.
+                              </div>
+                            </div>
+                          </div>
+                        </label>
+
+                        <label class="selectable-card bg-white rounded-2xl p-6 md:p-8 block">
+                          <div class="flex items-start gap-4">
+                            <input
+                              type="radio"
+                              name="delivery"
+                              value="Nearby Location"
+                              class="custom-radio mt-1"
+                              data-price="40000"
+                              {% if cart.attributes['Delivery Method'] == 'Nearby Location' %}checked{% endif %}
+                            >
+                            <div class="flex-1">
+                              <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
+                                Nearby Location
+                                <span class="text-base font-normal text-body-copy">($400.00)</span>
+                              </span>
+                              <div class="text-sm text-body-copy mt-1">
+                                A flexible option for buyers who want their puppy delivered close to home without needing full doorstep delivery.
+                              </div>
+                            </div>
+                          </div>
+                        </label>
+
+                        <label class="selectable-card bg-white rounded-2xl p-6 md:p-8 block">
+                          <div class="flex items-start gap-4">
+                            <input
+                              type="radio"
+                              name="delivery"
+                              value="Home Delivery"
+                              class="custom-radio mt-1"
+                              data-price="50000"
+                              {% if cart.attributes['Delivery Method'] == 'Home Delivery' %}checked{% endif %}
+                            >
+                            <div class="flex-1">
+                              <span class="text-lg font-medium cursor-pointer select-none block leading-tight">
+                                Home Delivery
+                                <span class="text-base font-normal text-body-copy">($500.00)</span>
+                              </span>
+                              <div class="text-sm text-body-copy mt-1">
+                                Perfect for those who prefer the convenience of having their new puppy delivered directly to their home.
+                              </div>
+                            </div>
+                          </div>
+                        </label>
+
                       </div>
-                    </label>
-                  {% endfor %}
-                  </div>
                     </div>
                   </div>
                 </div>
               </details>
-
-              <script>
-                // Move descriptions from hidden container to variant options
-                document.addEventListener('DOMContentLoaded', () => {
-                  const descriptionsContainer = document.getElementById('variant-descriptions');
-                  if (!descriptionsContainer) return;
-
-                  document.querySelectorAll('.variant-description').forEach((targetDiv) => {
-                    const descId = targetDiv.getAttribute('data-for');
-                    const sourceDiv = descriptionsContainer.querySelector(`#${descId}`);
-
-                    if (sourceDiv) {
-                      targetDiv.innerHTML = sourceDiv.innerHTML;
-                    }
-                  });
-                });
-              </script>
             {% endif %}
 
 
@@ -472,7 +481,7 @@
 
                 <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
                   <strong class="text-body-copy font-titles">Total</strong>
-                  <span>{{ cart.items_subtotal_price | money }}</span>
+                  <span id="cart-total-display">{{ cart.items_subtotal_price | money }}</span>
                 </li>
               </ul>
 
@@ -535,6 +544,32 @@
 
 <script>
   // Save delivery method as cart attribute and update UI
+  const puppySubtotal = {{ cart.items_subtotal_price }};
+  
+  function updateCartTotals(deliveryPrice) {
+    const priceDisplay = document.getElementById('delivery-price-display');
+    const totalDisplay = document.getElementById('cart-total-display');
+    
+    if (priceDisplay) {
+      if (deliveryPrice > 0) {
+        priceDisplay.textContent = (deliveryPrice / 100).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        });
+      } else {
+        priceDisplay.textContent = 'Free';
+      }
+    }
+    
+    if (totalDisplay) {
+      const total = puppySubtotal + deliveryPrice;
+      totalDisplay.textContent = (total / 100).toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      });
+    }
+  }
+  
   document.querySelectorAll('input[name="delivery"]').forEach((radio) => {
     radio.addEventListener('change', async (e) => {
       const selectedMethod = e.target.value;
@@ -563,18 +598,8 @@
         deliveryStatus.classList.add('status-complete');
       }
       
-      // Update delivery price display
-      const priceDisplay = document.getElementById('delivery-price-display');
-      if (priceDisplay) {
-        if (selectedPrice > 0) {
-          priceDisplay.textContent = (selectedPrice / 100).toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD'
-          });
-        } else {
-          priceDisplay.textContent = 'Free';
-        }
-      }
+      // Update delivery price and total displays
+      updateCartTotals(selectedPrice);
     });
   });
   
@@ -583,19 +608,10 @@
     const selectedRadio = document.querySelector('input[name="delivery"]:checked');
     if (selectedRadio) {
       const selectedPrice = parseInt(selectedRadio.dataset.price, 10) || 0;
-      const priceDisplay = document.getElementById('delivery-price-display');
       const deliveryStatus = document.getElementById('delivery-status');
       
-      if (priceDisplay) {
-        if (selectedPrice > 0) {
-          priceDisplay.textContent = (selectedPrice / 100).toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD'
-          });
-        } else {
-          priceDisplay.textContent = 'Free';
-        }
-      }
+      // Update both delivery price and total
+      updateCartTotals(selectedPrice);
       
       // Ensure status shows as complete
       if (deliveryStatus) {

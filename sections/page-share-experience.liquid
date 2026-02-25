@@ -21,18 +21,17 @@
             {%- comment -%} Right Column: Image {%- endcomment -%}
             <div class="flex items-center justify-center md:justify-end">
                 <div class="relative w-full max-w-md mx-auto">
-                    <img
-                        src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/pup-testimonial.webp?v=1763388446"
-                        alt="Adorable Puppy at Home"
-                        width="800"
-                        height="784"
-                        class="w-full h-auto rounded-4xl shadow-xl"
-                        loading="eager"
-                    >
-
-                    {%- comment -%} Optional decorative element {%- endcomment -%}
-                    <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-[var(--color-primary)] rounded-2xl opacity-20 -z-10"></div>
-                    <div class="absolute -top-4 -left-4 w-16 h-16 bg-yellow-400 rounded-2xl opacity-30 -z-10"></div>
+                    <div class="absolute -left-2 -bottom-2 w-full h-full rounded-3xl bg-primary z-0"></div>
+                    <div class="relative group">
+                        <img
+                            src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/pup-testimonial.webp?v=1763388446"
+                            alt="Adorable Puppy at Home"
+                            width="800"
+                            height="784"
+                            class="w-full h-auto rounded-3xl z-10"
+                            loading="eager"
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,20 +39,18 @@
         {%- comment -%} Form Section - Two Column Layout {%- endcomment -%}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             {%- comment -%} Left Column: Birthday Puppy Image {%- endcomment -%}
-            <div class="order-2 lg:order-1">
+            <div class="order-2 lg:order-1 relative">
+                <div class="absolute -left-2 -bottom-2 w-full h-full rounded-3xl bg-primary"></div>
                 <div class="relative group">
                     <img
                         src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/birthday-pup.jpg?v=1763389024"
                         width="778"
                         height="1123"
                         alt="Birthday Puppy"
-                        class="w-full h-auto rounded-4xl shadow-2xl"
+                        class="w-full h-auto rounded-3xl "
                         loading="lazy"
                     >
 
-                    {%- comment -%} Decorative Elements {%- endcomment -%}
-                    <div class="absolute -top-6 -left-6 w-20 h-20 bg-pink-400 rounded-full opacity-40 blur-xl"></div>
-                    <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-blue-400 rounded-full opacity-30 blur-2xl"></div>
                 </div>
             </div>
 
@@ -260,11 +257,12 @@
 
         if (form) {
             form.addEventListener('submit', function (e) {
-                // Let the form submit normally to Zoho
-                // You can add additional validation or tracking here if needed
-
-                // Optional: Add loading state to submit button
+                e.preventDefault(); // Prevent default form submission
+                
                 const submitBtn = form.querySelector('button[type="submit"]');
+                const formData = new FormData(form);
+                
+                // Show loading state
                 if (submitBtn) {
                     submitBtn.innerHTML = `
             <span class="flex items-center justify-center space-x-2">
@@ -277,6 +275,45 @@
           `;
                     submitBtn.disabled = true;
                 }
+
+                // Submit form via AJAX
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // Zoho forms require no-cors mode
+                })
+                .then(() => {
+                    // Hide form and show success message
+                    form.style.display = 'none';
+                    
+                    // Create and show success message
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'bg-green-20 border-2 border-green-200 rounded-xl p-8 text-center';
+                    successMessage.innerHTML = `
+                        <svg class="w-16 h-16 mx-auto text-green-500 mb-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
+                        <p class="text-[var(--color-body-copy)] mb-4">Your testimonial has been submitted successfully. We appreciate you sharing your Puppys R Us experience!</p>
+                        <p class="text-sm text-gray-600">Our team will review your submission and it may appear on our website soon.</p>
+                    `;
+                    
+                    form.parentNode.insertBefore(successMessage, form);
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Show error message
+                    alert('There was an error submitting your testimonial. Please try again.');
+                    
+                    // Reset button
+                    if (submitBtn) {
+                        submitBtn.innerHTML = 'Submit';
+                        submitBtn.disabled = false;
+                    }
+                });
             });
         }
 

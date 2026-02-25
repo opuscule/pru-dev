@@ -153,3 +153,55 @@ git log --oneline
 | Git commit | `git add . && git commit -m "message" && git push` |
 | View themes | `shopify theme list` |
 | Pull changes | `shopify theme pull` |
+
+---
+
+## Your Specific Commands (puppysrusdev.myshopify.com / pru-dev/main)
+
+### 1. Pull Latest Settings (before making changes)
+```bash
+shopify theme pull --store puppysrusdev.myshopify.com --theme pru-dev/main
+```
+**Use this:** When you need to sync content added via Theme Editor to your local files
+
+### 2. Development Mode (RECOMMENDED - preserves Theme Editor content)
+```bash
+npm run watch:css
+shopify theme dev --store puppysrusdev.myshopify.com --theme pru-dev/main
+```
+**Use this:** For daily development - keeps Theme Editor content safe, only syncs code changes
+
+### 3. Push Code Changes Only (ignores settings)
+```bash
+shopify theme push --store puppysrusdev.myshopify.com --theme pru-dev/main --ignore="config/settings_data.json"
+```
+**Use this:** When you need to deploy without overwriting Theme Editor content
+
+### 4. Push Everything (⚠️ OVERWRITES Theme Editor content)
+```bash
+shopify theme push --store puppysrusdev.myshopify.com --theme pru-dev/main
+```
+**Use this:** Only when you want to completely sync everything (will overwrite Theme Editor settings)
+
+### 5. List Your Themes
+```bash
+shopify theme list --store puppysrusdev.myshopify.com
+```
+**Use this:** To see all available themes and their IDs
+
+---
+
+## ⭐ Recommended Daily Workflow
+
+```bash
+# Terminal 1: Start Tailwind watch
+npm run watch:css
+
+# Terminal 2: Start Shopify dev server (preserves Theme Editor content)
+shopify theme dev --store puppysrusdev.myshopify.com --theme pru-dev/main
+
+# Make your changes → auto-reloads
+
+# When done, commit to git
+git add . && git commit -m "Your message" && git push
+```

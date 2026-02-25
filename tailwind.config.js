@@ -47,9 +47,33 @@ module.exports = {
           '2xl': '6rem',
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: 'var(--color-body-copy)',
+            '--tw-prose-body': 'var(--color-body-copy)',
+            '--tw-prose-headings': 'var(--color-body-copy)',
+            '--tw-prose-lead': 'var(--color-body-copy)',
+            '--tw-prose-links': 'var(--color-primary)',
+            '--tw-prose-bold': 'var(--color-body-copy)',
+            '--tw-prose-counters': 'var(--color-primary)',
+            '--tw-prose-bullets': 'var(--color-primary)',
+            '--tw-prose-hr': 'var(--color-body-copy)',
+            '--tw-prose-quotes': 'var(--color-body-copy)',
+            '--tw-prose-quote-borders': 'var(--color-primary)',
+            '--tw-prose-captions': 'var(--color-body-copy)',
+            '--tw-prose-code': 'var(--color-body-copy)',
+            '--tw-prose-pre-code': 'var(--color-body-copy)',
+            '--tw-prose-pre-bg': 'var(--color-bg-light)',
+            '--tw-prose-th-borders': 'var(--color-body-copy)',
+            '--tw-prose-td-borders': 'var(--color-body-copy)',
+          },
+        },
+      },
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     function ({ addComponents, theme }) {
       addComponents({
         '.btn': {
