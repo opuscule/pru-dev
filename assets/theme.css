@@ -1430,6 +1430,13 @@ video {
   color: var(--color-white);
 }
 
+@media (max-width: 525px) {
+  .btn {
+    width: 100%;
+    display: block;
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
