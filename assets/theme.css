@@ -1672,6 +1672,10 @@ video {
   grid-column: span 2 / span 2;
 }
 
+.col-span-full {
+  grid-column: 1 / -1;
+}
+
 .m-0 {
   margin: 0px;
 }
