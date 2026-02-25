@@ -293,33 +293,35 @@
                                 %}
                             </p>
 
-                            <p class="pl-2 pr-4 font-semibold">Date Available:</p>
+                            {% unless product.metafields.custom.availability == 'Reserved' or product.metafields.custom.availability == 'Sold, but Show' or product.metafields.custom.availability == 'Sold' %}
+                                <p class="pl-2 pr-4 font-semibold">Date Available:</p>
 
-                            {% assign dob_val = product.metafields.custom.dob.value %}
-                            {% if dob_val %}
-                                {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
-                                {% assign ready_ts = dob_ts | plus: 4838400 %}
-                                {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+                                {% assign dob_val = product.metafields.custom.dob.value %}
+                                {% if dob_val %}
+                                    {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                                    {% assign ready_ts = dob_ts | plus: 4838400 %}
+                                    {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
 
+                                    <p>
+                                        {% if now_ts >= ready_ts %}
+                                            <span>I'm Ready!</span>
+                                        {% else %}
+                                            <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                                <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
                                 <p>
-                                    {% if now_ts >= ready_ts %}
-                                        <span>I'm Ready!</span>
+                                    {% if dob_val %}
+                                        {% assign diff_seconds = now_ts | minus: dob_ts %}
+                                        {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+                                        {{ weeks_old | floor }}
                                     {% else %}
-                                        <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                        N/A
                                     {% endif %}
                                 </p>
-                            {% endif %}
-
-                            <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
-                            <p>
-                                {% if dob_val %}
-                                    {% assign diff_seconds = now_ts | minus: dob_ts %}
-                                    {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                                    {{ weeks_old | floor }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </p>
+                            {% endunless %}
 
                             <p class="pl-2 pr-4 font-semibold">Sex:</p>
                             <p>
