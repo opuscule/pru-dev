@@ -125,13 +125,27 @@
     <div class="max-w-[var(--width-container-content)] mx-auto">
 
       <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
+        {% assign delivery_product_ids = '7322490765397,7322488569941,7319932797013,7237943296085' | split: ',' %}
+        {% assign delivery_subtotal = 0 %}
+        {% assign has_visible_items = false %}
+        {% for item in cart.items %}
+          {% assign item_product_id = item.product.id | append: '' %}
+          {% if delivery_product_ids contains item_product_id %}
+            {% assign delivery_subtotal = delivery_subtotal | plus: item.final_line_price %}
+          {% else %}
+            {% assign has_visible_items = true %}
+          {% endif %}
+        {% endfor %}
+        {% assign puppy_price = cart.items_subtotal_price | minus: delivery_subtotal %}
+
         <div class="flex flex-wrap -mx-4">
           <div class="w-full lg:w-9/12 px-4">
-            {% if cart.item_count == 0 %}
+            {% if cart.item_count == 0 or has_visible_items == false %}
               <p class="text-lg">Your cart is empty.</p>
             {% else %}
               {% for item in cart.items %}
-                {% unless item.product.title contains 'Puppy Delivery Option' %}
+                {% assign item_product_id = item.product.id | append: '' %}
+                {% unless delivery_product_ids contains item_product_id %}
                   <!-- each cart item -->
                   
                   <a class="block bg-bg-light rounded-3xl overflow-hidden mb-6" href="{{ item.url }}" data-line="{{ item.key }}">
@@ -461,9 +475,6 @@
             <div class="bg-bg-light rounded-3xl mt-6 md:mt-0 p-6">
               <h4 class="font-titles font-bold text-4xl md:text-5xl lg:text-6xl text-body-copy mb-4">Total</h4>
               
-              {% comment %} Calculate puppy price {% endcomment %}
-              {% assign puppy_price = cart.items_subtotal_price %}
-              
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Puppy Price</strong>
@@ -552,7 +563,7 @@
 
 <script>
   // Save delivery method as cart attribute and update UI
-  const puppySubtotal = {{ cart.items_subtotal_price }};
+  const puppySubtotal = {{ puppy_price }};
   window.deliverySelectionError = false;
   const deliveryVariantCache = {};
   
