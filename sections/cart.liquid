@@ -499,15 +499,15 @@
               </ul>
 
               {% if cart.item_count > 0 %}
-                <input
+                <button
                   id="checkoutBtn"
-                  type="submit"
-                  name="checkout"
+                  type="button"
                   class="w-full py-3 px-9 text-white border-2 cursor-pointer mb-3 bg-primary border-primary rounded-full text-lg font-medium transition-all duration-200 disabled:bg-[#d7d5ce] disabled:border-[#d7d5ce] disabled:text-white hover:enabled:bg-primary-hover hover:enabled:border-primary-hover"
                   disabled
                   aria-disabled="true"
-                  value="{{ 'cart.checkout' | t }}"
                 >
+                  {{ 'cart.checkout' | t }}
+                </button>
                 <div
                   id="checkout-text1"
                   class="text-center text-sm py-2 px-4 bg-white rounded-lg text-[var(--color-primary)] mb-4"
@@ -891,6 +891,29 @@
     checks.forEach((cb) => cb.addEventListener('change', syncCheckoutState));
     deliveryOptions.forEach((radio) => radio.addEventListener('change', syncCheckoutState));
     syncCheckoutState();
+
+    // Handle checkout button click - remove delivery products before proceeding
+    checkoutBtn?.addEventListener('click', async () => {
+      if (checkoutBtn.disabled) return;
+
+      // Disable button and show loading state
+      checkoutBtn.disabled = true;
+      const originalText = checkoutBtn.textContent;
+      checkoutBtn.textContent = 'Processing...';
+
+      try {
+        // Remove all delivery products from cart
+        await removeDeliveryProducts();
+        
+        // Navigate to checkout
+        window.location.href = '/checkout';
+      } catch (error) {
+        console.error('Checkout error:', error);
+        setDeliverySelectionError('Unable to proceed to checkout. Please try again.');
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalText;
+      }
+    });
 
     // Update accordion status indicators
     function updateDeliveryStatus() {
