@@ -501,6 +501,10 @@
                 >
                   Please accept all terms and select a shipping method
                 </div>
+                <div
+                  id="delivery-selection-error"
+                  class="hidden text-center text-sm py-2 px-4 bg-white rounded-lg text-red-600 mb-4"
+                ></div>
               {% endif %}
             </div>
               <img src="https://help.trustpilot.com/servlet/rtaImage?eid=ka0Sh0000008Y7l&feoid=00N7U000000O2jv&refid=0EMSh0000055viq" alt="Trustpilot reviews" class="w-full mt-5">
@@ -545,9 +549,46 @@
 <script>
   // Save delivery method as cart attribute and update UI
   const puppySubtotal = {{ cart.items_subtotal_price }};
+  window.deliverySelectionError = false;
   
   // Track delivery product variant IDs
   const DELIVERY_PRODUCT_IDS = ['7322490765397', '7322488569941', '7319932797013', '7237943296085'];
+
+  function setDeliverySelectionError(message) {
+    const errorBox = document.getElementById('delivery-selection-error');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+
+    if (message) {
+      window.deliverySelectionError = true;
+      if (errorBox) {
+        errorBox.textContent = message;
+        errorBox.classList.remove('hidden');
+      }
+      checkoutBtn?.setAttribute('disabled', 'disabled');
+      checkoutBtn?.setAttribute('aria-disabled', 'true');
+      return;
+    }
+
+    window.deliverySelectionError = false;
+    if (errorBox) {
+      errorBox.textContent = '';
+      errorBox.classList.add('hidden');
+    }
+  }
+
+  async function requestCartJson(url, payload) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Cart request failed: ${url}`);
+    }
+
+    return response;
+  }
   
   function updateCartTotals(deliveryPrice) {
     const priceDisplay = document.getElementById('delivery-price-display');
@@ -576,6 +617,9 @@
   async function removeDeliveryProducts() {
     // Get current cart
     const cartResponse = await fetch('/cart.js');
+    if (!cartResponse.ok) {
+      throw new Error('Failed to load cart state');
+    }
     const cart = await cartResponse.json();
     
     // Find any delivery products in cart
@@ -585,25 +629,17 @@
     
     // Remove each delivery product
     for (const item of deliveryItems) {
-      await fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: item.key,
-          quantity: 0
-        })
+      await requestCartJson('/cart/change.js', {
+        id: item.key,
+        quantity: 0
       });
     }
   }
   
   async function addDeliveryProduct(variantId) {
-    await fetch('/cart/add.js', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: variantId,
-        quantity: 1
-      })
+    await requestCartJson('/cart/add.js', {
+      id: variantId,
+      quantity: 1
     });
   }
   
@@ -612,25 +648,28 @@
       const selectedMethod = e.target.value;
       const selectedPrice = parseInt(e.target.dataset.price, 10) || 0;
       const productId = e.target.dataset.productId;
-      
-      // First, remove any existing delivery products
-      await removeDeliveryProducts();
-      
-      // If this option has a product ID, add it to cart
-      if (productId) {
-        await addDeliveryProduct(productId);
-      }
-      
-      // Update cart attribute via AJAX
-      await fetch('/cart/update.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+
+      setDeliverySelectionError('');
+
+      try {
+        // First, remove any existing delivery products
+        await removeDeliveryProducts();
+
+        // If this option has a product ID, add it to cart
+        if (productId) {
+          await addDeliveryProduct(productId);
+        }
+
+        // Update cart attribute via AJAX
+        await requestCartJson('/cart/update.js', {
           attributes: {
             'Delivery Method': selectedMethod
           }
-        }),
-      });
+        });
+      } catch (error) {
+        setDeliverySelectionError('We could not save your delivery option. Please try again.');
+        return;
+      }
       
       // Update delivery status display
       const deliveryStatus = document.getElementById('delivery-status');
@@ -656,6 +695,8 @@
   
   // On page load, update price display if a delivery method is already selected
   document.addEventListener('DOMContentLoaded', () => {
+    setDeliverySelectionError('');
+
     // Check for saved delivery method in cart attributes
     const savedDeliveryMethod = {{ cart.attributes['Delivery Method'] | json }};
     
@@ -734,6 +775,14 @@
     const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
 
     function syncCheckoutState() {
+      if (window.deliverySelectionError === true) {
+        checkoutBtn?.classList.add('is-disabled');
+        checkoutBtn?.setAttribute('disabled', 'disabled');
+        checkoutBtn?.setAttribute('aria-disabled', 'true');
+        document.getElementById('checkout-text1').style.display = 'inline-block';
+        return;
+      }
+
       const allCheckboxesChecked = checks.length === 0 || checks.every((cb) => cb.checked);
 
       // Check if delivery option is selected (only if delivery options exist)
