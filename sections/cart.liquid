@@ -550,8 +550,9 @@
   // Save delivery method as cart attribute and update UI
   const puppySubtotal = {{ cart.items_subtotal_price }};
   window.deliverySelectionError = false;
+  const deliveryVariantCache = {};
   
-  // Track delivery product variant IDs
+  // Track delivery product IDs
   const DELIVERY_PRODUCT_IDS = ['7322490765397', '7322488569941', '7319932797013', '7237943296085'];
 
   function setDeliverySelectionError(message) {
@@ -584,10 +585,46 @@
     });
 
     if (!response.ok) {
-      throw new Error(`Cart request failed: ${url}`);
+      let errorMessage = `Cart request failed: ${url}`;
+
+      try {
+        const errorData = await response.json();
+        if (errorData && errorData.description) {
+          errorMessage = errorData.description;
+        }
+      } catch (error) {
+      }
+
+      throw new Error(errorMessage);
     }
 
     return response;
+  }
+
+  async function getVariantIdFromProductId(productId) {
+    const normalizedProductId = String(productId);
+
+    if (deliveryVariantCache[normalizedProductId]) {
+      return deliveryVariantCache[normalizedProductId];
+    }
+
+    const productsResponse = await fetch('/products.json?limit=250');
+    if (!productsResponse.ok) {
+      throw new Error('Unable to load delivery products');
+    }
+
+    const productsPayload = await productsResponse.json();
+    const products = productsPayload.products || [];
+    const matchedProduct = products.find((product) => String(product.id) === normalizedProductId);
+
+    if (!matchedProduct || !matchedProduct.variants || matchedProduct.variants.length === 0) {
+      throw new Error('Delivery product is unavailable in the Online Store channel');
+    }
+
+    const availableVariant = matchedProduct.variants.find((variant) => variant.available) || matchedProduct.variants[0];
+    const variantId = String(availableVariant.id);
+    deliveryVariantCache[normalizedProductId] = variantId;
+    return variantId;
   }
   
   function updateCartTotals(deliveryPrice) {
@@ -624,7 +661,7 @@
     
     // Find any delivery products in cart
     const deliveryItems = cart.items.filter(item => 
-      DELIVERY_PRODUCT_IDS.includes(item.variant_id.toString())
+      DELIVERY_PRODUCT_IDS.includes(item.product_id.toString())
     );
     
     // Remove each delivery product
@@ -648,6 +685,7 @@
       const selectedMethod = e.target.value;
       const selectedPrice = parseInt(e.target.dataset.price, 10) || 0;
       const productId = e.target.dataset.productId;
+      const variantId = e.target.dataset.variantId;
 
       setDeliverySelectionError('');
 
@@ -655,9 +693,12 @@
         // First, remove any existing delivery products
         await removeDeliveryProducts();
 
-        // If this option has a product ID, add it to cart
-        if (productId) {
-          await addDeliveryProduct(productId);
+        // If this option has a product/variant ID, add it to cart
+        if (variantId) {
+          await addDeliveryProduct(variantId);
+        } else if (productId) {
+          const resolvedVariantId = await getVariantIdFromProductId(productId);
+          await addDeliveryProduct(resolvedVariantId);
         }
 
         // Update cart attribute via AJAX
@@ -667,7 +708,7 @@
           }
         });
       } catch (error) {
-        setDeliverySelectionError('We could not save your delivery option. Please try again.');
+        setDeliverySelectionError(error.message || 'We could not save your delivery option. Please try again.');
         return;
       }
       
