@@ -905,8 +905,8 @@
         // Remove all delivery products from cart
         await removeDeliveryProducts();
         
-        // Navigate to checkout
-        window.location.href = '/checkout';
+        // Submit the form to proceed to checkout
+        form.submit();
       } catch (error) {
         console.error('Checkout error:', error);
         setDeliverySelectionError('Unable to proceed to checkout. Please try again.');
