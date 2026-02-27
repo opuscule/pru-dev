@@ -608,17 +608,35 @@
       return deliveryVariantCache[normalizedProductId];
     }
 
-    const productsResponse = await fetch('/products.json?limit=250');
-    if (!productsResponse.ok) {
-      throw new Error('Unable to load delivery products');
+    const pageSize = 250;
+    const maxPages = 40;
+    let matchedProduct = null;
+
+    for (let page = 1; page <= maxPages; page++) {
+      const productsResponse = await fetch(`/products.json?limit=${pageSize}&page=${page}`);
+      if (!productsResponse.ok) {
+        throw new Error('Unable to load delivery products');
+      }
+
+      const productsPayload = await productsResponse.json();
+      const products = productsPayload.products || [];
+
+      if (products.length === 0) {
+        break;
+      }
+
+      matchedProduct = products.find((product) => String(product.id) === normalizedProductId);
+      if (matchedProduct) {
+        break;
+      }
+
+      if (products.length < pageSize) {
+        break;
+      }
     }
 
-    const productsPayload = await productsResponse.json();
-    const products = productsPayload.products || [];
-    const matchedProduct = products.find((product) => String(product.id) === normalizedProductId);
-
     if (!matchedProduct || !matchedProduct.variants || matchedProduct.variants.length === 0) {
-      throw new Error('Delivery product is unavailable in the Online Store channel');
+      throw new Error(`Delivery product ${normalizedProductId} could not be found in storefront products.json`);
     }
 
     const availableVariant = matchedProduct.variants.find((variant) => variant.available) || matchedProduct.variants[0];
