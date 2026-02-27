@@ -601,8 +601,9 @@
     return response;
   }
 
-  async function getVariantIdFromProductId(productId) {
+  async function getVariantIdFromProductId(productId, productTitle) {
     const normalizedProductId = String(productId);
+    const normalizedProductTitle = (productTitle || '').trim().toLowerCase();
 
     if (deliveryVariantCache[normalizedProductId]) {
       return deliveryVariantCache[normalizedProductId];
@@ -611,6 +612,7 @@
     const pageSize = 250;
     const maxPages = 40;
     let matchedProduct = null;
+    let titleMatchedProduct = null;
 
     for (let page = 1; page <= maxPages; page++) {
       const productsResponse = await fetch(`/products.json?limit=${pageSize}&page=${page}`);
@@ -630,9 +632,19 @@
         break;
       }
 
+      if (normalizedProductTitle && !titleMatchedProduct) {
+        titleMatchedProduct = products.find((product) => {
+          return (product.title || '').trim().toLowerCase() === normalizedProductTitle;
+        });
+      }
+
       if (products.length < pageSize) {
         break;
       }
+    }
+
+    if (!matchedProduct && titleMatchedProduct) {
+      matchedProduct = titleMatchedProduct;
     }
 
     if (!matchedProduct || !matchedProduct.variants || matchedProduct.variants.length === 0) {
@@ -715,7 +727,7 @@
         if (variantId) {
           await addDeliveryProduct(variantId);
         } else if (productId) {
-          const resolvedVariantId = await getVariantIdFromProductId(productId);
+          const resolvedVariantId = await getVariantIdFromProductId(productId, selectedMethod);
           await addDeliveryProduct(resolvedVariantId);
         }
 
