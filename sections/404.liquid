@@ -5,6 +5,92 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
+   
+ <style>
+
+        .page_bg {
+          background-color: var(--color-bg-light);
+         }
+         .h1-fs{
+           font-size: var(--headline1-font-size);
+         }
+         .h1-fs, .h2-fs {
+            font-weight: 700;
+            line-height: 1;
+            text-wrap: pretty;
+         }
+         h1, h2, h3 {
+            font-family: var(--font_header);
+            font-weight: 400;
+         }
+         li, ol, p, ul {
+            color: var(--color-body-copy);
+            font-family: var(--font-body);
+         }
+         .h2-fs {
+            font-size: var(--headline2-font-size);
+         }
+         .h3-fs {
+            font-size: var(--headline3-font-size);
+            font-weight: 700;
+            line-height: 1;
+         }
+         .wspbgadj {
+            margin-bottom: -1px;
+         }
+         .extralightbg {
+            background-color: var(--color-bg-extralight);
+         }
+         .footer_overlap {
+            margin-bottom: -200px;
+            padding-bottom: 100px;
+         }
+         .pup_card_bg {
+            background-color: var(--color-bg-main);
+            padding-top: 4rem;
+         }
+         .top-left-rounded-wrapper {
+            background-color: var(--color-bg-light);
+            border-radius: 12.5vw 0 0 0;
+            margin: 0 0 0 4vw;
+            padding: 4rem 0;
+         }
+         .font-color-red {
+              color: var(--color-primary-red);
+          }
+
+          a {
+                color: var(--color-primary-red);
+            }
+            .contact_us_sm {
+              background-color: hsla(0, 0%, 100%, .6) !important;
+              height: 3rem;
+              width: 3rem;
+            }
+
+            .contact_us_sm.contact_us_fb svg {
+                transition: all .25s ease;
+                width: .8rem;
+            }
+            .contact_us_sm.contact_us_ig svg {
+                transition: all .25s 
+            ease;
+                width: 1.1rem;
+            }
+            .contact_us_sm.contact_us_yt svg {
+                transition: all .25s ease;
+                width: 1.3rem;
+            }
+            .bg-secondary{
+              background-color:oklch(.7057 .158 124.46) !important;
+            }
+            .contact_us_sm:focus svg, .contact_us_sm:hover svg {
+              fill: var(--color-primary-red);
+            }
+        </style>
+
+
+
 <section class="page_bg py-5">
    <div class="container"> 
       <div class="justify-content-left row">
@@ -55,6 +141,7 @@
       </div>
    </div>
 </section>
+<section class="page_bg footer_overlap pt-5"></section>
 
 <!--<h1>{{ '404.title' | t }}</h1>
 
