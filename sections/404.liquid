@@ -5,109 +5,33 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
-   
- <style>
-
-        .page_bg {
-          background-color: var(--color-bg-light);
-         }
-         .h1-fs{
-           font-size: var(--headline1-font-size);
-         }
-         .h1-fs, .h2-fs {
-            font-weight: 700;
-            line-height: 1;
-            text-wrap: pretty;
-         }
-         h1, h2, h3 {
-            font-family: var(--font_header);
-            font-weight: 400;
-         }
-         li, ol, p, ul {
-            color: var(--color-body-copy);
-            font-family: var(--font-body);
-         }
-         .h2-fs {
-            font-size: var(--headline2-font-size);
-         }
-         .h3-fs {
-            font-size: var(--headline3-font-size);
-            font-weight: 700;
-            line-height: 1;
-         }
-         .wspbgadj {
-            margin-bottom: -1px;
-         }
-         .extralightbg {
-            background-color: var(--color-bg-extralight);
-         }
-         .footer_overlap {
-            margin-bottom: -200px;
-            padding-bottom: 100px;
-         }
-         .pup_card_bg {
-            background-color: var(--color-bg-main);
-            padding-top: 4rem;
-         }
-         .top-left-rounded-wrapper {
-            background-color: var(--color-bg-light);
-            border-radius: 12.5vw 0 0 0;
-            margin: 0 0 0 4vw;
-            padding: 4rem 0;
-         }
-         .font-color-red {
-              color: var(--color-primary-red);
-          }
-
-          a {
-                color: var(--color-primary-red);
-            }
-            .contact_us_sm {
-              background-color: hsla(0, 0%, 100%, .6) !important;
-              height: 3rem;
-              width: 3rem;
-            }
-
-            .contact_us_sm.contact_us_fb svg {
-                transition: all .25s ease;
-                width: .8rem;
-            }
-            .contact_us_sm.contact_us_ig svg {
-                transition: all .25s 
-            ease;
-                width: 1.1rem;
-            }
-            .contact_us_sm.contact_us_yt svg {
-                transition: all .25s ease;
-                width: 1.3rem;
-            }
-            .bg-secondary{
-              background-color:oklch(.7057 .158 124.46) !important;
-            }
-            .contact_us_sm:focus svg, .contact_us_sm:hover svg {
-              fill: var(--color-primary-red);
-            }
-        </style>
+{% stylesheet %}
+  a {
+    @apply text-primary-red;
+  }
+  
+  .contact_us_sm svg {
+    @apply transition-all duration-250;
+  }
+  
+  .contact_us_sm:focus svg, .contact_us_sm:hover svg {
+    @apply fill-primary-red;
+  }
+{% endstylesheet %}
 
 
 
 <section class="page_bg py-5">
    <div class="container"> 
       <div class="justify-content-left row">
+
+         <!-- column 1 of 2, larger h1 in titles font, social media icons should be in circle that is tailwind equivalent of 3rem -->
          <div class="col-lg-6">
             <div class="my-5 col">
                <h1 class="h1-fs">We Didn't Find That Page!</h1>
                <p>The page you are looking for doesn't exist or has been moved.</p>
             </div>
             <div class="mb-3 mt-4 row"> 
-               <div class="col-auto col">
-                  <a href="https://www.facebook.com/puppysrus/" target="_blank" title="Follow Puppys R Us on Facebook" rel="noopener nofollow" class="d-inline-flex justify-content-center contact_us_sm contact_us_fb rounded-circle">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                        <title>Follow Puppys R Us on Facebook</title>
-                        <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
-                     </svg>
-                  </a>
-               </div>
                <div class="col-auto col">
                   <a href="https://www.instagram.com/puppysruswp/" target="_blank" title="Follow Puppys R Us on Instagram" rel="noopener nofollow" class="d-inline-flex justify-content-center contact_us_sm contact_us_ig rounded-circle">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -125,19 +49,22 @@
                   </a>
                </div>
             </div>
+         </div>
+         
+
+         
+         <!-- column 2 of 2, font title in primary red color, phone link color primary red with underline -->
+         <div class="col-lg-5">
+            <div class="my-5 col">
+               <h2 class="font-color-red h2-fs">Call or Text</h2>
+               <p>
+                  (844) SEE-PUPS or<!-- --> <a href="tel:+18447337877">(844) 733-7877</a>
+               </p>
+               <p><strong>Owners:</strong> Amy &amp; Sonny Smith</p>
+               <p><strong>Puppys R Us, LLC.</strong></p>
+               <p><strong>Mailing Address</strong><br>1404 Southern Hills #246<br>West Plains, MO 65775</p>
             </div>
-            <div class="col-lg-1"></div>
-            <div class="col-lg-5">
-              <div class="my-5 col">
-            <h2 class="font-color-red h2-fs">Call or Text</h2>
-            <p>
-               (844) SEE-PUPS or<!-- --> <a href="tel:+18447337877">(844) 733-7877</a>
-            </p>
-            <p><strong>Owners:</strong> Amy &amp; Sonny Smith</p>
-            <p><strong>Puppys R Us, LLC.</strong></p>
-            <p><strong>Mailing Address</strong><br>1404 Southern Hills #246<br>West Plains, MO 65775</p>
-            </div>
-            </div>
+         </div>
       </div>
    </div>
 </section>
