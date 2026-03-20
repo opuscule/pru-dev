@@ -1,0 +1,23 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "contentful_space_id": "23jezwfidcn5",
+    "contentful_access_token": "OHrVhKJsNrvmUW2drSHlWsXpkyoX6QE6_1nxL1DLRlw",
+    "content_for_index": [],
+    "blocks": {
+      "7385302900728337613": {
+        "type": "shopify://apps/depo/blocks/app-embed/fa2b6a7a-29ea-4193-bcc4-3ecc583efe2e",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  }
+}
