@@ -15,6 +15,15 @@
     },
     "177402486328b86e15": {
       "type": "apps",
+      "blocks": {
+        "depo_subscription_block_e7AwBa": {
+          "type": "shopify://apps/depo/blocks/subscription-block/fa2b6a7a-29ea-4193-bcc4-3ecc583efe2e",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "depo_subscription_block_e7AwBa"
+      ],
       "settings": {}
     }
   },
