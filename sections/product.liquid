@@ -475,7 +475,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const askBtn = document.getElementById('ask-about-btn');
-        const takeBtn = document.getElementById('take-me-home-btn');
         const askModal = document.getElementById('ask-modal');
         const askCloseBtn = document.getElementById('ask-close-btn');
         const askForm = document.getElementById('form');
@@ -592,15 +591,7 @@
             });
         }
 
-        if (takeBtn) {
-            takeBtn.addEventListener('click', () => {
-                // submit the product form on the page
-                const productForm = document.querySelector('form[action^="/cart/add"]') || document.querySelector('form[action*="/cart/add"]') || document.querySelector('form');
-                if (productForm) {
-                    productForm.submit();
-                }
-            });
-        }
+
     });
 </script>
 
