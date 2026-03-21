@@ -204,6 +204,9 @@
                                         <!-- Hidden quantity -->
                                         <input type="hidden" name="quantity" value="1">
 
+                                        <!-- App blocks (e.g. Depo deposit options) -->
+                                        {% content_for 'blocks' %}
+
                                         <!-- Add to Cart button -->
                                         <input type="submit" id="take-me-home-btn" value="Take Me Home" class="btn btn-primary cursor-pointer">
                                     {% endform %}
@@ -674,6 +677,7 @@
 {% schema %}
 {
     "name": "t:general.product",
+    "blocks": [{ "type": "@app" }],
     "settings": [],
     "disabled_on": {
         "groups": ["header", "footer"]
