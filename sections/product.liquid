@@ -525,19 +525,39 @@
                                         const ctaText = card.querySelector('[data-cta-text]');
                                         const depoBlock = card.querySelector('.pricing-card__depo-blocks');
 
+                                        var currentMode = 'full';
+
                                         function syncDepo(mode) {
                                             if (!depoBlock) return;
-                                            /* Depo renders radio inputs — click the matching one */
-                                            const radios = depoBlock.querySelectorAll('input[type="radio"]');
-                                            if (radios.length < 2) return;
-                                            if (mode === 'full') {
-                                                radios[0].click();
-                                            } else {
-                                                radios[1].click();
+                                            /* Depo may render radios, selects, or buttons — try all */
+                                            var radios = depoBlock.querySelectorAll('input[type="radio"]');
+                                            if (radios.length >= 2) {
+                                                if (mode === 'full') { radios[0].click(); }
+                                                else { radios[1].click(); }
+                                                return;
+                                            }
+                                            /* Fallback: look for any clickable Depo options */
+                                            var options = depoBlock.querySelectorAll('[data-payment-option], .depo-option, button, label');
+                                            if (options.length >= 2) {
+                                                if (mode === 'full') { options[0].click(); }
+                                                else { options[1].click(); }
                                             }
                                         }
 
+                                        /* Watch for Depo to finish rendering, then sync */
+                                        if (depoBlock) {
+                                            var observer = new MutationObserver(function() {
+                                                var content = depoBlock.querySelector('input, button, select');
+                                                if (content) {
+                                                    observer.disconnect();
+                                                    syncDepo(currentMode);
+                                                }
+                                            });
+                                            observer.observe(depoBlock, { childList: true, subtree: true });
+                                        }
+
                                         function setMode(mode) {
+                                            currentMode = mode;
                                             toggles.forEach(function(btn) {
                                                 var isActive = btn.dataset.toggle === mode;
                                                 btn.classList.toggle('is-active', isActive);
@@ -575,8 +595,8 @@
                                             });
                                         });
 
-                                        /* Initial sync with Depo (give it a moment to render) */
-                                        setTimeout(function() { syncDepo('full'); }, 500);
+                                        /* Fallback: if Depo already rendered before observer, sync now */
+                                        syncDepo('full');
                                     });
                                 })();
                             </script>
