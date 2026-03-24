@@ -42,47 +42,50 @@
         max-width: 28rem;
     }
 
-    /* Toggle */
-    .pricing-card__toggle-wrap {
+    /* Depo toggle — restyle as pill toggle */
+    .depo-po-container {
         position: relative;
-        display: grid;
+        display: grid !important;
         grid-template-columns: 1fr 1fr;
         background: rgb(0 0 0 / 0.08);
         border-radius: 9999px;
         padding: 4px;
+        gap: 0;
     }
-    .pricing-card__toggle-option {
+    .depo-po-container .depo-po-option {
         position: relative;
         z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 0.625rem 0;
         font-size: 0.9375rem;
         font-weight: 600;
         text-align: center;
         background: none;
-        border: none;
+        border: 2px solid transparent;
+        border-radius: 9999px;
         cursor: pointer;
         color: var(--color-body-copy);
-        transition: color 0.3s ease;
+        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
         min-height: 44px;
     }
-    .pricing-card__toggle-option.is-active {
-        color: var(--color-primary);
-    }
-    .pricing-card__toggle-option:focus-visible {
-        outline: 2px solid var(--color-primary);
-        outline-offset: 2px;
-        border-radius: 9999px;
-    }
-    .pricing-card__slider {
-        position: absolute;
-        top: 4px;
-        left: 4px;
-        width: calc(50% - 4px);
-        height: calc(100% - 8px);
+    .depo-po-container .depo-po-option:has(input:checked) {
         background: white;
-        border-radius: 9999px;
+        color: var(--color-primary);
         box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
-        transition: transform 0.3s ease;
+    }
+    .depo-po-container .depo-po-option input[type="radio"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+    }
+    /* Hide the default Depo label text like "Payment Options :" */
+    #depo-subscription-widget-block > :not(.depo-po-container) {
+        display: none !important;
     }
 
     /* Price area */
@@ -116,20 +119,9 @@
         line-height: 1.4;
     }
 
-    /* Hide Depo's own UI */
-    .depo-po-container {
-        display: none !important;
-    }
-
-    /* Hidden Depo blocks */
+    /* Depo blocks container — visible now */
     .pricing-card__depo-blocks {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        white-space: nowrap;
+        margin-top: 1rem;
     }
 
     /* CTA button */
@@ -448,25 +440,6 @@
 
                             <!-- Pricing Card -->
                             <div class="pricing-card mt-6" data-pricing-card>
-                                <!-- Toggle Switch -->
-                                <div class="pricing-card__toggle-wrap" role="radiogroup" aria-label="Payment option">
-                                    <button
-                                        type="button"
-                                        role="radio"
-                                        aria-checked="true"
-                                        class="pricing-card__toggle-option is-active"
-                                        data-toggle="full"
-                                    >Pay in full</button>
-                                    <button
-                                        type="button"
-                                        role="radio"
-                                        aria-checked="false"
-                                        class="pricing-card__toggle-option"
-                                        data-toggle="deposit"
-                                    >50% Deposit</button>
-                                    <span class="pricing-card__slider" aria-hidden="true"></span>
-                                </div>
-
                                 <!-- Price Display -->
                                 <div class="pricing-card__price-area" aria-live="polite">
                                     <span class="pricing-card__label" data-price-label>Total price</span>
@@ -483,8 +456,8 @@
                                         <input type="hidden" name="id" value="{{ current_variant.id }}">
                                         <input type="hidden" name="quantity" value="1">
 
-                                        <!-- Depo app blocks (hidden, synced via JS) -->
-                                        <div class="pricing-card__depo-blocks" aria-hidden="true">
+                                        <!-- Depo payment options (styled as toggle) -->
+                                        <div class="pricing-card__depo-blocks">
                                             {% content_for 'blocks' %}
                                         </div>
 
@@ -507,8 +480,6 @@
 
                             <script>
                                 (function() {
-                                    const FULL_PRICE_CENTS = {{ full_price }};
-                                    const DEPOSIT_CENTS = {{ deposit_price }};
                                     const REMAINING = '{{ remaining_price | money }}';
                                     const FULL_FORMATTED = '{{ full_price | money }}';
                                     const DEPOSIT_FORMATTED = '{{ deposit_price | money }}';
@@ -517,70 +488,14 @@
                                         const card = document.querySelector('[data-pricing-card]');
                                         if (!card) return;
 
-                                        const toggles = card.querySelectorAll('[data-toggle]');
-                                        const slider = card.querySelector('.pricing-card__slider');
                                         const priceLabel = card.querySelector('[data-price-label]');
                                         const priceDisplay = card.querySelector('[data-price-display]');
                                         const priceNote = card.querySelector('[data-price-note]');
                                         const ctaText = card.querySelector('[data-cta-text]');
                                         const depoBlock = card.querySelector('.pricing-card__depo-blocks');
 
-                                        var currentMode = 'full';
-
-                                        function syncDepo(mode) {
-                                            if (!depoBlock) return;
-                                            var radios = depoBlock.querySelectorAll('input[type="radio"]');
-                                            if (radios.length >= 2) {
-                                                var target = (mode === 'full') ? radios[0] : radios[1];
-                                                target.checked = true;
-                                                target.dispatchEvent(new Event('change', { bubbles: true }));
-                                                target.dispatchEvent(new Event('input', { bubbles: true }));
-                                                target.click();
-                                                /* Also click the parent label/container if it exists */
-                                                var label = target.closest('label') || target.parentElement;
-                                                if (label && label !== depoBlock) { label.click(); }
-                                                return;
-                                            }
-                                            /* Fallback: click the container divs wrapping each option */
-                                            var containers = depoBlock.querySelectorAll('.depo-po-container > div, .depo-option, [data-payment-option]');
-                                            if (containers.length >= 2) {
-                                                var t = (mode === 'full') ? containers[0] : containers[1];
-                                                t.click();
-                                            }
-                                        }
-
-                                        /* Watch for Depo to finish rendering, then sync */
-                                        if (depoBlock) {
-                                            var observer = new MutationObserver(function() {
-                                                var content = depoBlock.querySelector('input, button, select');
-                                                if (content) {
-                                                    observer.disconnect();
-                                                    syncDepo(currentMode);
-                                                }
-                                            });
-                                            observer.observe(depoBlock, { childList: true, subtree: true });
-                                        }
-
-                                        function setMode(mode) {
-                                            currentMode = mode;
-                                            toggles.forEach(function(btn) {
-                                                var isActive = btn.dataset.toggle === mode;
-                                                btn.classList.toggle('is-active', isActive);
-                                                btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
-                                            });
-
-                                            if (mode === 'full') {
-                                                slider.style.transform = 'translateX(0)';
-                                                priceLabel.textContent = 'Total price';
-                                                priceDisplay.style.opacity = '0';
-                                                setTimeout(function() {
-                                                    priceDisplay.textContent = FULL_FORMATTED;
-                                                    priceDisplay.style.opacity = '1';
-                                                }, 150);
-                                                priceNote.textContent = 'Includes health certificate, microchip & first vaccinations';
-                                                ctaText.textContent = 'Take Me Home';
-                                            } else {
-                                                slider.style.transform = 'translateX(100%)';
+                                        function updateUI(isDeposit) {
+                                            if (isDeposit) {
                                                 priceLabel.textContent = 'Due today';
                                                 priceDisplay.style.opacity = '0';
                                                 setTimeout(function() {
@@ -589,19 +504,40 @@
                                                 }, 150);
                                                 priceNote.textContent = 'Remaining ' + REMAINING + ' due before pickup \u00b7 Secures your puppy';
                                                 ctaText.textContent = 'Place Deposit';
+                                            } else {
+                                                priceLabel.textContent = 'Total price';
+                                                priceDisplay.style.opacity = '0';
+                                                setTimeout(function() {
+                                                    priceDisplay.textContent = FULL_FORMATTED;
+                                                    priceDisplay.style.opacity = '1';
+                                                }, 150);
+                                                priceNote.textContent = 'Includes health certificate, microchip & first vaccinations';
+                                                ctaText.textContent = 'Take Me Home';
                                             }
-
-                                            syncDepo(mode);
                                         }
 
-                                        toggles.forEach(function(btn) {
-                                            btn.addEventListener('click', function() {
-                                                setMode(btn.dataset.toggle);
+                                        function bindDepoRadios() {
+                                            var radios = depoBlock.querySelectorAll('input[type="radio"]');
+                                            if (radios.length < 2) return false;
+                                            radios.forEach(function(radio, idx) {
+                                                radio.addEventListener('change', function() {
+                                                    updateUI(idx > 0);
+                                                });
                                             });
-                                        });
+                                            return true;
+                                        }
 
-                                        /* Fallback: if Depo already rendered before observer, sync now */
-                                        syncDepo('full');
+                                        /* Watch for Depo to render, then bind listeners */
+                                        if (depoBlock) {
+                                            if (!bindDepoRadios()) {
+                                                var observer = new MutationObserver(function() {
+                                                    if (bindDepoRadios()) {
+                                                        observer.disconnect();
+                                                    }
+                                                });
+                                                observer.observe(depoBlock, { childList: true, subtree: true });
+                                            }
+                                        }
                                     });
                                 })();
                             </script>
