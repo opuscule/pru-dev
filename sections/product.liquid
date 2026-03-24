@@ -43,7 +43,7 @@
     }
 
     /* Depo toggle — restyle as pill toggle */
-    .depo-po-container {
+    .depo-pp-options {
         position: relative;
         display: grid !important;
         grid-template-columns: 1fr 1fr;
@@ -51,11 +51,12 @@
         border-radius: 9999px;
         padding: 4px;
         gap: 0;
+        flex-direction: row !important;
     }
-    .depo-po-container .depo-po-option {
+    .depo-pp-container {
         position: relative;
         z-index: 1;
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
         padding: 0.625rem 0;
@@ -67,27 +68,32 @@
         border-radius: 9999px;
         cursor: pointer;
         color: var(--color-body-copy);
-        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+        transition: color 0.3s ease, background 0.3s ease;
         min-height: 44px;
     }
-    .depo-po-container .depo-po-option:has(input:checked) {
+    .depo-pp-container:has(input:checked) {
         background: white;
         color: var(--color-primary);
         box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
     }
-    .depo-po-container .depo-po-option input[type="radio"] {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
+    .depo-pp-radio {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        clip: rect(0 0 0 0) !important;
+        clip-path: inset(50%) !important;
     }
-    /* Hide the default Depo label text like "Payment Options :" */
-    #depo-subscription-widget-block > :not(.depo-po-container) {
+    .depo-pp-label {
+        cursor: pointer;
+        user-select: none;
+    }
+    /* Hide non-toggle Depo chrome */
+    #depo-subscription-widget-block > :not(.depo-pp-options) {
         display: none !important;
     }
-    .depo-po-header {
+    .depo-po-header,
+    .depo-pp-header {
         display: none !important;
     }
 
