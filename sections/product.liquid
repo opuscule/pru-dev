@@ -529,18 +529,23 @@
 
                                         function syncDepo(mode) {
                                             if (!depoBlock) return;
-                                            /* Depo may render radios, selects, or buttons — try all */
                                             var radios = depoBlock.querySelectorAll('input[type="radio"]');
                                             if (radios.length >= 2) {
-                                                if (mode === 'full') { radios[0].click(); }
-                                                else { radios[1].click(); }
+                                                var target = (mode === 'full') ? radios[0] : radios[1];
+                                                target.checked = true;
+                                                target.dispatchEvent(new Event('change', { bubbles: true }));
+                                                target.dispatchEvent(new Event('input', { bubbles: true }));
+                                                target.click();
+                                                /* Also click the parent label/container if it exists */
+                                                var label = target.closest('label') || target.parentElement;
+                                                if (label && label !== depoBlock) { label.click(); }
                                                 return;
                                             }
-                                            /* Fallback: look for any clickable Depo options */
-                                            var options = depoBlock.querySelectorAll('[data-payment-option], .depo-option, button, label');
-                                            if (options.length >= 2) {
-                                                if (mode === 'full') { options[0].click(); }
-                                                else { options[1].click(); }
+                                            /* Fallback: click the container divs wrapping each option */
+                                            var containers = depoBlock.querySelectorAll('.depo-po-container > div, .depo-option, [data-payment-option]');
+                                            if (containers.length >= 2) {
+                                                var t = (mode === 'full') ? containers[0] : containers[1];
+                                                t.click();
                                             }
                                         }
 
