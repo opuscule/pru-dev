@@ -33,6 +33,140 @@
     .splide__pagination .splide__pagination__page.is-active {
         background: var(--color-primary);
     }
+
+    /* Pricing Card */
+    .pricing-card {
+        background: var(--color-bg-extralight);
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        max-width: 28rem;
+    }
+
+    /* Toggle */
+    .pricing-card__toggle-wrap {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: rgb(0 0 0 / 0.08);
+        border-radius: 9999px;
+        padding: 4px;
+    }
+    .pricing-card__toggle-option {
+        position: relative;
+        z-index: 1;
+        padding: 0.625rem 0;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-body-copy);
+        transition: color 0.3s ease;
+        min-height: 44px;
+    }
+    .pricing-card__toggle-option.is-active {
+        color: var(--color-primary);
+    }
+    .pricing-card__toggle-option:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+        border-radius: 9999px;
+    }
+    .pricing-card__slider {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: calc(50% - 4px);
+        height: calc(100% - 8px);
+        background: white;
+        border-radius: 9999px;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+        transition: transform 0.3s ease;
+    }
+
+    /* Price area */
+    .pricing-card__price-area {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 1.25rem;
+        gap: 0.125rem;
+    }
+    .pricing-card__label {
+        font-size: 0.8125rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgb(0 0 0 / 0.5);
+        font-weight: 600;
+    }
+    .pricing-card__price {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        line-height: 1.1;
+        transition: opacity 0.15s ease;
+    }
+
+    /* Note */
+    .pricing-card__note {
+        font-size: 0.8125rem;
+        color: rgb(0 0 0 / 0.5);
+        margin-top: 0.5rem;
+        line-height: 1.4;
+    }
+
+    /* Hidden Depo blocks */
+    .pricing-card__depo-blocks {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    /* CTA button */
+    .pricing-card__cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 1.25rem;
+        cursor: pointer;
+    }
+    .pricing-card__cta-icon {
+        flex-shrink: 0;
+    }
+
+    /* Inquiry link */
+    .pricing-card__inquiry {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .pricing-card__inquiry-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.875rem;
+        color: rgb(0 0 0 / 0.45);
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .pricing-card__inquiry-link:hover,
+    .pricing-card__inquiry-link:focus {
+        color: var(--color-primary);
+    }
+    .pricing-card__inquiry-link:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
 </style>
 
 <script type="application/ld+json">
@@ -188,30 +322,144 @@
                         {% elsif product.metafields.custom.availability == 'Sold' %}
 
                         {% else %}
-                            <p class="mt-2 text-xl leading-[1.2]">{{ product.price | money }}</p>
+                            {% assign full_price = product.price %}
+                            {% assign deposit_price = product.price | divided_by: 2 %}
+                            {% assign remaining_price = full_price | minus: deposit_price %}
 
-                            <!-- CTAs -->
-                            <div class="flex flex-col md:flex-row gap-4 mt-4 items-center">
-                                <button type="button" id="ask-about-btn" class="btn btn-secondary">Ask About {{ product.title }}</button>
-                                <!-- <button type="button" id="take-me-home-btn" class="btn btn-primary">Take Me Home</button> -->
+                            <!-- Pricing Card -->
+                            <div class="pricing-card mt-6" data-pricing-card>
+                                <!-- Toggle Switch -->
+                                <div class="pricing-card__toggle-wrap" role="radiogroup" aria-label="Payment option">
+                                    <button
+                                        type="button"
+                                        role="radio"
+                                        aria-checked="true"
+                                        class="pricing-card__toggle-option is-active"
+                                        data-toggle="full"
+                                    >Pay in full</button>
+                                    <button
+                                        type="button"
+                                        role="radio"
+                                        aria-checked="false"
+                                        class="pricing-card__toggle-option"
+                                        data-toggle="deposit"
+                                    >50% Deposit</button>
+                                    <span class="pricing-card__slider" aria-hidden="true"></span>
+                                </div>
+
+                                <!-- Price Display -->
+                                <div class="pricing-card__price-area" aria-live="polite">
+                                    <span class="pricing-card__label" data-price-label>Total price</span>
+                                    <span class="pricing-card__price" data-price-display>{{ full_price | money }}</span>
+                                </div>
+
+                                <!-- Contextual Note -->
+                                <p class="pricing-card__note" data-price-note>Includes health certificate, microchip &amp; first vaccinations</p>
+
+                                <!-- Product Form -->
                                 <div class="product-form">
                                     {% form 'product', product %}
                                         {% assign current_variant = product.selected_or_first_available_variant %}
-
-                                        <!-- Hidden variant ID (always adds the first available variant) -->
                                         <input type="hidden" name="id" value="{{ current_variant.id }}">
-
-                                        <!-- Hidden quantity -->
                                         <input type="hidden" name="quantity" value="1">
 
-                                        <!-- App blocks (e.g. Depo deposit options) -->
-                                        {% content_for 'blocks' %}
+                                        <!-- Depo app blocks (hidden, synced via JS) -->
+                                        <div class="pricing-card__depo-blocks" aria-hidden="true">
+                                            {% content_for 'blocks' %}
+                                        </div>
 
-                                        <!-- Add to Cart button -->
-                                        <button type="submit" name="add" id="take-me-home-btn" class="btn btn-primary cursor-pointer btn--add-to-cart product-form__submit">Take Me Home</button>
+                                        <!-- Primary CTA -->
+                                        <button type="submit" name="add" id="take-me-home-btn" class="pricing-card__cta btn btn-primary btn--add-to-cart product-form__submit" data-cta-btn>
+                                            <svg class="pricing-card__cta-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                            <span data-cta-text>Take Me Home</span>
+                                        </button>
                                     {% endform %}
                                 </div>
+
+                                <!-- Inquiry Link -->
+                                <p class="pricing-card__inquiry">
+                                    <button type="button" id="ask-about-btn" class="pricing-card__inquiry-link">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                        Have questions? Ask about {{ product.title }}
+                                    </button>
+                                </p>
                             </div>
+
+                            <script>
+                                (function() {
+                                    const FULL_PRICE_CENTS = {{ full_price }};
+                                    const DEPOSIT_CENTS = {{ deposit_price }};
+                                    const REMAINING = '{{ remaining_price | money }}';
+                                    const FULL_FORMATTED = '{{ full_price | money }}';
+                                    const DEPOSIT_FORMATTED = '{{ deposit_price | money }}';
+
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const card = document.querySelector('[data-pricing-card]');
+                                        if (!card) return;
+
+                                        const toggles = card.querySelectorAll('[data-toggle]');
+                                        const slider = card.querySelector('.pricing-card__slider');
+                                        const priceLabel = card.querySelector('[data-price-label]');
+                                        const priceDisplay = card.querySelector('[data-price-display]');
+                                        const priceNote = card.querySelector('[data-price-note]');
+                                        const ctaText = card.querySelector('[data-cta-text]');
+                                        const depoBlock = card.querySelector('.pricing-card__depo-blocks');
+
+                                        function syncDepo(mode) {
+                                            if (!depoBlock) return;
+                                            /* Depo renders radio inputs — click the matching one */
+                                            const radios = depoBlock.querySelectorAll('input[type="radio"]');
+                                            if (radios.length < 2) return;
+                                            if (mode === 'full') {
+                                                radios[0].click();
+                                            } else {
+                                                radios[1].click();
+                                            }
+                                        }
+
+                                        function setMode(mode) {
+                                            toggles.forEach(function(btn) {
+                                                var isActive = btn.dataset.toggle === mode;
+                                                btn.classList.toggle('is-active', isActive);
+                                                btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+                                            });
+
+                                            if (mode === 'full') {
+                                                slider.style.transform = 'translateX(0)';
+                                                priceLabel.textContent = 'Total price';
+                                                priceDisplay.style.opacity = '0';
+                                                setTimeout(function() {
+                                                    priceDisplay.textContent = FULL_FORMATTED;
+                                                    priceDisplay.style.opacity = '1';
+                                                }, 150);
+                                                priceNote.textContent = 'Includes health certificate, microchip & first vaccinations';
+                                                ctaText.textContent = 'Take Me Home';
+                                            } else {
+                                                slider.style.transform = 'translateX(100%)';
+                                                priceLabel.textContent = 'Due today';
+                                                priceDisplay.style.opacity = '0';
+                                                setTimeout(function() {
+                                                    priceDisplay.textContent = DEPOSIT_FORMATTED;
+                                                    priceDisplay.style.opacity = '1';
+                                                }, 150);
+                                                priceNote.textContent = 'Remaining ' + REMAINING + ' due before pickup \u00b7 Secures your puppy';
+                                                ctaText.textContent = 'Place Deposit';
+                                            }
+
+                                            syncDepo(mode);
+                                        }
+
+                                        toggles.forEach(function(btn) {
+                                            btn.addEventListener('click', function() {
+                                                setMode(btn.dataset.toggle);
+                                            });
+                                        });
+
+                                        /* Initial sync with Depo (give it a moment to render) */
+                                        setTimeout(function() { syncDepo('full'); }, 500);
+                                    });
+                                })();
+                            </script>
                         {% endif %}
                         <!-- Ask modal -->
                         <div id="ask-modal" class="fixed inset-0 hidden items-center justify-center z-50" style="background-color:rgb(0 0 0 / 25%)" aria-hidden="true" role="dialog" aria-modal="true">
