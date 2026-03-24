@@ -329,6 +329,119 @@
                         {% elsif product.metafields.custom.availability == 'Sold' %}
 
                         {% else %}
+
+                        <div class="puppy_meta_grid">
+                            <p class="pl-2 pr-4 font-semibold">Date of Birth:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.dob.value | date: '%m/%d/%Y'
+                                %}
+                            </p>
+
+                            {% unless product.metafields.custom.availability == 'Reserved' or product.metafields.custom.availability == 'Sold, but Show' or product.metafields.custom.availability == 'Sold' %}
+                                <p class="pl-2 pr-4 font-semibold">Date Available:</p>
+
+                                {% assign dob_val = product.metafields.custom.dob.value %}
+                                {% if dob_val %}
+                                    {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
+                                    {% assign ready_ts = dob_ts | plus: 4838400 %}
+                                    {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+
+                                    <p>
+                                        {% if now_ts >= ready_ts %}
+                                            <span>I'm Ready!</span>
+                                        {% else %}
+                                            <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                                <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
+                                <p>
+                                    {% if dob_val %}
+                                        {% assign diff_seconds = now_ts | minus: dob_ts %}
+                                        {% assign weeks_old = diff_seconds | divided_by: 604800 %}
+                                        {{ weeks_old | floor }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            {% endunless %}
+
+                            <p class="pl-2 pr-4 font-semibold">Sex:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.sex.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Color:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.color.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Food:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.food_brand.value
+                                %}
+                                {% liquid
+                                    echo product.metafields.custom.food_brand_formula.value
+                                %}
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Dad Weight:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.sire_weight.value
+                                %}&nbsp;lbs.
+                            </p>
+
+                            <p class="pl-2 pr-4 font-semibold">Mom Weight:</p>
+                            <p>
+                                {% liquid
+                                    echo product.metafields.custom.dam_weight.value
+                                %}&nbsp;lbs.
+                            </p>
+
+                            {% if product.metafields.custom.registry.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Registry:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.registry.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.generation.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Generation:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.generation.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.size.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Size:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.size.value
+                                    %}
+                                </p>
+                            {% endif %}
+
+                            {% if product.metafields.custom.variety.value != blank %}
+                                <p class="pl-2 pr-4 font-semibold">Variety:</p>
+                                <p>
+                                    {% liquid
+                                        echo product.metafields.custom.variety.value
+                                    %}
+                                </p>
+                            {% endif %}
+                        </div>
                             {% assign full_price = product.price %}
                             {% assign deposit_price = product.price | divided_by: 2 %}
                             {% assign remaining_price = full_price | minus: deposit_price %}
@@ -551,118 +664,7 @@
                             </div>
                         </div>
 
-                        <div class="puppy_meta_grid">
-                            <p class="pl-2 pr-4 font-semibold">Date of Birth:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.dob.value | date: '%m/%d/%Y'
-                                %}
-                            </p>
-
-                            {% unless product.metafields.custom.availability == 'Reserved' or product.metafields.custom.availability == 'Sold, but Show' or product.metafields.custom.availability == 'Sold' %}
-                                <p class="pl-2 pr-4 font-semibold">Date Available:</p>
-
-                                {% assign dob_val = product.metafields.custom.dob.value %}
-                                {% if dob_val %}
-                                    {% assign dob_ts = dob_val | date: '%s' | plus: 0 %}
-                                    {% assign ready_ts = dob_ts | plus: 4838400 %}
-                                    {% assign now_ts = 'now' | date: '%s' | plus: 0 %}
-
-                                    <p>
-                                        {% if now_ts >= ready_ts %}
-                                            <span>I'm Ready!</span>
-                                        {% else %}
-                                            <span>{{ ready_ts | date: '%m/%d/%Y' }}</span>
-                                        {% endif %}
-                                    </p>
-                                {% endif %}
-
-                                <p class="pl-2 pr-4 font-semibold">Weeks Old:</p>
-                                <p>
-                                    {% if dob_val %}
-                                        {% assign diff_seconds = now_ts | minus: dob_ts %}
-                                        {% assign weeks_old = diff_seconds | divided_by: 604800 %}
-                                        {{ weeks_old | floor }}
-                                    {% else %}
-                                        N/A
-                                    {% endif %}
-                                </p>
-                            {% endunless %}
-
-                            <p class="pl-2 pr-4 font-semibold">Sex:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.sex.value
-                                %}
-                            </p>
-
-                            <p class="pl-2 pr-4 font-semibold">Color:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.color.value
-                                %}
-                            </p>
-
-                            <p class="pl-2 pr-4 font-semibold">Food:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.food_brand.value
-                                %}
-                                {% liquid
-                                    echo product.metafields.custom.food_brand_formula.value
-                                %}
-                            </p>
-
-                            <p class="pl-2 pr-4 font-semibold">Dad Weight:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.sire_weight.value
-                                %}&nbsp;lbs.
-                            </p>
-
-                            <p class="pl-2 pr-4 font-semibold">Mom Weight:</p>
-                            <p>
-                                {% liquid
-                                    echo product.metafields.custom.dam_weight.value
-                                %}&nbsp;lbs.
-                            </p>
-
-                            {% if product.metafields.custom.registry.value != blank %}
-                                <p class="pl-2 pr-4 font-semibold">Registry:</p>
-                                <p>
-                                    {% liquid
-                                        echo product.metafields.custom.registry.value
-                                    %}
-                                </p>
-                            {% endif %}
-
-                            {% if product.metafields.custom.generation.value != blank %}
-                                <p class="pl-2 pr-4 font-semibold">Generation:</p>
-                                <p>
-                                    {% liquid
-                                        echo product.metafields.custom.generation.value
-                                    %}
-                                </p>
-                            {% endif %}
-
-                            {% if product.metafields.custom.size.value != blank %}
-                                <p class="pl-2 pr-4 font-semibold">Size:</p>
-                                <p>
-                                    {% liquid
-                                        echo product.metafields.custom.size.value
-                                    %}
-                                </p>
-                            {% endif %}
-
-                            {% if product.metafields.custom.variety.value != blank %}
-                                <p class="pl-2 pr-4 font-semibold">Variety:</p>
-                                <p>
-                                    {% liquid
-                                        echo product.metafields.custom.variety.value
-                                    %}
-                                </p>
-                            {% endif %}
-                        </div>
+                        
                     </div>
                 </div>
                 <!-- # right column -->
