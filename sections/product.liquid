@@ -42,21 +42,18 @@
         max-width: 28rem;
     }
 
-    /* Depo toggle — restyle as pill toggle */
-    .depo-pp-options {
-        position: relative;
-        display: grid !important;
+    /* Custom pill toggle */
+    .pricing-toggle {
+        display: grid;
         grid-template-columns: 1fr 1fr;
         background: rgb(0 0 0 / 0.08);
         border-radius: 9999px;
         padding: 4px;
-        gap: 0;
-        flex-direction: row !important;
+        margin-top: 1rem;
     }
-    .depo-pp-container {
+    .pricing-toggle__btn {
         position: relative;
-        z-index: 1;
-        display: flex !important;
+        display: flex;
         align-items: center;
         justify-content: center;
         padding: 0.625rem 0;
@@ -71,28 +68,19 @@
         transition: color 0.3s ease, background 0.3s ease;
         min-height: 44px;
     }
-    .depo-pp-container:has(input:checked) {
+    .pricing-toggle__btn[aria-pressed="true"] {
         background: white;
         color: var(--color-primary);
         box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
     }
-    .depo-pp-radio {
+    /* Hide the entire Depo widget — we drive it programmatically */
+    .depo-po-container {
         position: absolute !important;
         width: 1px !important;
         height: 1px !important;
         overflow: hidden !important;
         clip: rect(0 0 0 0) !important;
         clip-path: inset(50%) !important;
-    }
-    .depo-pp-label {
-        cursor: pointer;
-        user-select: none;
-    }
-    /* Hide non-toggle Depo chrome */
-    .depo-po-container > :not(.depo-pp-options),
-    .depo-po-header,
-    .depo-pp-header {
-        display: none !important;
     }
 
     /* Price area */
