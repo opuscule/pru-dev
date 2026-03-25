@@ -525,12 +525,24 @@
                                             }
                                         }
 
-                                        function trimDepoLabels() {
-                                            var labels = depoBlock.querySelectorAll('.depo-pp-label');
-                                            console.log('[Depo Debug] trimDepoLabels called, found labels:', labels.length);
+                                        /* Find the root to query — may be inside a Shadow DOM */
+                                        function getDepoRoot() {
+                                            /* Walk all descendants looking for a shadowRoot */
+                                            var els = depoBlock.querySelectorAll('*');
+                                            for (var i = 0; i < els.length; i++) {
+                                                if (els[i].shadowRoot) {
+                                                    console.log('[Depo Debug] Shadow DOM found on:', els[i].tagName, els[i].id);
+                                                    return els[i].shadowRoot;
+                                                }
+                                            }
+                                            return depoBlock;
+                                        }
+
+                                        function trimDepoLabels(root) {
+                                            var labels = root.querySelectorAll('.depo-pp-label');
+                                            console.log('[Depo Debug] trimDepoLabels, found labels:', labels.length);
                                             labels.forEach(function(label) {
                                                 var text = label.textContent.trim();
-                                                console.log('[Depo Debug] label text:', JSON.stringify(text));
                                                 var dashIdx = text.indexOf('$');
                                                 if (dashIdx > -1) {
                                                     label.textContent = text.substring(0, dashIdx).replace(/\s*-\s*$/, '');
@@ -539,11 +551,11 @@
                                             });
                                         }
 
-                                        function bindDepoRadios() {
-                                            var radios = depoBlock.querySelectorAll('input[type="radio"]');
-                                            console.log('[Depo Debug] bindDepoRadios called, found radios:', radios.length);
+                                        function bindDepoRadios(root) {
+                                            var radios = root.querySelectorAll('input[type="radio"]');
+                                            console.log('[Depo Debug] bindDepoRadios, found radios:', radios.length);
                                             if (radios.length < 2) return false;
-                                            trimDepoLabels();
+                                            trimDepoLabels(root);
                                             radios.forEach(function(radio, idx) {
                                                 radio.addEventListener('change', function() {
                                                     console.log('[Depo Debug] radio changed, idx:', idx);
@@ -553,23 +565,28 @@
                                             return true;
                                         }
 
-                                        /* Watch for Depo to render, then bind listeners */
-                                        console.log('[Depo Debug] depoBlock found:', !!depoBlock);
+                                        /* Poll for Depo widget (handles Shadow DOM + async rendering) */
                                         if (depoBlock) {
-                                            console.log('[Depo Debug] depoBlock innerHTML:', depoBlock.innerHTML.substring(0, 200));
-                                            var bound = false;
-                                            var observer = new MutationObserver(function(mutations) {
-                                                console.log('[Depo Debug] MutationObserver fired, mutations:', mutations.length);
-                                                if (!bound) {
-                                                    bound = bindDepoRadios();
+                                            console.log('[Depo Debug] depoBlock found, starting poll');
+                                            var attempts = 0;
+                                            var poll = setInterval(function() {
+                                                attempts++;
+                                                var root = getDepoRoot();
+                                                var radios = root.querySelectorAll('input[type="radio"]');
+                                                console.log('[Depo Debug] poll #' + attempts + ', root:', root === depoBlock ? 'depoBlock' : 'shadowRoot', ', radios:', radios.length);
+                                                if (radios.length >= 2) {
+                                                    clearInterval(poll);
+                                                    bindDepoRadios(root);
+                                                    /* Keep trimming labels as Depo may update text */
+                                                    var observer = new MutationObserver(function() {
+                                                        trimDepoLabels(root);
+                                                    });
+                                                    observer.observe(root, { childList: true, subtree: true, characterData: true });
+                                                } else if (attempts >= 40) {
+                                                    console.log('[Depo Debug] gave up polling after 40 attempts');
+                                                    clearInterval(poll);
                                                 }
-                                                /* Keep trimming labels on every DOM change */
-                                                trimDepoLabels();
-                                            });
-                                            observer.observe(depoBlock, { childList: true, subtree: true, characterData: true });
-                                            /* Also try immediately */
-                                            bound = bindDepoRadios();
-                                            console.log('[Depo Debug] initial bind result:', bound);
+                                            }, 500);
                                         }
                                     });
                                 })();
