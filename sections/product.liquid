@@ -526,21 +526,27 @@
                                         }
 
                                         function trimDepoLabels() {
-                                            depoBlock.querySelectorAll('.depo-pp-label').forEach(function(label) {
+                                            var labels = depoBlock.querySelectorAll('.depo-pp-label');
+                                            console.log('[Depo Debug] trimDepoLabels called, found labels:', labels.length);
+                                            labels.forEach(function(label) {
                                                 var text = label.textContent.trim();
+                                                console.log('[Depo Debug] label text:', JSON.stringify(text));
                                                 var dashIdx = text.indexOf('$');
                                                 if (dashIdx > -1) {
-                                                    label.textContent = text.substring(0, dashIdx);
+                                                    label.textContent = text.substring(0, dashIdx).replace(/\s*-\s*$/, '');
+                                                    console.log('[Depo Debug] trimmed to:', JSON.stringify(label.textContent));
                                                 }
                                             });
                                         }
 
                                         function bindDepoRadios() {
                                             var radios = depoBlock.querySelectorAll('input[type="radio"]');
+                                            console.log('[Depo Debug] bindDepoRadios called, found radios:', radios.length);
                                             if (radios.length < 2) return false;
                                             trimDepoLabels();
                                             radios.forEach(function(radio, idx) {
                                                 radio.addEventListener('change', function() {
+                                                    console.log('[Depo Debug] radio changed, idx:', idx);
                                                     updateUI(idx > 0);
                                                 });
                                             });
@@ -548,9 +554,12 @@
                                         }
 
                                         /* Watch for Depo to render, then bind listeners */
+                                        console.log('[Depo Debug] depoBlock found:', !!depoBlock);
                                         if (depoBlock) {
+                                            console.log('[Depo Debug] depoBlock innerHTML:', depoBlock.innerHTML.substring(0, 200));
                                             var bound = false;
-                                            var observer = new MutationObserver(function() {
+                                            var observer = new MutationObserver(function(mutations) {
+                                                console.log('[Depo Debug] MutationObserver fired, mutations:', mutations.length);
                                                 if (!bound) {
                                                     bound = bindDepoRadios();
                                                 }
@@ -560,6 +569,7 @@
                                             observer.observe(depoBlock, { childList: true, subtree: true, characterData: true });
                                             /* Also try immediately */
                                             bound = bindDepoRadios();
+                                            console.log('[Depo Debug] initial bind result:', bound);
                                         }
                                     });
                                 })();
