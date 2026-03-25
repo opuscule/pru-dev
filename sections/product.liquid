@@ -451,8 +451,14 @@
                                         <input type="hidden" name="id" value="{{ current_variant.id }}">
                                         <input type="hidden" name="quantity" value="1">
 
-                                        <!-- Depo payment options (styled as toggle) -->
-                                        <div class="pricing-card__depo-blocks">
+                                        <!-- Custom pill toggle -->
+                                        <div class="pricing-toggle" role="group" aria-label="Payment option" data-pricing-toggle>
+                                            <button type="button" class="pricing-toggle__btn" aria-pressed="true" data-toggle-full>Full Payment</button>
+                                            <button type="button" class="pricing-toggle__btn" aria-pressed="false" data-toggle-deposit>50% Deposit</button>
+                                        </div>
+
+                                        <!-- Depo app block (hidden, kept for cart logic) -->
+                                        <div class="pricing-card__depo-blocks" aria-hidden="true">
                                             {% content_for 'blocks' %}
                                         </div>
 
@@ -487,9 +493,14 @@
                                         const priceDisplay = card.querySelector('[data-price-display]');
                                         const priceNote = card.querySelector('[data-price-note]');
                                         const ctaText = card.querySelector('[data-cta-text]');
-                                        const depoBlock = card.querySelector('.pricing-card__depo-blocks');
+                                        const btnFull = card.querySelector('[data-toggle-full]');
+                                        const btnDeposit = card.querySelector('[data-toggle-deposit]');
 
                                         function updateUI(isDeposit) {
+                                            /* Update toggle state */
+                                            btnFull.setAttribute('aria-pressed', String(!isDeposit));
+                                            btnDeposit.setAttribute('aria-pressed', String(isDeposit));
+
                                             if (isDeposit) {
                                                 priceLabel.textContent = 'Due today';
                                                 priceDisplay.style.opacity = '0';
@@ -509,63 +520,26 @@
                                                 priceNote.textContent = 'Includes health certificate, microchip & first vaccinations';
                                                 ctaText.textContent = 'Take Me Home';
                                             }
+
+                                            /* Sync Depo radio (if available) */
+                                            syncDepoRadio(isDeposit);
                                         }
 
-                                        function trimDepoLabels(container) {
-                                            var labels = container.querySelectorAll('.depo-pp-label');
-                                            labels.forEach(function(label) {
-                                                var text = label.textContent.trim();
-                                                var idx = text.indexOf('$');
-                                                if (idx > -1) {
-                                                    label.textContent = text.substring(0, idx).replace(/\s*-\s*$/, '');
-                                                }
-                                            });
-                                        }
-
-                                        function bindDepoRadios(container) {
-                                            var radios = container.querySelectorAll('input[type="radio"]');
-                                            if (radios.length < 2) return false;
-                                            trimDepoLabels(container);
-                                            radios.forEach(function(radio, idx) {
-                                                if (!radio._priceBound) {
-                                                    radio._priceBound = true;
-                                                    radio.addEventListener('change', function() {
-                                                        updateUI(idx > 0);
-                                                    });
-                                                }
-                                            });
-                                            /* Sync UI with whichever radio is currently checked */
-                                            var checked = container.querySelector('input[type="radio"]:checked');
-                                            if (checked) {
-                                                var allRadios = Array.prototype.slice.call(radios);
-                                                updateUI(allRadios.indexOf(checked) > 0);
-                                            }
-                                            return true;
-                                        }
-
-                                        /*
-                                         * Depo renders .depo-po-container outside the app block,
-                                         * so we poll the full page for it, then move it into our card.
-                                         */
-                                        var attempts = 0;
-                                        var poll = setInterval(function() {
-                                            attempts++;
+                                        function syncDepoRadio(isDeposit) {
                                             var depoWidget = document.querySelector('.depo-po-container');
-                                            if (depoWidget) {
-                                                clearInterval(poll);
-                                                /* Move the widget into our pricing card */
-                                                depoBlock.appendChild(depoWidget);
-                                                bindDepoRadios(depoWidget);
-                                                /* Re-bind radios & trim labels whenever Depo re-renders */
-                                                var observer = new MutationObserver(function() {
-                                                    trimDepoLabels(depoWidget);
-                                                    bindDepoRadios(depoWidget);
-                                                });
-                                                observer.observe(depoWidget, { childList: true, subtree: true, characterData: true });
-                                            } else if (attempts >= 40) {
-                                                clearInterval(poll);
+                                            if (!depoWidget) return;
+                                            var radios = depoWidget.querySelectorAll('input[type="radio"]');
+                                            if (radios.length < 2) return;
+                                            var target = isDeposit ? radios[1] : radios[0];
+                                            if (!target.checked) {
+                                                target.checked = true;
+                                                target.dispatchEvent(new Event('change', { bubbles: true }));
+                                                target.click();
                                             }
-                                        }, 500);
+                                        }
+
+                                        btnFull.addEventListener('click', function() { updateUI(false); });
+                                        btnDeposit.addEventListener('click', function() { updateUI(true); });
                                     });
                                 })();
                             </script>
