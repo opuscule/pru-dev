@@ -89,9 +89,7 @@
         user-select: none;
     }
     /* Hide non-toggle Depo chrome */
-    #depo-subscription-widget-block > :not(.depo-pp-options) {
-        display: none !important;
-    }
+    .depo-po-container > :not(.depo-pp-options),
     .depo-po-header,
     .depo-pp-header {
         display: none !important;
@@ -525,69 +523,61 @@
                                             }
                                         }
 
-                                        /* Find the root to query — may be inside a Shadow DOM */
-                                        function getDepoRoot() {
-                                            /* Walk all descendants looking for a shadowRoot */
-                                            var els = depoBlock.querySelectorAll('*');
-                                            for (var i = 0; i < els.length; i++) {
-                                                if (els[i].shadowRoot) {
-                                                    console.log('[Depo Debug] Shadow DOM found on:', els[i].tagName, els[i].id);
-                                                    return els[i].shadowRoot;
-                                                }
-                                            }
-                                            return depoBlock;
-                                        }
-
-                                        function trimDepoLabels(root) {
-                                            var labels = root.querySelectorAll('.depo-pp-label');
-                                            console.log('[Depo Debug] trimDepoLabels, found labels:', labels.length);
+                                        function trimDepoLabels(container) {
+                                            var labels = container.querySelectorAll('.depo-pp-label');
                                             labels.forEach(function(label) {
                                                 var text = label.textContent.trim();
-                                                var dashIdx = text.indexOf('$');
-                                                if (dashIdx > -1) {
-                                                    label.textContent = text.substring(0, dashIdx).replace(/\s*-\s*$/, '');
-                                                    console.log('[Depo Debug] trimmed to:', JSON.stringify(label.textContent));
+                                                var idx = text.indexOf('$');
+                                                if (idx > -1) {
+                                                    label.textContent = text.substring(0, idx).replace(/\s*-\s*$/, '');
                                                 }
                                             });
                                         }
 
-                                        function bindDepoRadios(root) {
-                                            var radios = root.querySelectorAll('input[type="radio"]');
-                                            console.log('[Depo Debug] bindDepoRadios, found radios:', radios.length);
+                                        function bindDepoRadios(container) {
+                                            var radios = container.querySelectorAll('input[type="radio"]');
                                             if (radios.length < 2) return false;
-                                            trimDepoLabels(root);
+                                            trimDepoLabels(container);
                                             radios.forEach(function(radio, idx) {
-                                                radio.addEventListener('change', function() {
-                                                    console.log('[Depo Debug] radio changed, idx:', idx);
-                                                    updateUI(idx > 0);
-                                                });
+                                                if (!radio._priceBound) {
+                                                    radio._priceBound = true;
+                                                    radio.addEventListener('change', function() {
+                                                        updateUI(idx > 0);
+                                                    });
+                                                }
                                             });
+                                            /* Sync UI with whichever radio is currently checked */
+                                            var checked = container.querySelector('input[type="radio"]:checked');
+                                            if (checked) {
+                                                var allRadios = Array.prototype.slice.call(radios);
+                                                updateUI(allRadios.indexOf(checked) > 0);
+                                            }
                                             return true;
                                         }
 
-                                        /* Poll for Depo widget (handles Shadow DOM + async rendering) */
-                                        if (depoBlock) {
-                                            console.log('[Depo Debug] depoBlock found, starting poll');
-                                            var attempts = 0;
-                                            var poll = setInterval(function() {
-                                                attempts++;
-                                                var root = getDepoRoot();
-                                                var radios = root.querySelectorAll('input[type="radio"]');
-                                                console.log('[Depo Debug] poll #' + attempts + ', root:', root === depoBlock ? 'depoBlock' : 'shadowRoot', ', radios:', radios.length);
-                                                if (radios.length >= 2) {
-                                                    clearInterval(poll);
-                                                    bindDepoRadios(root);
-                                                    /* Keep trimming labels as Depo may update text */
-                                                    var observer = new MutationObserver(function() {
-                                                        trimDepoLabels(root);
-                                                    });
-                                                    observer.observe(root, { childList: true, subtree: true, characterData: true });
-                                                } else if (attempts >= 40) {
-                                                    console.log('[Depo Debug] gave up polling after 40 attempts');
-                                                    clearInterval(poll);
-                                                }
-                                            }, 500);
-                                        }
+                                        /*
+                                         * Depo renders .depo-po-container outside the app block,
+                                         * so we poll the full page for it, then move it into our card.
+                                         */
+                                        var attempts = 0;
+                                        var poll = setInterval(function() {
+                                            attempts++;
+                                            var depoWidget = document.querySelector('.depo-po-container');
+                                            if (depoWidget) {
+                                                clearInterval(poll);
+                                                /* Move the widget into our pricing card */
+                                                depoBlock.appendChild(depoWidget);
+                                                bindDepoRadios(depoWidget);
+                                                /* Re-bind radios & trim labels whenever Depo re-renders */
+                                                var observer = new MutationObserver(function() {
+                                                    trimDepoLabels(depoWidget);
+                                                    bindDepoRadios(depoWidget);
+                                                });
+                                                observer.observe(depoWidget, { childList: true, subtree: true, characterData: true });
+                                            } else if (attempts >= 40) {
+                                                clearInterval(poll);
+                                            }
+                                        }, 500);
                                     });
                                 })();
                             </script>
