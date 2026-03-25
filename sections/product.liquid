@@ -435,6 +435,13 @@
 
                             <!-- Pricing Card -->
                             <div class="pricing-card mt-6" data-pricing-card>
+
+                                 <!-- Custom pill toggle -->
+                                <div class="pricing-toggle" role="group" aria-label="Payment option" data-pricing-toggle>
+                                    <button type="button" class="pricing-toggle__btn" aria-pressed="true" data-toggle-full>Pay in Full</button>
+                                    <button type="button" class="pricing-toggle__btn" aria-pressed="false" data-toggle-deposit>50% Deposit</button>
+                                </div>
+                                
                                 <!-- Price Display -->
                                 <div class="pricing-card__price-area" aria-live="polite">
                                     <span class="pricing-card__label" data-price-label>Total price</span>
@@ -450,12 +457,6 @@
                                         {% assign current_variant = product.selected_or_first_available_variant %}
                                         <input type="hidden" name="id" value="{{ current_variant.id }}">
                                         <input type="hidden" name="quantity" value="1">
-
-                                        <!-- Custom pill toggle -->
-                                        <div class="pricing-toggle" role="group" aria-label="Payment option" data-pricing-toggle>
-                                            <button type="button" class="pricing-toggle__btn" aria-pressed="true" data-toggle-full>Pay in Full</button>
-                                            <button type="button" class="pricing-toggle__btn" aria-pressed="false" data-toggle-deposit>50% Deposit</button>
-                                        </div>
 
                                         <!-- Depo app block (hidden, kept for cart logic) -->
                                         <div class="pricing-card__depo-blocks" aria-hidden="true">
