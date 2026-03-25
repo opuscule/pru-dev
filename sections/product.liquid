@@ -528,7 +528,7 @@
                                         function trimDepoLabels() {
                                             depoBlock.querySelectorAll('.depo-pp-label').forEach(function(label) {
                                                 var text = label.textContent.trim();
-                                                var dashIdx = text.indexOf('-');
+                                                var dashIdx = text.indexOf('$');
                                                 if (dashIdx > -1) {
                                                     label.textContent = text.substring(0, dashIdx);
                                                 }
