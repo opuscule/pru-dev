@@ -525,9 +525,20 @@
                                             }
                                         }
 
+                                        function trimDepoLabels() {
+                                            depoBlock.querySelectorAll('.depo-pp-label').forEach(function(label) {
+                                                var text = label.textContent.trim();
+                                                var dashIdx = text.indexOf(' - ');
+                                                if (dashIdx > -1) {
+                                                    label.textContent = text.substring(0, dashIdx);
+                                                }
+                                            });
+                                        }
+
                                         function bindDepoRadios() {
                                             var radios = depoBlock.querySelectorAll('input[type="radio"]');
                                             if (radios.length < 2) return false;
+                                            trimDepoLabels();
                                             radios.forEach(function(radio, idx) {
                                                 radio.addEventListener('change', function() {
                                                     updateUI(idx > 0);
@@ -538,14 +549,17 @@
 
                                         /* Watch for Depo to render, then bind listeners */
                                         if (depoBlock) {
-                                            if (!bindDepoRadios()) {
-                                                var observer = new MutationObserver(function() {
-                                                    if (bindDepoRadios()) {
-                                                        observer.disconnect();
-                                                    }
-                                                });
-                                                observer.observe(depoBlock, { childList: true, subtree: true });
-                                            }
+                                            var bound = false;
+                                            var observer = new MutationObserver(function() {
+                                                if (!bound) {
+                                                    bound = bindDepoRadios();
+                                                }
+                                                /* Keep trimming labels on every DOM change */
+                                                trimDepoLabels();
+                                            });
+                                            observer.observe(depoBlock, { childList: true, subtree: true, characterData: true });
+                                            /* Also try immediately */
+                                            bound = bindDepoRadios();
                                         }
                                     });
                                 })();
