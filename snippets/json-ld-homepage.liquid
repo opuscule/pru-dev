@@ -1,0 +1,100 @@
+{% doc %}
+  Renders JSON-LD structured data for the homepage.
+
+  Outputs two schema blocks:
+  1. PetStore (Organization + LocalBusiness) with optional AggregateRating
+  2. WebSite with SearchAction for Google sitelinks search box
+
+  AggregateRating is only included when both `settings.review_average` and
+  `settings.review_count` are populated in Theme Settings > Reviews & Ratings.
+
+  @example
+  {% render 'json-ld-homepage' %}
+{% enddoc %}
+
+{%- liquid
+  assign has_reviews = false
+  if settings.review_average != blank and settings.review_count != blank
+    assign has_reviews = true
+  endif
+-%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "PetStore",
+  "name": "Puppys R Us, LLC.",
+  "description": "An online marketplace connecting families with healthy puppies from screened, verified breeders across the United States.",
+  "url": "{{ shop.url }}",
+  "logo": "https://cdn.shopify.com/s/files/1/0603/0471/9957/files/puppys-r-us-logo.png?v=1769021888",
+  "image": "https://cdn.shopify.com/s/files/1/0603/0471/9957/files/social-share-homepage.jpg?v=1771477940",
+  "telephone": "+1-844-733-7877",
+  "email": "sales@puppysrus.com",
+  "foundingDate": "2013",
+  "priceRange": "$$$",
+  "currenciesAccepted": "USD",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1404 Southern Hills #246",
+    "addressLocality": "West Plains",
+    "addressRegion": "MO",
+    "postalCode": "65775",
+    "addressCountry": "US"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+1-844-733-7877",
+    "email": "sales@puppysrus.com",
+    "contactType": "customer service",
+    "availableLanguage": "English"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "United States"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "09:00",
+      "closes": "21:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/puppysruswp/",
+    "https://www.youtube.com/@puppysrus5034",
+    "https://maps.app.goo.gl/L587mciPdWBg4TRa8",
+    "https://www.bbb.org/us/mo/west-plains/profile/dog-breeders/puppys-r-us-0734-1000004584"
+  ]
+  {%- if has_reviews -%}
+  ,
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ settings.review_average | json }},
+    "reviewCount": {{ settings.review_count | json }},
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+  {%- endif -%}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": "{{ shop.url }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ shop.url }}/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
