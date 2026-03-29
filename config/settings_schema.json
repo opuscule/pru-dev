@@ -122,5 +122,28 @@
         "placeholder": "Example: Healthy, happy designer & purebred puppies from responsible breeders."
       }
     ]
+  },
+  {
+    "name": "t:general.reviews_and_ratings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:settings.reviews.header"
+      },
+      {
+        "type": "text",
+        "id": "review_average",
+        "label": "t:settings.reviews.average_label",
+        "default": "4.8",
+        "info": "t:settings.reviews.average_info"
+      },
+      {
+        "type": "text",
+        "id": "review_count",
+        "label": "t:settings.reviews.count_label",
+        "default": "71",
+        "info": "t:settings.reviews.count_info"
+      }
+    ]
   }
 ]
