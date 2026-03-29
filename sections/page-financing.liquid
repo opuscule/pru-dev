@@ -1,0 +1,91 @@
+<section class="w-full bg-bg-extralight pt-[5rem] pb-[200px] -mb-[200px]">
+    <div class="rounded-top-left w-auto bg-bg-light rounded-none rounded-tl-[12.5vw] ms-[4vw] py-16" style="padding-bottom:200px;margin-bottom:-200px">
+        <div class="max-w-[var(--width-container-content)] mx-auto px-16">
+            <h1 class="font-titles text-5xl md:text-8xl mb-8 md:mb-11 font-semibold leading-tight tracking-tight text-center">Financing</h1>
+            <div class="flex flex-col md:flex-row gap-8 md:gap-12">
+              <div class="w-full md:w-1/2">
+                <img 
+                  src="https://cdn.shopify.com/s/files/1/0603/0471/9957/files/Terrace-Logo-Powered-by-350-300x89.png?v=1763732701" 
+                  alt="Powered by Terrace Finance" 
+                  loading="lazy" 
+                  decoding="async" 
+                  width="350" 
+                  height="89" 
+                  class="mb-8" 
+                  style="max-width:350px"
+                >
+
+                <h3 class="text-3xl md:text-4xl font-titles mb-4">
+                  {{ 'financing.terrace.questions' | t }}
+                </h3>
+
+                <p class="mb-2">
+                  <a href="mailto:info@terracefinance.com" class="text-primary hover:underline">
+                    info@terracefinance.com
+                  </a>
+                </p>
+                <p class="mb-4">
+                  <a href="tel:+18885091370" class="text-primary hover:underline">
+                    888-509-1370
+                  </a>
+                </p>
+
+                <p class="mb-1">
+                  <strong class="font-semibold">{{ 'financing.terrace.hours.monday_saturday' | t }}</strong> 
+                  {{ 'financing.terrace.hours.monday_saturday_time' | t }}
+                </p>
+                <p>
+                  <strong class="font-semibold">{{ 'financing.terrace.hours.sunday' | t }}</strong> 
+                  {{ 'financing.terrace.hours.sunday_time' | t }}
+                </p>
+              </div>
+
+              <div class="w-full md:w-1/2">
+                <h2 class="text-4xl md:text-5xl font-titles mb-6">
+                  {{ 'financing.terrace.prequalify_title' | t }}
+                </h2>
+
+                <h3 class="text-2xl font-titles mb-6">
+                  {{ 'financing.terrace.prequalify_subtitle' | t }}
+                </h3>
+
+                <ul class="space-y-4 mb-8">
+                  <li class="text-body-copy">
+                    {{ 'financing.terrace.requirement_employer' | t }}
+                  </li>
+                  <li class="text-body-copy">
+                    {{ 'financing.terrace.requirement_checking' | t }}
+                  </li>
+                  <li class="text-body-copy">
+                    {{ 'financing.terrace.requirement_income' | t }}
+                  </li>
+                </ul>
+
+                <div class="text-center md:text-left">
+                  <a 
+                    href="https://terracefinance.azurewebsites.net/onlineApplication/preApplication?source=1&identifier=2616" 
+                    class="btn btn-primary inline-block hover:opacity-90 transition-opacity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ 'financing.cta_button' | t }}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-12 text-center">
+              <p class="text-body-copy italic">
+                {{ 'financing.terrace.disclaimer' | t }}
+              </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% schema %}
+{
+  "name": "Financing Page",
+  "settings": []
+}
+{% endschema %}
