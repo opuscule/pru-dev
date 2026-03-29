@@ -248,7 +248,16 @@
 <!-- Embedded Testimonials -->
 <section id="happy-families" class="pt-24 pb-[200px] mb-[-200px] bg-[var(--color-bg-extralight)]">
     <div class="max-w-[var(--width-container-content)] mx-auto px-4">
-        <h2 class="font-titles text-center text-5xl md:text-6xl font-semibold leading-tight mb-16">Happy Families</h2>
+        <h2 class="font-titles text-center text-5xl md:text-6xl font-semibold leading-tight mb-4">Happy Families</h2>
+        {% if settings.review_average != blank and settings.review_count != blank %}
+            <p class="text-center text-lg mb-12">
+                <span class="text-[#F2635B] tracking-wide" aria-hidden="true">★★★★★</span>
+                <span class="font-semibold">{{ settings.review_average }}</span>
+                from {{ settings.review_count }} reviews
+            </p>
+        {% else %}
+            <div class="mb-16"></div>
+        {% endif %}
         <div id="happy-families-slider" class="relative max-w-5xl mx-auto">
             <div id="happy-families-track" class="overflow-hidden">
                 <div class="slides transition-all duration-500"></div>
