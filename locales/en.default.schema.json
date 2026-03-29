@@ -32,6 +32,7 @@
     "password": "Password",
     "primary": "Primary",
     "product": "Product",
+    "reviews_and_ratings": "Reviews & ratings",
     "row": "Row",
     "search": "Search",
     "secondary": "Secondary",
@@ -113,6 +114,15 @@
           "label": "Contentful Delivery API Token"
         }
       }
+    }
+  },
+  "settings": {
+    "reviews": {
+      "header": "Aggregate review data",
+      "average_label": "Average rating",
+      "average_info": "Used for JSON-LD structured data and the visible rating badge on the homepage. Example: 4.8",
+      "count_label": "Total review count",
+      "count_info": "Total number of reviews across all sources (Google, letters, etc.). Used for JSON-LD and badge."
     }
   }
 }
