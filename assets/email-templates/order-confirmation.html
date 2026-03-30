@@ -48,9 +48,28 @@
 
     {% comment %} === DEPOSIT DETECTION === {% endcomment %}
     {% assign is_deposit = false %}
+
+    {% comment %} Method 1: Shopify financial_status {% endcomment %}
     {% if financial_status == 'partially_paid' %}
       {% assign is_deposit = true %}
     {% endif %}
+
+    {% comment %} Method 2: Cart attribute carried to order note_attributes {% endcomment %}
+    {% for attr in note_attributes %}
+      {% if attr.name == 'Payment Option' %}
+        {% if attr.value == 'deposit' %}
+          {% assign is_deposit = true %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% comment %} Method 3: Check line item properties from Depo app {% endcomment %}
+    {% for prop in puppy_item.properties %}
+      {% assign prop_name_lower = prop.first | downcase %}
+      {% if prop_name_lower contains 'deposit' or prop_name_lower contains 'depo' or prop_name_lower contains 'payment_plan' %}
+        {% assign is_deposit = true %}
+      {% endif %}
+    {% endfor %}
 
     {% comment %} Calculate actual amount paid from successful transactions {% endcomment %}
     {% assign amount_paid = 0 %}
@@ -61,6 +80,31 @@
         {% endif %}
       {% endif %}
     {% endfor %}
+
+    {% comment %} === DEBUG: Remove this block after troubleshooting === {% endcomment %}
+    <!-- DEBUG_START
+    financial_status: {{ financial_status }}
+    total_price: {{ total_price }}
+    subtotal_price: {{ subtotal_price }}
+    total_outstanding: {{ total_outstanding }}
+    amount_paid_calc: {{ amount_paid }}
+    is_deposit: {{ is_deposit }}
+
+    note_attributes:
+    {% for attr in note_attributes %}
+      {{ attr.name }}: {{ attr.value }}
+    {% endfor %}
+
+    transactions:
+    {% for t in transactions %}
+      kind={{ t.kind }} status={{ t.status }} amount={{ t.amount }} gateway={{ t.gateway }}
+    {% endfor %}
+
+    line_item_properties:
+    {% for prop in puppy_item.properties %}
+      {{ prop.first }}: {{ prop.last }}
+    {% endfor %}
+    DEBUG_END -->
 
     <!-- PREHEADER TEXT -->
     <div style="display: none; max-height: 0px; overflow: hidden;">

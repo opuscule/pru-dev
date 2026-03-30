@@ -76,11 +76,11 @@
     /* Hide the entire Depo widget — we drive it programmatically */
     .depo-po-container {
         position: absolute !important;
+        left: -9999px !important;
+        top: auto !important;
         width: 1px !important;
         height: 1px !important;
         overflow: hidden !important;
-        clip: rect(0 0 0 0) !important;
-        clip-path: inset(50%) !important;
     }
 
     /* Price area */
@@ -538,19 +538,48 @@
 
                                         function syncDepoRadio(isDeposit) {
                                             var depoWidget = document.querySelector('.depo-po-container');
-                                            if (!depoWidget) return;
+                                            if (!depoWidget) {
+                                                /* Widget may not be rendered yet — observe and retry */
+                                                var obs = new MutationObserver(function(mutations, observer) {
+                                                    var w = document.querySelector('.depo-po-container');
+                                                    if (w) {
+                                                        observer.disconnect();
+                                                        triggerDepoRadio(w, isDeposit);
+                                                    }
+                                                });
+                                                obs.observe(document.body, { childList: true, subtree: true });
+                                                setTimeout(function() { obs.disconnect(); }, 5000);
+                                                return;
+                                            }
+                                            triggerDepoRadio(depoWidget, isDeposit);
+                                        }
+
+                                        function triggerDepoRadio(depoWidget, isDeposit) {
                                             var radios = depoWidget.querySelectorAll('input[type="radio"]');
                                             if (radios.length < 2) return;
                                             var target = isDeposit ? radios[1] : radios[0];
-                                            if (!target.checked) {
-                                                target.checked = true;
-                                                target.dispatchEvent(new Event('change', { bubbles: true }));
-                                                target.click();
+                                            /* Set checked state */
+                                            target.checked = true;
+                                            /* Fire all event types the Depo app might listen to */
+                                            target.dispatchEvent(new Event('input', { bubbles: true }));
+                                            target.dispatchEvent(new Event('change', { bubbles: true }));
+                                            target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                                            /* Also try clicking the label/parent container */
+                                            var label = target.closest('label') || target.parentElement;
+                                            if (label && label !== target) {
+                                                label.click();
                                             }
                                         }
 
                                         btnFull.addEventListener('click', function() { updateUI(false); });
                                         btnDeposit.addEventListener('click', function() { updateUI(true); });
+
+                                        /* DEBUG: type showDepo() in browser console to reveal the hidden Depo widget */
+                                        window.showDepo = function() {
+                                            var w = document.querySelector('.depo-po-container');
+                                            if (w) { w.style.cssText = 'position:static!important;width:auto!important;height:auto!important;overflow:visible!important;left:auto!important;border:3px solid red;padding:10px;margin:10px 0;'; }
+                                            else { console.log('Depo widget not found'); }
+                                        };
                                     });
                                 })();
                             </script>
