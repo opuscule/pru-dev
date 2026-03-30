@@ -497,6 +497,14 @@
                                         const btnFull = card.querySelector('[data-toggle-full]');
                                         const btnDeposit = card.querySelector('[data-toggle-deposit]');
 
+                                        function savePaymentOption(isDeposit) {
+                                            fetch('/cart/update.js', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({ attributes: { 'Payment Option': isDeposit ? 'deposit' : 'full' } })
+                                            });
+                                        }
+
                                         function updateUI(isDeposit) {
                                             /* Update toggle state */
                                             btnFull.setAttribute('aria-pressed', String(!isDeposit));
@@ -524,6 +532,8 @@
 
                                             /* Sync Depo radio (if available) */
                                             syncDepoRadio(isDeposit);
+                                            /* Persist selection as cart attribute */
+                                            savePaymentOption(isDeposit);
                                         }
 
                                         function syncDepoRadio(isDeposit) {
