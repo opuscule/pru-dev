@@ -458,8 +458,8 @@
                                         <input type="hidden" name="id" value="{{ current_variant.id }}">
                                         <input type="hidden" name="quantity" value="1">
 
-                                        <!-- Depo app block (hidden, kept for cart logic) -->
-                                        <div class="pricing-card__depo-blocks" aria-hidden="true">
+                                        <!-- Depo app block (hidden via CSS) -->
+                                        <div class="pricing-card__depo-blocks">
                                             {% content_for 'blocks' %}
                                         </div>
 
