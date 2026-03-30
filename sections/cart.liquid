@@ -498,7 +498,7 @@
               <ul class="list-none m-0 p-0 mb-4">
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Puppy Price</strong>
-                  <span>{{ puppy_price | money }}</span>
+                  <span>{% if is_deposit %}{{ original_price | money }}{% else %}{{ puppy_price | money }}{% endif %}</span>
                 </li>
 
                 {% if is_deposit %}
