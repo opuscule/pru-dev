@@ -3613,10 +3613,6 @@ video {
   font-size: 12px;
 }
 
-.text-\[20px\] {
-  font-size: 20px;
-}
-
 .text-\[42px\] {
   font-size: 42px;
 }
@@ -4520,11 +4516,6 @@ video {
 
   .md\:text-right {
     text-align: right;
-  }
-
-  .md\:text-2xl {
-    font-size: 1.5rem;
-    line-height: 2rem;
   }
 
   .md\:text-3xl {
