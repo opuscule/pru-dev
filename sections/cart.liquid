@@ -595,6 +595,8 @@
 <script>
   // Save delivery method as cart attribute and update UI
   const puppySubtotal = {{ puppy_price }};
+  const isDeposit = {{ is_deposit }};
+  const displayPuppyPrice = isDeposit ? Math.floor(puppySubtotal / 2) : puppySubtotal;
   window.deliverySelectionError = false;
   const deliveryVariantCache = {};
   
