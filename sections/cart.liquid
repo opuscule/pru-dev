@@ -137,6 +137,12 @@
           {% endif %}
         {% endfor %}
         {% assign puppy_price = cart.items_subtotal_price | minus: delivery_subtotal %}
+        {% assign is_deposit = false %}
+        {% if cart.attributes['Payment Option'] == 'deposit' %}
+          {% assign is_deposit = true %}
+          {% assign deposit_price = puppy_price | divided_by: 2 %}
+          {% assign remaining_price = puppy_price | minus: deposit_price %}
+        {% endif %}
 
         <div class="flex flex-wrap -mx-4">
           <div class="w-full lg:w-9/12 px-4">
@@ -162,7 +168,12 @@
                           <div class="flex justify-between items-center">
                             <h3 class="text-5xl md:text-6xl font-semibold leading-tight tracking-tight mb-2 mt-1">{{- item.product.title -}}</h3>
                             <div>
-                              <span class="text-[20px] md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                              {% if is_deposit %}
+                                <span class="text-[20px] md:text-2xl text-primary text-right">{{ deposit_price | money }}</span>
+                                <div class="text-xs text-body-copy text-right mt-1">50% Deposit</div>
+                              {% else %}
+                                <span class="text-[20px] md:text-2xl text-primary text-right">{{ item.final_line_price | money }}</span>
+                              {% endif %}
                               <div class="flex items-center justify-end mt-0 md:mt-2">
                                 <span class="text-sm text-body-copy text-right leading-none hover:text-red-500 transition-colors" onclick="event.preventDefault(); if(confirm('Remove this puppy from your cart?')) { window.location.href='/cart/change?id={{ item.key }}&quantity=0'; }">
                                   Remove
@@ -480,6 +491,17 @@
                   <strong class="text-body-copy">Puppy Price</strong>
                   <span>{{ puppy_price | money }}</span>
                 </li>
+
+                {% if is_deposit %}
+                  <li class="flex justify-between items-center py-2">
+                    <strong class="text-body-copy">50% Deposit Due Today</strong>
+                    <span class="text-primary font-bold">{{ deposit_price | money }}</span>
+                  </li>
+                  <li class="flex justify-between items-center py-2 text-sm text-body-copy">
+                    <span>Remaining Balance</span>
+                    <span>{{ remaining_price | money }}</span>
+                  </li>
+                {% endif %}
                 
                 <li class="flex justify-between items-center py-2">
                   <strong class="text-body-copy">Delivery Option</strong>
@@ -493,8 +515,8 @@
                 {% endif %}
 
                 <li class="flex justify-between items-center py-2 border-b-0 text-2xl">
-                  <strong class="text-body-copy font-titles">Total</strong>
-                  <span id="cart-total-display">{{ cart.items_subtotal_price | money }}</span>
+                  <strong class="text-body-copy font-titles">{% if is_deposit %}Due Today{% else %}Total{% endif %}</strong>
+                  <span id="cart-total-display">{% if is_deposit %}{{ deposit_price | money }}{% else %}{{ cart.items_subtotal_price | money }}{% endif %}</span>
                 </li>
               </ul>
 
