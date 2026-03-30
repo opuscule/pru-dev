@@ -140,8 +140,17 @@
         {% assign is_deposit = false %}
         {% if cart.attributes['Payment Option'] == 'deposit' %}
           {% assign is_deposit = true %}
-          {% assign deposit_price = puppy_price | divided_by: 2 %}
-          {% assign remaining_price = puppy_price | minus: deposit_price %}
+          {% comment %} Depo app already set the line item to the deposit amount, so puppy_price IS the deposit {% endcomment %}
+          {% assign deposit_price = puppy_price %}
+          {% comment %} Calculate remaining from the original product price {% endcomment %}
+          {% assign original_price = 0 %}
+          {% for item in cart.items %}
+            {% assign item_product_id = item.product.id | append: '' %}
+            {% unless delivery_product_ids contains item_product_id %}
+              {% assign original_price = original_price | plus: item.product.price %}
+            {% endunless %}
+          {% endfor %}
+          {% assign remaining_price = original_price | minus: deposit_price %}
         {% endif %}
 
         <div class="flex flex-wrap -mx-4">
@@ -596,7 +605,7 @@
   // Save delivery method as cart attribute and update UI
   const puppySubtotal = {{ puppy_price }};
   const isDeposit = {{ is_deposit }};
-  const displayPuppyPrice = isDeposit ? Math.floor(puppySubtotal / 2) : puppySubtotal;
+  const displayPuppyPrice = puppySubtotal; // Depo app already sets the correct price in cart
   window.deliverySelectionError = false;
   const deliveryVariantCache = {};
   
