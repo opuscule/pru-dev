@@ -71,15 +71,26 @@
       {% endif %}
     {% endfor %}
 
-    {% comment %} Calculate actual amount paid from successful transactions {% endcomment %}
-    {% assign amount_paid = 0 %}
-    {% for transaction in transactions %}
-      {% if transaction.status == "success" %}
-        {% if transaction.kind == "sale" or transaction.kind == "capture" %}
-          {% assign amount_paid = amount_paid | plus: transaction.amount %}
-        {% endif %}
+    {% comment %} Extract Depo payment properties for accurate pricing {% endcomment %}
+    {% assign deposit_amount_dollars = 0 %}
+    {% assign pp_percentage = 0 %}
+    {% for prop in puppy_item.properties %}
+      {% if prop.first == '_part_payment_amount' %}
+        {% assign deposit_amount_dollars = prop.last | plus: 0 %}
+      {% endif %}
+      {% if prop.first == '_pp_percentage' %}
+        {% assign pp_percentage = prop.last | plus: 0 %}
       {% endif %}
     {% endfor %}
+
+    {% comment %} Calculate deposit (cents), full price (cents), and remaining (cents) {% endcomment %}
+    {% assign deposit_paid_cents = deposit_amount_dollars | times: 100 | round %}
+    {% if pp_percentage > 0 %}
+      {% assign full_price_cents = deposit_paid_cents | times: 100 | divided_by: pp_percentage | round %}
+    {% else %}
+      {% assign full_price_cents = total_price %}
+    {% endif %}
+    {% assign remaining_cents = full_price_cents | minus: deposit_paid_cents | round %}
 
     {% comment %} === DEBUG: Remove this block after troubleshooting === {% endcomment %}
     <!-- DEBUG_START
@@ -87,18 +98,14 @@
     total_price: {{ total_price }}
     subtotal_price: {{ subtotal_price }}
     total_outstanding: {{ total_outstanding }}
-    amount_paid_calc: {{ amount_paid }}
     is_deposit: {{ is_deposit }}
 
-    note_attributes:
-    {% for attr in note_attributes %}
-      {{ attr.name }}: {{ attr.value }}
-    {% endfor %}
-
-    transactions:
-    {% for t in transactions %}
-      kind={{ t.kind }} status={{ t.status }} amount={{ t.amount }} gateway={{ t.gateway }}
-    {% endfor %}
+    COMPUTED VALUES:
+    deposit_amount_dollars: {{ deposit_amount_dollars }}
+    pp_percentage: {{ pp_percentage }}
+    deposit_paid_cents: {{ deposit_paid_cents }}
+    full_price_cents: {{ full_price_cents }}
+    remaining_cents: {{ remaining_cents }}
 
     line_item_properties:
     {% for prop in puppy_item.properties %}
@@ -137,7 +144,7 @@
                   <h1 class="header-title" style="text-align: center;">Deposit Received!</h1>
                   <p style="font-size: 16px; color: #444444; line-height: 26px; text-align: left; margin-top: 30px;">
                     Hello {{ customer.first_name | default: billing_address.first_name }},<br>
-                    Thank you for your deposit! Your puppy has been reserved. A separate invoice for the remaining balance of <strong>{{ total_outstanding | money }}</strong> will be sent to you via the Depo app before pickup or delivery.
+                    Thank you for your deposit! Your puppy has been reserved. A separate invoice for the remaining balance of <strong>{{ remaining_cents | money }}</strong> will be sent to you before pickup or delivery.
                   </p>
                 {% else %}
                   <h1 class="header-title" style="text-align: center;">Your Puppy Reservation is Confirmed!</h1>
@@ -176,7 +183,7 @@
                           <tr>
                             <td>
                               {% if is_deposit %}
-                                <strong style="color: #ef6859;">Deposit Paid:</strong> {{ amount_paid | money }}
+                                <strong style="color: #ef6859;">Deposit Paid:</strong> {{ deposit_paid_cents | money }}
                               {% else %}
                                 <strong style="color: #ef6859;">Total Paid:</strong> {{ total_price | money }}
                               {% endif %}
@@ -196,7 +203,7 @@
                 <div class="section-title" style="margin-bottom: 10px;">Next Steps:</div>
                 <ol style="font-size: 15px; color: #555555; line-height: 26px; padding-left: 20px; margin: 0;">
                   {% if is_deposit %}
-                    <li style="margin-bottom: 10px;">Your puppy is now reserved! A member of our team will be in touch to arrange the remaining payment of <strong>{{ total_outstanding | money }}</strong> before pickup or delivery.</li>
+                    <li style="margin-bottom: 10px;">Your puppy is now reserved! A member of our team will be in touch to arrange the remaining payment of <strong>{{ remaining_cents | money }}</strong> before pickup or delivery.</li>
                     <li style="margin-bottom: 10px;">We will contact you to confirm delivery or pickup details once the balance is paid in full.</li>
                   {% else %}
                     <li style="margin-bottom: 10px;">A member of our Puppys R Us Team will contact you to confirm delivery or pickup details.</li>
@@ -234,17 +241,17 @@
                   {% endfor %}
                   <tr style="border-top: 1px solid #e4e4e4;">
                     <th style="font-weight: bold; color: #212121; padding-top: 10px;">Order Total:</th>
-                    <td style="font-weight: bold; color: #212121; font-size: 16px; padding-top: 10px;">{{ total_price | money }}</td>
+                    <td style="font-weight: bold; color: #212121; font-size: 16px; padding-top: 10px;">{% if is_deposit %}{{ full_price_cents | money }}{% else %}{{ total_price | money }}{% endif %}</td>
                   </tr>
 
                   {% if is_deposit %}
                     <tr>
                       <th style="color: #2e7d32;">Deposit Paid Today:</th>
-                      <td style="color: #2e7d32; font-weight: bold;">{{ amount_paid | money }}</td>
+                      <td style="color: #2e7d32; font-weight: bold;">{{ deposit_paid_cents | money }}</td>
                     </tr>
                     <tr>
                       <th style="color: #e65100;">Remaining Balance:</th>
-                      <td style="color: #e65100; font-weight: bold; font-size: 16px;">{{ total_outstanding | money }}</td>
+                      <td style="color: #e65100; font-weight: bold; font-size: 16px;">{{ remaining_cents | money }}</td>
                     </tr>
                   {% else %}
                     <tr>
@@ -257,7 +264,7 @@
                 {% if is_deposit %}
                   <div class="remaining-box">
                     <p style="font-size: 14px; color: #e65100; margin: 0; line-height: 22px;">
-                      <strong>Remaining balance of {{ total_outstanding | money }}</strong> will be invoiced separately via the Depo app before your puppy's pickup or delivery date.
+                      <strong>Remaining balance of {{ remaining_cents | money }}</strong> will be invoiced separately before your puppy's pickup or delivery date.
                     </p>
                   </div>
                 {% endif %}
