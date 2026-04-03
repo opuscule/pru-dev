@@ -92,26 +92,37 @@
     {% endif %}
     {% assign remaining_cents = full_price_cents | minus: deposit_paid_cents | round %}
 
-    {% comment %} === DEBUG: Remove this block after troubleshooting === {% endcomment %}
-    <!-- DEBUG_START
-    financial_status: {{ financial_status }}
-    total_price: {{ total_price }}
-    subtotal_price: {{ subtotal_price }}
-    total_outstanding: {{ total_outstanding }}
-    is_deposit: {{ is_deposit }}
+    {% comment %} === SHIPPING TYPE DETECTION === {% endcomment %}
+    {% assign shipping_type = 'unknown' %}
+    {% assign shipping_title = shipping_method.title | downcase %}
 
-    COMPUTED VALUES:
-    deposit_amount_dollars: {{ deposit_amount_dollars }}
-    pp_percentage: {{ pp_percentage }}
-    deposit_paid_cents: {{ deposit_paid_cents }}
-    full_price_cents: {{ full_price_cents }}
-    remaining_cents: {{ remaining_cents }}
+    {% if shipping_title contains 'decide later' or shipping_title contains 'will decide' %}
+      {% assign shipping_type = 'decide-later' %}
+    {% elsif shipping_title contains 'pick up' or shipping_title contains 'pickup' or shipping_title contains 'breeder' %}
+      {% assign shipping_type = 'pickup-breeder' %}
+    {% elsif shipping_title contains 'nearby' or shipping_title contains 'local' %}
+      {% assign shipping_type = 'nearby-location' %}
+    {% elsif shipping_title contains 'home' or shipping_title contains 'delivery' or shipping_title contains 'ship' %}
+      {% assign shipping_type = 'home-delivery' %}
+    {% endif %}
 
-    line_item_properties:
-    {% for prop in puppy_item.properties %}
-      {{ prop.first }}: {{ prop.last }}
-    {% endfor %}
-    DEBUG_END -->
+    {% comment %} Fallback: check note_attributes for shipping selection {% endcomment %}
+    {% if shipping_type == 'unknown' %}
+      {% for attr in note_attributes %}
+        {% if attr.name == 'Shipping Option' or attr.name == 'Delivery Method' %}
+          {% assign attr_val = attr.value | downcase %}
+          {% if attr_val contains 'decide later' or attr_val contains 'will decide' %}
+            {% assign shipping_type = 'decide-later' %}
+          {% elsif attr_val contains 'pick up' or attr_val contains 'pickup' or attr_val contains 'breeder' %}
+            {% assign shipping_type = 'pickup-breeder' %}
+          {% elsif attr_val contains 'nearby' or attr_val contains 'local' %}
+            {% assign shipping_type = 'nearby-location' %}
+          {% elsif attr_val contains 'home' or attr_val contains 'delivery' or attr_val contains 'ship' %}
+            {% assign shipping_type = 'home-delivery' %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
 
     <!-- PREHEADER TEXT -->
     <div style="display: none; max-height: 0px; overflow: hidden;">
@@ -193,6 +204,33 @@
                       </td>
                     </tr>
                   </table>
+                </div>
+              </td>
+            </tr>
+
+            <!-- SHIPPING TYPE TEST OUTPUT -->
+            <tr>
+              <td style="padding: 0 40px 20px 40px;">
+                <div style="background: #f0f0f0; border: 2px dashed #999; border-radius: 8px; padding: 15px 20px; font-size: 14px; color: #333; line-height: 22px;">
+                  <strong>&#9881; Shipping/Delivery Test Output:</strong><br>
+                  {% if shipping_type == 'decide-later' %}
+                    Shipping = I Will Decide Later
+                  {% elsif shipping_type == 'pickup-breeder' %}
+                    Shipping = Pick Up from Breeder
+                  {% elsif shipping_type == 'nearby-location' %}
+                    Shipping = Nearby Location
+                  {% elsif shipping_type == 'home-delivery' %}
+                    Shipping = Home Delivery
+                  {% else %}
+                    Shipping = Unknown (raw: "{{ shipping_method.title }}")
+                  {% endif %}
+                  <br>
+                  <strong>&#9881; Payment Test Output:</strong><br>
+                  {% if is_deposit %}
+                    Payment = Deposit
+                  {% else %}
+                    Payment = Paid in Full
+                  {% endif %}
                 </div>
               </td>
             </tr>
