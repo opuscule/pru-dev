@@ -2824,6 +2824,11 @@ video {
   border-top-right-radius: 0.75rem;
 }
 
+.rounded-t-2xl {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
 .rounded-bl-\[1\.5rem\] {
   border-bottom-left-radius: 1.5rem;
 }
