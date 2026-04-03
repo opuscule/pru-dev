@@ -2095,6 +2095,14 @@ video {
   height: min-content;
 }
 
+.h-1\/2 {
+  height: 50%;
+}
+
+.h-1 {
+  height: 0.25rem;
+}
+
 .max-h-0 {
   max-height: 0px;
 }
@@ -2930,6 +2938,10 @@ video {
 
 .border-t-\[6px\] {
   border-top-width: 6px;
+}
+
+.border-b-\[6px\] {
+  border-bottom-width: 6px;
 }
 
 .border-solid {
@@ -4555,6 +4567,11 @@ video {
 
   .md\:text-xl {
     font-size: 1.125rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 }
 
